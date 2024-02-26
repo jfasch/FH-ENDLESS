@@ -7,7 +7,7 @@ class CANSensor:
     FRAME_LAYOUT = "=IB3x8s"
     FRAME_SIZE = struct.calcsize(FRAME_LAYOUT)
 
-    DATA_LAYOUT = "<2I"
+    DATA_LAYOUT = "<Ii"
 
     assert struct.calcsize(FRAME_LAYOUT) == 16
     assert struct.calcsize(DATA_LAYOUT) == 8
