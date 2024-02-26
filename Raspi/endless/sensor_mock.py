@@ -1,13 +1,16 @@
 class MockSensor:
-    def __init__(self, initial_timestamp, temperature, interval):
-        self.timestamp = initial_timestamp
+    def __init__(self, initial_time, temperature, interval):
+        self.time = initial_time
         self.temperature = temperature
         self.interval = interval
 
     async def get_one(self):
-        return self.timestamp, self.temperature
+        return self.time, self.temperature
 
     async def iter(self):
         while True:
-            yield self.timestamp, self.temperature
-            self.timestamp += self.interval
+            yield self.time, self.temperature
+            self.time += self.interval
+
+    def set_time(self, time):
+        self.time = time
