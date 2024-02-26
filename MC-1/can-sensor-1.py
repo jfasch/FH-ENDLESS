@@ -29,6 +29,8 @@ while True:
     temperature = int(TEMPERATURE * 1000)
     data = struct.pack(DATA_LAYOUT, now_ms, temperature)
 
+    print('now_ms', now_ms, 'temperature', temperature)
+
     frame = struct.pack(FRAME_LAYOUT, can_id, 8, data)
     can_socket.send(frame)
 
