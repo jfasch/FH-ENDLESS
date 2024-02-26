@@ -6,14 +6,14 @@ async def enumerate(aiterable, start=0):
         yield start, item
         start += 1
 
-async def wall_timestamps(start_time_ns, interval_ns):
-    interval_s = interval_ns / 1_000_000_000
+async def wall_timestamps(start_time_ms, interval_ms):
+    interval_s = interval_ms / 1000
     while True:
-        yield start_time_ns
+        yield start_time_ms
         await asyncio.sleep(interval_s)
-        start_time_ns += interval_ns
+        start_time_ms += interval_ms
 
-async def mock_timestamps(start_time_ns, interval_ns):
+async def mock_timestamps(start_time_ms, interval_ms):
     while True:
-        yield start_time_ns
-        start_time_ns += interval_ns
+        yield start_time_ms
+        start_time_ms += interval_ms

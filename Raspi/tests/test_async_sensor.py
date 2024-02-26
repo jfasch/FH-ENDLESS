@@ -8,7 +8,7 @@ import pytest
 async def test_iter():
     sensor = MockSensor(
         temperature = 37.5, 
-        timestamps = async_util.mock_timestamps(start_time_ns = 100, interval_ns = 10),
+        timestamps = async_util.mock_timestamps(start_time_ms = 100, interval_ms = 10),
     )
 
     samples = []

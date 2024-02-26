@@ -9,17 +9,17 @@ import asyncio
 sensors = {
     'links-oben': MockSensor(
         temperature = -273.15, 
-        timestamps = async_util.wall_timestamps(start_time_ns=0, interval_ns=500*1000*1000),
+        timestamps = async_util.wall_timestamps(start_time_ms=0, interval_ms=500),
     ),
     'rechts-unten': MockSensor(
         temperature = 42.6,
-        timestamps = async_util.wall_timestamps(start_time_ns=0, interval_ns=400*1000*1000),
+        timestamps = async_util.wall_timestamps(start_time_ms=0, interval_ms=400),
     ),
 }
 
 async def measure(name, sensor):
-    async for timestamp_ns, temperature in sensor.iter():
-        print(name, timestamp_ns, temperature)
+    async for timestamp_ms, temperature in sensor.iter():
+        print(name, timestamp_ms, temperature)
 
 async def main():
     async with asyncio.TaskGroup() as tg:
