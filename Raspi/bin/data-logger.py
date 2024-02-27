@@ -1,35 +1,24 @@
 #!/usr/bin/env python
 
-from endless.sensor_mock import MockSensor
-from endless.sensor_can import CANSensor
-from endless import async_util
+from endless.source_can import source_can
+from endless.sink_stdout import sink_stdout
 
 import asyncio
 
 
-# sensors = {
-#     'links-oben': MockSensor(
-#         temperature = -273.15, 
-#         timestamps = async_util.wall_timestamps(start_time_ms=0, interval_ms=500),
-#     ),
-#     'rechts-unten': MockSensor(
-#         temperature = 42.6,
-#         timestamps = async_util.wall_timestamps(start_time_ms=0, interval_ms=400),
-#     ),
-# }
+queue = asyncio.Queue()
 
-sensors = {
-    'CAN#42': CANSensor(can_iface = 'mein-test-can', can_id=42),
-    'CAN#43': CANSensor(can_iface = 'mein-test-can', can_id=43),
-}
+sources = [
+    source_can(name='CAN#42', can_iface = 'mein-test-can', can_id=42, queue=queue),
+    source_can(name='CAN#01', can_iface = 'mein-test-can', can_id=1, queue=queue),
+]
 
-async def measure(name, sensor):
-    async for timestamp_ms, temperature in sensor.iter():
-        print(name, timestamp_ms, temperature)
+sink = sink_stdout(queue)
 
 async def main():
     async with asyncio.TaskGroup() as tg:
-        for name, sensor in sensors.items():
-            tg.create_task(measure(name, sensor))
+        for source in sources:
+            tg.create_task(source)
+        tg.create_task(sink)
 
 asyncio.run(main())
