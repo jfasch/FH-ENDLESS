@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 
-from endless.source_can import source_can
-from endless.sink_stdout import sink_stdout
+from endless.source_can import CANSource
+from endless.sink_stdout import StdoutSink
 
 import asyncio
 
 
-queue = asyncio.Queue()
-
 sources = [
-    source_can(name='CAN#42', can_iface = 'mein-test-can', can_id=42, queue=queue),
-    source_can(name='CAN#01', can_iface = 'mein-test-can', can_id=1, queue=queue),
+    CANSource(name='CAN#42', can_iface='mein-test-can', can_id=42),
+    CANSource(name='CAN#01', can_iface='mein-test-can', can_id=1),
 ]
 
-sink = sink_stdout(queue)
+sink = StdoutSink()
 
 async def main():
     async with asyncio.TaskGroup() as tg:
+        sink.start(tg)
+
         for source in sources:
-            tg.create_task(source)
-        tg.create_task(sink)
+            source.start(sink, tg)
 
 asyncio.run(main())

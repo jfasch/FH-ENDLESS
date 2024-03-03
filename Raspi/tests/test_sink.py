@@ -1,4 +1,6 @@
-from endless.sink_mock import sink_mock
+from endless.sink import Sink
+from endless.sink_mock import MockSink
+from endless.sample import Sample
 
 import pytest
 import asyncio
@@ -6,20 +8,21 @@ import asyncio
 
 @pytest.mark.asyncio
 async def test_basic():
-    samples = []
+    async with asyncio.TaskGroup() as tg:
+        sink = MockSink()
+        task = sink.start(tg)
 
-    queue = asyncio.Queue()
+        await sink.put(Sample(name='name1', timestamp_ms=100, temperature=42.666))
+        await sink.put(Sample(name='name2', timestamp_ms=200, temperature=-273.15))
 
-    sink = asyncio.create_task(sink_mock(queue, samples))
+        while len(sink.samples) < 2: # argh. polling.
+            await asyncio.sleep(0.001)
 
-    await queue.put(('name1', 100, 42.666))
-    await queue.put(('name2', 200, -273.15))
+        assert sink.samples[0] == Sample('name1', 100, pytest.approx(42.666))
+        assert sink.samples[1] == Sample('name2', 200, pytest.approx(-273.15))
 
-    while len(samples) < 2: # argh. polling.
-        await asyncio.sleep(0.01)
-    sink.cancel()
+        task.cancel()
 
-    assert samples[0] == ('name1', 100, pytest.approx(42.666))
-    assert samples[1] == ('name2', 200, pytest.approx(-273.15))
-
+def test_is_a_sink():
+    assert issubclass(MockSink, Sink)
 

@@ -1,3 +1,4 @@
+from endless.sample import Sample
 from endless.source_mock import source_mock
 from endless import async_util
 
@@ -18,11 +19,11 @@ async def test_basic():
                 temperature = 37.5
             ))
 
-        assert await queue.get() == ("mock", 100, pytest.approx(37.5))
-        assert await queue.get() == ("mock", 110, pytest.approx(37.5))
-        assert await queue.get() == ("mock", 120, pytest.approx(37.5))
-        assert await queue.get() == ("mock", 130, pytest.approx(37.5))
-        assert await queue.get() == ("mock", 140, pytest.approx(37.5))
+        assert await queue.get() == Sample(name="mock", timestamp_ms=100, temperature=pytest.approx(37.5))
+        assert await queue.get() == Sample(name="mock", timestamp_ms=110, temperature=pytest.approx(37.5))
+        assert await queue.get() == Sample(name="mock", timestamp_ms=120, temperature=pytest.approx(37.5))
+        assert await queue.get() == Sample(name="mock", timestamp_ms=130, temperature=pytest.approx(37.5))
+        assert await queue.get() == Sample(name="mock", timestamp_ms=140, temperature=pytest.approx(37.5))
 
         producer.cancel()
 

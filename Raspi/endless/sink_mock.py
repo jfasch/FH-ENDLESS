@@ -1,4 +1,10 @@
-async def sink_mock(queue, samples):
-    while True:
-        name, timestamp_ms, temperature = await queue.get()
-        samples.append((name, timestamp_ms, temperature))
+from .sink import Sink
+
+
+class MockSink(Sink):
+    def __init__(self):
+        super().__init__()
+        self.samples = []
+
+    async def handle_put(self, sample):
+        self.samples.append(sample)
