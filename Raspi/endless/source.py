@@ -9,10 +9,9 @@ class Source(abc.ABC):
         self.task = None
         self.sink = None
 
-    def start(self, sink):
+    def start(self, tg, sink):
         self.sink = sink
-        self.task = asyncio.create_task(self._do_run())
-        return [self.task]
+        tg.create_task(self._do_run())
 
     async def _do_run(self):
         try:
