@@ -1,5 +1,5 @@
 from endless.sample import Sample
-from endless.source_mock import source_mock
+from endless.source_mock import MockSource
 from endless import async_util
 
 import pytest
