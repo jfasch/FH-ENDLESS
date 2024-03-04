@@ -17,12 +17,13 @@ class MQTTSource(Source):
         async with aiomqtt.Client(hostname=self.host, port=self.port) as client:
             await client.subscribe(self.topic)
             async for message in client.messages:
-                mqtt_sample = json.loads(message.payload)
-                await self.sink.put(
-                    Sample(
-                        name = self.name,
-                        timestamp_ms = mqtt_sample['timestamp_ms'],
-                        temperature = mqtt_sample['temperature'],
-                    ),
-                )
+                sample = self._make_sample(message.payload)
+                await self.sink.put(sample)
                 
+    def _make_sample(self, payload):
+        mqtt_sample = json.loads(payload)
+        return Sample(
+            name = self.name,
+            timestamp_ms = mqtt_sample['timestamp_ms'],
+            temperature = mqtt_sample['temperature'],
+        )
