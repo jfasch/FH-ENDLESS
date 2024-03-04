@@ -14,7 +14,7 @@ _DATA_LAYOUT = "<Ii"
 
 class CANSource(Source):
     def __init__(self, name, can_iface, can_id):
-        super().__init__(self)
+        super().__init__(name)
 
         self.name = name
         self.can_iface = can_iface

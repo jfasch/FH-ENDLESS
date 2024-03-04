@@ -1,14 +1,21 @@
 from .sample import Sample
+from .source import Source
 
 import asyncio
 
 
-async def source_mock(queue, name, timestamps, temperature):
-    async for ts in timestamps:
-        await queue.put(Sample(name=name, timestamp_ms=ts, temperature=temperature))
+class MockSource(Source):
+    def __init__(self, name, timestamps, temperature):
+        super().__init__(name)
+        self.timestamps = timestamps
+        self.temperature = temperature
 
-        # if queue is unbounded (and timestamps are of the
-        # quick-rush-through variant), then queue.put() wont schedule
-        # and the entire program will hang. add a manual scheduling
-        # point.
-        await asyncio.sleep(0)
+    async def _run(self):
+        async for ts in self.timestamps:
+            await self.sink.put(Sample(name=self.name, timestamp_ms=ts, temperature=self.temperature))
+
+            # if queue is unbounded (and timestamps are of the
+            # quick-rush-through variant), then queue.put() wont
+            # schedule and the entire program will hang. add a manual
+            # scheduling point.
+            await asyncio.sleep(0)
