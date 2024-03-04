@@ -8,8 +8,9 @@ class Sink(abc.ABC):
         self.task = None
         self.queue = asyncio.Queue()
 
-    def start(self, taskgroup):
-        return taskgroup.create_task(self._run())
+    def start(self):
+        self.task = asyncio.create_task(self._run())
+        return [self.task]
 
     async def put(self, sample):
         await self.queue.put(sample)

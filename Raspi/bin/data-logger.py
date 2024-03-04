@@ -14,10 +14,17 @@ sources = [
 sink = StdoutSink()
 
 async def main():
-    async with asyncio.TaskGroup() as tg:
-        sink.start(tg)
+    tasks = []
 
-        for source in sources:
-            source.start(sink, tg)
+    tasks += sink.start()
+
+    for source in sources:
+        tasks += source.start(sink)
+
+    try:
+        await asyncio.gather(*tasks)
+    except asyncio.CancelledError:
+        for t in tasks:
+            t.cancel()
 
 asyncio.run(main())
