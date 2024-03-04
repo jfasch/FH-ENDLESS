@@ -21,7 +21,8 @@ class Sink(abc.ABC):
                 sample = await self.queue.get()
                 await self.handle_put(sample)
         except Exception as e:
-            print(type(e), e, file=sys.stderr)    # jjj fix that: task exception handling!!!
+            print(type(e), e, file=sys.stderr)
+            raise
 
     @abc.abstractmethod
     async def handle_put(self, sample):

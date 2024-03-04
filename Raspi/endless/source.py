@@ -21,6 +21,7 @@ class Source(abc.ABC):
             print(self.name, 'cancelled', file=sys.stderr)
         except Exception as e:
             print(self.name, 'exception', type(e), e)
+            raise
 
     @abc.abstractmethod
     async def _run(self):
