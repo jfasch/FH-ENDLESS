@@ -1,7 +1,7 @@
 from .sink import Sink
 
 
-class CompositeSink(Sink):
+class TeeSink(Sink):
     def __init__(self, sinks):
         super().__init__()
         self.sinks = sinks
