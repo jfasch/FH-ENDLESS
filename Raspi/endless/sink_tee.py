@@ -1,7 +1,7 @@
-from .sink import Sink
+from .sink_simple import SimpleSink
 
 
-class TeeSink(Sink):
+class TeeSink(SimpleSink):
     '''Distributes incoming samples to other sinks'''
 
     def __init__(self, sinks):
@@ -18,6 +18,6 @@ class TeeSink(Sink):
         for sink in self.sinks:
             sink.stop()
         
-    async def handle_put(self, sample):
+    async def _handle_put(self, sample):
         for sink in self.sinks:
             await sink.put(sample)

@@ -1,6 +1,6 @@
-from .sink import Sink
+from .sink_simple import SimpleSink
 
 
-class StdoutSink(Sink):
-    async def handle_put(self, sample):
+class StdoutSink(SimpleSink):
+    async def _handle_put(self, sample):
         print(sample.name, sample.timestamp_ms, sample.temperature)

@@ -39,17 +39,10 @@ class Sink(abc.ABC):
         '''
         await self.queue.put(sample)
 
-    async def _run(self):
-        try:
-            while True:
-                sample = await self.queue.get()
-                await self.handle_put(sample)
-        except Exception as e:
-            print(type(e), e, file=sys.stderr)
-            raise
-
     @abc.abstractmethod
-    async def handle_put(self, sample):
-        # do something with sample
+    async def _run(self):
+        '''Derived classes implement this to retrieve samples from the
+        queue and handle them.
+
+        '''
         pass
-        

@@ -1,4 +1,4 @@
-from .sink import Sink
+from .sink_simple import SimpleSink
 
 import asyncio
 
@@ -10,13 +10,13 @@ def have_n_samples(n):
             future.set_result(True)
     return future, cond
 
-class MockSink(Sink):
+class MockSink(SimpleSink):
     def __init__(self, cond=None):
         super().__init__()
         self.samples = []
         self.cond = cond
 
-    async def handle_put(self, sample):
+    async def _handle_put(self, sample):
         self.samples.append(sample)
 
         if self.cond is not None:

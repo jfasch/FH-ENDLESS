@@ -12,7 +12,6 @@ class MQTTSink(Sink):
 
         '''
 
-
         super().__init__()
 
         self.host = host
@@ -32,6 +31,3 @@ class MQTTSink(Sink):
             'timestamp_ms': sample.timestamp_ms,
             'temperature': sample.temperature,
         })
-
-    def handle_put(self, sample):
-        assert False
