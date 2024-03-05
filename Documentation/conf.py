@@ -58,6 +58,7 @@ intersphinx_mapping = {
     'opentraining': ('https://opentraining.readthedocs.io/en/latest/', None),
     'pytest': ('https://docs.pytest.org/en/latest/', None),
     'numpy': ('https://numpy.org/doc/stable/', None),
+    'jfasch': ('https://www.faschingbauer.me/', None),
 }
 
 # List of patterns, relative to source directory, that match files and
