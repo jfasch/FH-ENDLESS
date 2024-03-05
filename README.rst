@@ -13,7 +13,7 @@ The Beginning Of It All
 ``Raspi/``
 ----------
 
-In the sketch, this is the node labaled "Raspi". A datalogger,
+In the sketch, this is the node labeled "Raspi". A datalogger,
 basically, capable of
 
 * receiving measurements from various *sources*
