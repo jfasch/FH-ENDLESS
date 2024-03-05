@@ -1,0 +1,6 @@
+Miscellaneous Notes
+===================
+
+.. toctree::
+
+   sinewave
