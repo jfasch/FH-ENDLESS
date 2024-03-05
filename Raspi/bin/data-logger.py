@@ -3,7 +3,9 @@
 from endless.source_can import CANSource
 from endless.source_mqtt import MQTTSource
 from endless.source_mock import MockSource
+from endless.sink_tee import TeeSink
 from endless.sink_stdout import StdoutSink
+from endless.sink_mqtt import MQTTSink
 from endless import async_util
 
 import asyncio
@@ -16,7 +18,16 @@ sources = [
     MQTTSource(name='MQTT.egon', host='localhost', topic='egon'),
 ]
 
-sink = StdoutSink()
+sink = TeeSink(
+    (StdoutSink(),
+     MQTTSink(host='localhost',
+              topics={
+                  'CAN#42': 'can-42',
+                  'CAN#01': 'can-01',
+                  'MOCK': 'mock',
+                  'MQTT.egon': 'mqtt-egon',
+              })
+     ))
 
 async def main():
     async with asyncio.TaskGroup() as tg:

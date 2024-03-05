@@ -1,16 +1,30 @@
-import asyncio_mqtt as aiomqtt
+from .sink import Sink
+
+import aiomqtt
 import json
 
 
-def _serialize(name, timestamp_ms, temperature):
-    return json.dumps({
-        'name': name,
-        'timestamp_ms': timestamp_ms,
-        'temperature': temperature,
-    })
+class MQTTSink(Sink):
+    def __init__(self, host, topics, port = 1883):
+        super().__init__()
 
-async def sink_to_mqtt(queue, host, port, topic):
-    async with aiomqtt.Client(host, port) as client:
-        while True:
-            name, timestamp_ms, temperature = await queue.get()
-            await client.publish(topic, _serialize(name, timestamp_ms, temperature))
+        self.host = host
+        self.port = port
+        self.topics = topics
+
+    async def _run(self):
+        async with aiomqtt.Client(hostname=self.host, port=self.port) as client:
+            while True:
+                sample = await self.queue.get()
+                topic = self.topics[sample.name]
+                payload = self._make_payload(sample)
+                await client.publish(topic, payload=payload)
+
+    def _make_payload(self, sample):
+        return json.dumps({
+            'timestamp_ms': sample.timestamp_ms,
+            'temperature': sample.temperature,
+        })
+
+    def handle_put(self, sample):
+        assert False
