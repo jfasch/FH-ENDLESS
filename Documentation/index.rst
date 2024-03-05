@@ -8,6 +8,11 @@ The ENDLESS Project
 
    misc-notes/index
 
+.. toctree::
+   :hidden:
+
+   Raspi/index
+
 The Beginning Of It All
 -----------------------
 
@@ -16,6 +21,10 @@ The Beginning Of It All
 
 ``Raspi/``
 ----------
+
+.. sidebar::
+
+   * :doc:`Datalogger Documentation <Raspi/index>`
 
 In the sketch, this is the node labeled "Raspi". A datalogger,
 basically, capable of

@@ -6,6 +6,13 @@ import json
 
 class MQTTSink(Sink):
     def __init__(self, host, topics, port = 1883):
+        ''':param host: MQTT broker to establish a connection to
+        :param port: optional, defaults to 1883
+        :param topics: mapping of incoming sample names to MQTT topics
+
+        '''
+
+
         super().__init__()
 
         self.host = host
