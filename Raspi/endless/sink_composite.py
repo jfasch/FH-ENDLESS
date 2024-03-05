@@ -6,10 +6,10 @@ class CompositeSink(Sink):
         super().__init__()
         self.sinks = sinks
 
-    def start(self):
+    def start(self, tg):
         for sink in self.sinks:
-            sink.start()
-        super().start()
+            sink.start(tg)
+        super().start(tg)
 
     def stop(self):
         super().stop()

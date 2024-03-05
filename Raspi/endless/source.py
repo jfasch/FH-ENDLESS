@@ -11,7 +11,11 @@ class Source(abc.ABC):
 
     def start(self, tg, sink):
         self.sink = sink
-        tg.create_task(self._do_run())
+        self.task = tg.create_task(self._do_run())
+        
+    def stop(self):
+        assert self.task is not None
+        self.task.cancel()
 
     async def _do_run(self):
         try:

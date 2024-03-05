@@ -19,7 +19,7 @@ class MQTTSource(Source):
             async for message in client.messages:
                 sample = self._make_sample(message.payload)
                 await self.sink.put(sample)
-                
+
     def _make_sample(self, payload):
         mqtt_sample = json.loads(payload)
         return Sample(

@@ -1,5 +1,6 @@
 from endless.sample import Sample
 from endless.source_mock import MockSource
+from endless.sink_mock import MockSink, have_n_samples
 from endless import async_util
 
 import pytest
@@ -8,22 +9,21 @@ import asyncio
 
 @pytest.mark.asyncio
 async def test_basic():
-    queue = asyncio.Queue()
+    have_5, cond = have_n_samples(5)
+    sink = MockSink(cond)
+    source = MockSource('mock', async_util.mock_timestamps(start_time_ms=100, interval_ms=10), temperature=37.5)
 
     async with asyncio.TaskGroup() as tg:
-        producer = tg.create_task(
-            source_mock(
-                queue = queue,
-                name = "mock",
-                timestamps = async_util.mock_timestamps(start_time_ms = 100, interval_ms = 10),
-                temperature = 37.5
-            ))
+        sink.start(tg)
+        source.start(tg, sink)
 
-        assert await queue.get() == Sample(name="mock", timestamp_ms=100, temperature=pytest.approx(37.5))
-        assert await queue.get() == Sample(name="mock", timestamp_ms=110, temperature=pytest.approx(37.5))
-        assert await queue.get() == Sample(name="mock", timestamp_ms=120, temperature=pytest.approx(37.5))
-        assert await queue.get() == Sample(name="mock", timestamp_ms=130, temperature=pytest.approx(37.5))
-        assert await queue.get() == Sample(name="mock", timestamp_ms=140, temperature=pytest.approx(37.5))
+        await have_5
 
-        producer.cancel()
+        assert sink.samples[0] == Sample(name="mock", timestamp_ms=100, temperature=pytest.approx(37.5))
+        assert sink.samples[1] == Sample(name="mock", timestamp_ms=110, temperature=pytest.approx(37.5))
+        assert sink.samples[2] == Sample(name="mock", timestamp_ms=120, temperature=pytest.approx(37.5))
+        assert sink.samples[3] == Sample(name="mock", timestamp_ms=130, temperature=pytest.approx(37.5))
+        assert sink.samples[4] == Sample(name="mock", timestamp_ms=140, temperature=pytest.approx(37.5))
 
+        source.stop()
+        sink.stop()
