@@ -11,20 +11,11 @@ class Source(abc.ABC):
 
     def start(self, tg, sink):
         self.sink = sink
-        self.task = tg.create_task(self._do_run())
+        self.task = tg.create_task(self._run())
         
     def stop(self):
         assert self.task is not None
         self.task.cancel()
-
-    async def _do_run(self):
-        try:
-            await self._run()
-        except asyncio.CancelledError:
-            print(self.name, 'cancelled', file=sys.stderr)
-        except Exception as e:
-            print(self.name, 'exception', type(e), e)
-            raise
 
     @abc.abstractmethod
     async def _run(self):
