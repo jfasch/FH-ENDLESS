@@ -22,6 +22,8 @@ class MQTTSource(Source):
 
     def _make_sample(self, payload):
         mqtt_sample = json.loads(payload)
+        if len(mqtt_sample) != 2:
+            raise RuntimeError('Invalid sample:', payload)
         return Sample(
             name = self.name,
             timestamp_ms = mqtt_sample['timestamp_ms'],
