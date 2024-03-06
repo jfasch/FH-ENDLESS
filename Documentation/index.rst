@@ -5,6 +5,7 @@ The ENDLESS Project
    :local:
 
 .. toctree::
+   :maxdepth: 1
 
    Raspi/index
    misc-notes/index
