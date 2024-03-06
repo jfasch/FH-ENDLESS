@@ -6,12 +6,9 @@ The ENDLESS Project
 
 .. toctree::
 
+   Raspi/index
    misc-notes/index
 
-.. toctree::
-   :hidden:
-
-   Raspi/index
 
 The Beginning Of It All
 -----------------------

@@ -1,5 +1,5 @@
-The Data Logger
-===============
+The Datalogger
+==============
 
 .. contents::
    :local:
@@ -29,10 +29,10 @@ MQTT Sink
    :undoc-members:
    :special-members: __init__
 
-Tee Sink
-........
+Composite Sink
+..............
 
-.. autoclass:: endless.sink_tee.TeeSink
+.. autoclass:: endless.sink_composite.CompositeSink
    :members:
    :undoc-members:
    :special-members: __init__
@@ -72,3 +72,9 @@ MQTT Source
    :undoc-members:
    :special-members: __init__
 
+Sample Datalogger Application
+-----------------------------
+
+.. literalinclude:: ../../Raspi/bin/data-logger.py
+   :language: python
+   :caption: :download:`../../Raspi/bin/data-logger.py`

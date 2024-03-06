@@ -1,7 +1,7 @@
 from .sink_simple import SimpleSink
 
 
-class TeeSink(SimpleSink):
+class CompositeSink(SimpleSink):
     '''Distributes incoming samples to other sinks'''
 
     def __init__(self, sinks):
