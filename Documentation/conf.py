@@ -15,6 +15,8 @@ import logging
 import os
 import sys
 
+sys.path.insert(0, '../Raspi')
+
 # -- Project information -----------------------------------------------------
 project = 'ENDLESS'
 copyright = '2024 (GPLv3)'
