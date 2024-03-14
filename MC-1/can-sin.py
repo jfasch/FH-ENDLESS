@@ -9,10 +9,10 @@ from math import pi, sin
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--can-interface', type=str)
-parser.add_argument('--can-id', type=int)
-parser.add_argument('--start', help='timestamp start value (milliseconds)')
-parser.add_argument('--interval', help='interval (milliseconds)')
+parser.add_argument('--can-interface', type=str, required=True)
+parser.add_argument('--can-id', type=int, required=True)
+parser.add_argument('--start', help='timestamp start value (milliseconds)', type=str, default='0')
+parser.add_argument('--interval', help='interval (milliseconds)', type=str, default='1000')
 
 parser.add_argument('--amplitude', default='1')
 parser.add_argument('--hz', type=float, default=1)
