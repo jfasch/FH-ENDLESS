@@ -28,6 +28,6 @@ class MQTTSink(Sink):
 
     def _make_payload(self, sample):
         return json.dumps({
-            'timestamp_ms': sample.timestamp_ms,
+            'timestamp': sample.timestamp.isoformat(),
             'temperature': sample.temperature,
         })

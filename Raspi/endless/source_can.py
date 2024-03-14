@@ -5,6 +5,7 @@ import socket
 import struct
 import sys
 import asyncio
+from datetime import datetime
 
 
 _FRAME_LAYOUT = "=IB3x8s"
@@ -38,4 +39,8 @@ class CANSource(Source):
 
             timestamp_ms, temperature = struct.unpack(_DATA_LAYOUT, frame_data)
 
-            await self.sink.put(Sample(name=self.name, timestamp_ms=timestamp_ms, temperature=temperature))
+            # FIXME: we are overriding the timestamps from the
+            # controller with the wall clock time that *we* see.
+            my_own_timestamp = datetime.now()
+
+            await self.sink.put(Sample(name=self.name, timestamp=my_own_timestamp, temperature=temperature))

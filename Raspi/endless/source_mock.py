@@ -12,7 +12,7 @@ class MockSource(Source):
 
     async def _run(self):
         async for ts in self.timestamps:
-            await self.sink.put(Sample(name=self.name, timestamp_ms=ts, temperature=self.temperature))
+            await self.sink.put(Sample(name=self.name, timestamp=ts, temperature=self.temperature))
 
             # if queue is unbounded (and timestamps are of the
             # quick-rush-through variant), then queue.put() wont

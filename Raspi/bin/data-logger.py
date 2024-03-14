@@ -26,7 +26,14 @@ sink = CompositeSink(
                   'CAN#01': 'can-01',
                   'MOCK': 'mock',
                   'MQTT.egon': 'mqtt-egon',
-              })
+              }),
+     MQTTSink(host='localhost',
+              topics={
+                  'CAN#42': 'test-channel',
+                  'CAN#01': 'test-channel',
+                  'MOCK': 'test-channel',
+                  'MQTT.egon': 'test-channel',
+              }),
      ))
 
 async def main():

@@ -4,6 +4,7 @@ from endless.sample import Sample
 
 import pytest
 import asyncio
+from datetime import datetime
 
 
 @pytest.mark.asyncio
@@ -15,12 +16,12 @@ async def test_basic():
         compsink = CompositeSink([sink1, sink2])
         compsink.start(tg)
 
-        await compsink.put(Sample(name='name', timestamp_ms=200, temperature=42.666))
+        await compsink.put(Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=42.666))
 
         await have_1_1
         await have_1_2
 
-        assert sink1.samples[0] == Sample(name='name', timestamp_ms=200, temperature=pytest.approx(42.666))
-        assert sink2.samples[0] == Sample(name='name', timestamp_ms=200, temperature=pytest.approx(42.666))
+        assert sink1.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=pytest.approx(42.666))
+        assert sink2.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=pytest.approx(42.666))
 
         compsink.stop()

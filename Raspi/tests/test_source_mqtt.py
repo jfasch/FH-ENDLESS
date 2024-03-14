@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import pytest
 import aiomqtt
 import asyncio
+from datetime import datetime
 
 
 @pytest.mark.asyncio
@@ -14,12 +15,15 @@ async def test_basic(monkeypatch):
     class Message:
         payload: str
 
+    ts1 = datetime(2024, 3, 14, 8, 46)
+    ts2 = datetime(2024, 3, 14, 8, 47)
+
     class MyClient:  # aiomqtt.Client replacement
         def __init__(self, hostname, port):
             self.host = hostname
             self.port = port
-            self._messages = [Message(payload='{"timestamp_ms": 100, "temperature": 37.5}'),
-                             Message(payload='{"timestamp_ms": 200, "temperature": 38.3}'),
+            self._messages = [Message(payload='{"timestamp": "'+ts1.isoformat()+'", "temperature": 37.5}'),
+                              Message(payload='{"timestamp": "'+ts2.isoformat()+'", "temperature": 38.3}'),
                              ]
 
         @property
@@ -45,8 +49,8 @@ async def test_basic(monkeypatch):
 
         await have_2
 
-        assert sink.samples[0] == Sample(name='a-name', timestamp_ms=100, temperature=pytest.approx(37.5))
-        assert sink.samples[1] == Sample(name='a-name', timestamp_ms=200, temperature=pytest.approx(38.3))
+        assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, temperature=pytest.approx(37.5))
+        assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, temperature=pytest.approx(38.3))
 
         sink.stop()
         source.stop()

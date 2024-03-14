@@ -3,6 +3,7 @@ from .sample import Sample
 
 import json
 import aiomqtt
+from datetime import datetime
 
 
 class MQTTSource(Source):
@@ -23,9 +24,9 @@ class MQTTSource(Source):
     def _make_sample(self, payload):
         mqtt_sample = json.loads(payload)
         if len(mqtt_sample) != 2:
-            raise RuntimeError('Invalid sample:', payload)
+            raise RuntimeError(f'Invalid sample (#entries=={len(mqtt_sample)}):', payload)
         return Sample(
             name = self.name,
-            timestamp_ms = mqtt_sample['timestamp_ms'],
+            timestamp = datetime.fromisoformat(mqtt_sample['timestamp']),
             temperature = mqtt_sample['temperature'],
         )

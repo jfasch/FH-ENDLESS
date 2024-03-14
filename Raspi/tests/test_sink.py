@@ -4,6 +4,7 @@ from endless.sample import Sample
 
 import pytest
 import asyncio
+from datetime import datetime
 
 
 @pytest.mark.asyncio
@@ -13,13 +14,13 @@ async def test_basic():
         sink = MockSink(cond)
         sink.start(tg)
 
-        await sink.put(Sample(name='name1', timestamp_ms=100, temperature=42.666))
-        await sink.put(Sample(name='name2', timestamp_ms=200, temperature=-273.15))
+        await sink.put(Sample(name='name1', timestamp=datetime(2024, 3, 14, 8, 46), temperature=42.666))
+        await sink.put(Sample(name='name2', timestamp=datetime(2024, 3, 14, 8, 47), temperature=-273.15))
 
         await have_2
 
-        assert sink.samples[0] == Sample('name1', 100, pytest.approx(42.666))
-        assert sink.samples[1] == Sample('name2', 200, pytest.approx(-273.15))
+        assert sink.samples[0] == Sample('name1', datetime(2024, 3, 14, 8, 46), pytest.approx(42.666))
+        assert sink.samples[1] == Sample('name2', datetime(2024, 3, 14, 8, 47), pytest.approx(-273.15))
 
         sink.stop()
 
