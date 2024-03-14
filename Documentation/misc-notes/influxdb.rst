@@ -84,3 +84,21 @@ A-ha - a statically linked executable. I have
    $ cp influx /home/jfasch/.local/bin
    $ influx --help
    ... help screen ...
+
+
+AAAARGGHHH
+----------
+
+The server is listening on the wildcard interface,
+
+.. code-block:: console
+
+   # netstat -antp
+   ...
+   tcp6       0      0 :::8086                 :::*                    LISTEN      1297/influxd        
+   ...
+
+This does not look like I want that (anybody could connect from
+outside, which is not a sane default IMO).
+
+Stop it, and fix it before continuing here.
