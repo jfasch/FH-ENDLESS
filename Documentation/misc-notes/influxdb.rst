@@ -7,6 +7,11 @@ Using InfluxDB
 Installation
 ------------
 
+.. sidebar::
+
+   Guided through by
+   https://docs.influxdata.com/influxdb/v2/get-started/setup/
+
 Server
 ......
 

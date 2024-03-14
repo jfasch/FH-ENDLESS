@@ -8,6 +8,7 @@ The ENDLESS Project
    :maxdepth: 1
 
    Raspi/index
+   Mgmt/index
    misc-notes/index
 
 
