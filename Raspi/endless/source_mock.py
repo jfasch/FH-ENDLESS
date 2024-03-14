@@ -12,10 +12,14 @@ class MockSource(Source):
 
     async def _run(self):
         async for ts in self.timestamps:
-            await self.sink.put(Sample(name=self.name, timestamp=ts, temperature=self.temperature))
+            await self.sink.put(
+                Sample(name=self.name, 
+                       timestamp=ts, 
+                       temperature=self.temperature(ts) if callable(self.temperature) else self.temperature))
+
 
             # if queue is unbounded (and timestamps are of the
-            # quick-rush-through variant), then queue.put() wont
-            # schedule and the entire program will hang. add a manual
-            # scheduling point.
+            # quick-rush-through variant, without any real delay),
+            # then queue.put() wont schedule and the entire program
+            # will hang. add a manual scheduling point.
             await asyncio.sleep(0)

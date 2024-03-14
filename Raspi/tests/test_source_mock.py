@@ -40,3 +40,29 @@ async def test_basic():
 
         source.stop()
         sink.stop()
+
+@pytest.mark.asyncio
+async def test_value_is_function_of_timestamp():
+    import math
+    def myfunc(ts): 
+        return math.sin(ts.timestamp())
+
+    have_1, cond = have_n_samples(1)
+    sink = MockSink(cond)
+    source = MockSource('mock',
+                        timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
+                        temperature=myfunc)
+
+    async with asyncio.TaskGroup() as tg:
+        sink.start(tg)
+        source.start(tg, sink)
+
+        await have_1
+
+        assert sink.samples[0] == Sample(name="mock",
+                                         timestamp=datetime(2024, 3, 14, 8, 46),
+                                         temperature=pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp())),
+                                         )
+
+        source.stop()
+        sink.stop()

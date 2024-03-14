@@ -12,7 +12,7 @@ class Sample:
 
     def __init__(self, name, timestamp, temperature):
         if type(timestamp) is not datetime.datetime:
-            raise RuntimeError(f'{timestamp} must be datetime.datetime')
+            raise RuntimeError(f'timestamp {timestamp} must be datetime.datetime (was {type(timestamp)})')
 
         self._name = name
         self._timestamp = timestamp
