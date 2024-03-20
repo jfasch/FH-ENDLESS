@@ -21,4 +21,7 @@ async def main():
     async with Runner(sources=sources, sinks=sinks):
         pass
 
-asyncio.run(main())
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    pass
