@@ -15,10 +15,10 @@ context = {}
 exec(config, context)
 
 sources = context['SOURCES']
-sink = context['SINK']
+sinks = context['SINKS']
 
 async def main():
-    async with Runner(sources=sources, sink=sink):
+    async with Runner(sources=sources, sinks=sinks):
         pass
 
 asyncio.run(main())

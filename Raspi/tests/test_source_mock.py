@@ -15,8 +15,9 @@ async def test_basic():
     source = MockSource('mock',
                         timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
                         temperature=37.5)
+    source.connect(sink)
 
-    async with Runner(sources=[source], sink=sink) as runner:
+    async with Runner(sources=[source], sinks=[sink]) as runner:
         await have_5
         runner.stop()
 
@@ -47,8 +48,9 @@ async def test_value_is_function_of_timestamp():
     source = MockSource('mock',
                         timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
                         temperature=myfunc)
+    source.connect(sink)
 
-    async with Runner(sources=[source], sink=sink) as runner:
+    async with Runner(sources=[source], sinks=[sink]) as runner:
         await have_1
         runner.stop()
 

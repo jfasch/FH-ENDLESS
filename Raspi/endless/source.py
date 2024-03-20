@@ -9,8 +9,11 @@ class Source(abc.ABC):
         self.task = None
         self.sink = None
 
-    def start(self, tg, sink):
+    def connect(self, sink):
+        assert self.sink is None
         self.sink = sink
+
+    def start(self, tg):
         self.task = tg.create_task(self._run())
         
     def stop(self):

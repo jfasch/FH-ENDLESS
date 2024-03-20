@@ -14,7 +14,7 @@ async def test_basic():
     sink1, sink2 = MockSink(cond1), MockSink(cond2)
     compsink = CompositeSink([sink1, sink2])
 
-    async with Runner(sources=(), sink=compsink) as runner:
+    async with Runner(sources=(), sinks=[compsink]) as runner:
         await compsink.put(Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=42.666))
 
         await have_1_1

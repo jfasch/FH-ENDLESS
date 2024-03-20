@@ -39,7 +39,7 @@ async def test_basic(monkeypatch):
                         'sensor-2': 'topic-2',
                     })
 
-    async with Runner(sources=(), sink=sink) as runner:
+    async with Runner(sources=(), sinks=[sink]) as runner:
         # first sample
         await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), temperature=37.5))
 
