@@ -1,11 +1,11 @@
 from endless.sink_mock import MockSink, have_n_samples
 from endless.source_mqtt import MQTTSource
 from endless.sample import Sample
+from endless.runner import Runner
 
 from dataclasses import dataclass
 import pytest
 import aiomqtt
-import asyncio
 from datetime import datetime
 
 
@@ -39,18 +39,13 @@ async def test_basic(monkeypatch):
 
     monkeypatch.setattr(aiomqtt, 'Client', MyClient)
 
-    async with asyncio.TaskGroup() as tg:
-        have_2, cond = have_n_samples(2)
-        sink = MockSink(cond)
-        source = MQTTSource(name='a-name', host='blah.com', port=6666, topic='a-topic')
+    have_2, cond = have_n_samples(2)
+    sink = MockSink(cond)
+    source = MQTTSource(name='a-name', host='blah.com', port=6666, topic='a-topic')
 
-        sink.start(tg)
-        source.start(tg, sink=sink)
-
+    async with Runner(sources=[source], sink=sink) as runner:
         await have_2
+        runner.stop()
 
-        assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, temperature=pytest.approx(37.5))
-        assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, temperature=pytest.approx(38.3))
-
-        sink.stop()
-        source.stop()
+    assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, temperature=pytest.approx(37.5))
+    assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, temperature=pytest.approx(38.3))

@@ -1,5 +1,6 @@
 from endless.sink_mqtt import MQTTSink
 from endless.sample import Sample
+from endless.runner import Runner
 
 
 import pytest
@@ -32,14 +33,13 @@ async def test_basic(monkeypatch):
 
     monkeypatch.setattr(aiomqtt, 'Client', MyClient)
 
-    async with asyncio.TaskGroup() as tg:
-        sink = MQTTSink(host='blah.com', port=6666, 
-                        topics={
-                            'sensor-1': 'topic-1',
-                            'sensor-2': 'topic-2',
-                        })
-        sink.start(tg)
+    sink = MQTTSink(host='blah.com', port=6666, 
+                    topics={
+                        'sensor-1': 'topic-1',
+                        'sensor-2': 'topic-2',
+                    })
 
+    async with Runner(sources=(), sink=sink) as runner:
         # first sample
         await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), temperature=37.5))
 
@@ -64,4 +64,4 @@ async def test_basic(monkeypatch):
         assert py_payload['timestamp'] == datetime(2024, 3, 14, 8, 47).isoformat()
         assert py_payload['temperature'] == pytest.approx(38.5)
 
-        sink.stop()
+        runner.stop()

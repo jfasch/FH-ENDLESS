@@ -82,3 +82,11 @@ Dashboards
 * `Build your first dashboard
   <https://grafana.com/docs/grafana/latest/getting-started/build-first-dashboard/>`__
 
+Most if not all functionality is available through
+http://localhost:3000. Based on a plugin system, many plugins are
+available through the base installation. Other plugins might be
+needed; even MQTT is available initially, though.
+
+Grafana's company is represented on Github;
+https://github.com/grafana.
+

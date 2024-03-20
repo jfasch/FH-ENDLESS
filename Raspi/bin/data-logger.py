@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from endless.runner import Runner
+
 import argparse
 import asyncio
 
@@ -16,10 +18,7 @@ sources = context['SOURCES']
 sink = context['SINK']
 
 async def main():
-    async with asyncio.TaskGroup() as tg:
-        sink.start(tg)
-
-        for source in sources:
-            source.start(tg, sink)
+    async with Runner(sources=sources, sink=sink):
+        pass
 
 asyncio.run(main())

@@ -31,6 +31,7 @@ class Sink(abc.ABC):
         '''Cancel the object's task'''
         assert self.task is not None
         self.task.cancel()
+        self.task = None
 
     async def put(self, sample):
         '''Put a sample onto the object's queue. The object's task

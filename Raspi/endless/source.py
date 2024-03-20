@@ -16,6 +16,7 @@ class Source(abc.ABC):
     def stop(self):
         assert self.task is not None
         self.task.cancel()
+        self.task = None
 
     @abc.abstractmethod
     async def _run(self):
