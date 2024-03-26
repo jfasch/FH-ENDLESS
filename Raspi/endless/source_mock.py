@@ -1,5 +1,6 @@
 from .sample import Sample
 from .source import Source
+from .errorhandler import ErrorHandler, ErrorReporter
 
 import asyncio
 
@@ -12,10 +13,13 @@ class MockSource(Source):
 
     async def _run(self):
         async for ts in self.timestamps:
-            await self.sink.put(
-                Sample(name=self.name, 
-                       timestamp=ts, 
-                       temperature=self.temperature(ts) if callable(self.temperature) else self.temperature))
+            if callable(self.temperature):
+                async with ErrorReporter(self.errorhandler):
+                    temperature = self.temperature(ts)
+            else:
+                temperature = self.temperature
+
+            await self.sink.put(Sample(name=self.name, timestamp=ts, temperature=temperature))
 
 
             # if queue is unbounded (and timestamps are of the

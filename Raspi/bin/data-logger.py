@@ -18,7 +18,7 @@ sources = context['SOURCES']
 sinks = context['SINKS']
 
 async def main():
-    async with Runner(sources=sources, sinks=sinks):
+    async with Runner(sources=sources, sinks=sinks) as runner:
         pass
 
 try:

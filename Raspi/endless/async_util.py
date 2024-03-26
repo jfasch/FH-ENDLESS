@@ -2,6 +2,10 @@ import asyncio
 from datetime import datetime
 
 
+async def iter_queue_blocking(q):
+    while True:
+        yield await q.get()
+
 async def enumerate(aiterable, start=0):
     async for item in aiterable:
         yield start, item

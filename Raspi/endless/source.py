@@ -8,10 +8,14 @@ class Source(abc.ABC):
         self.name = name
         self.task = None
         self.sink = None
+        self.errorhandler = None
 
     def connect(self, sink):
         assert self.sink is None
         self.sink = sink
+
+    def errors_to(self, errorhandler):
+        self.errorhandler = errorhandler
 
     def start(self, tg):
         self.task = tg.create_task(self._run())

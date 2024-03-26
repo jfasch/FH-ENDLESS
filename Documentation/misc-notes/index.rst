@@ -6,3 +6,4 @@ Miscellaneous Notes
    grafana
    influxdb
    sinewave
+   yocto-raspi
