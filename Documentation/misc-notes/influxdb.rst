@@ -4,49 +4,75 @@ Using InfluxDB
 .. contents::
    :local:
 
-Installation
+.. sidebar::
+
+   * Guided through by
+     https://docs.influxdata.com/influxdb/v2/get-started/setup/
+   * Server Installation:
+     https://docs.influxdata.com/influxdb/v2/install/
+
+Server Setup
 ------------
 
-.. sidebar::
-
-   Guided through by
-   https://docs.influxdata.com/influxdb/v2/get-started/setup/
-
-Server
-......
-
-.. sidebar::
-
-   Server Installation:
-   https://docs.influxdata.com/influxdb/v2/install/
+Installation
+............
 
 Fedorishly, I did
 
 .. code-block:: console
 
    $ wget --output-document=$HOME/tmp/influxdb2-2.7.4-1.x86_64.rpm https://dl.influxdata.com/influxdb/releases/influxdb2-2.7.4-1.x86_64.rpm
-   $ sudo rpm -ivh $HOME/tmp/influxdb2-2.7.4-1.x86_64.rpm
+   $ sudo rpm -hiv $HOME/tmp/influxdb2-2.7.4-1.x86_64.rpm
    $ rm $HOME/tmp/influxdb2-2.7.4-1.x86_64.rpm
 
 (There is no download fingerprint supplied, which raised my eyebrows a
 bit.)
 
-Finally, start the service
+Server Security
+...............
+
+For the paranoid ... err, security aware ... the following is the
+default configuration,
+
+* Cleartext HTTP is used
+* Server opens port 8086, listening on *all* interfaces
 
 .. code-block:: console
 
-   $ systemctl start influxdb.service 
+   # netstat -antp
+   ...
+   tcp6       0      0 :::8086                 :::*                    LISTEN      620488/influxd      
+   ...
 
-(Again raising eyebrows; in the documentation they start the ancient
-SysV init script.)
+Add the following line to ``/etc/influxdb/config.toml``,
 
-Btw., 
+.. code-block:: console
+   :caption:``/etc/influxdb/config.toml``
 
-* Data is in ``/var/lib/influxdb/``
-* Config is in ``/etc/influxdb/``
+   # "LOCALHOST ONLY" should be the default but isn't                                                                                                                                            http-bind-address = "127.0.0.1:8086"
 
-CLI
-...
+Startup
+.......
+
+Finally, start the service and optionally *enable* it at boot,
+
+.. code-block:: console
+
+   # systemctl start influxdb.service 
+   # systemctl enable influxdb.service 
+
+Paranoidly check network situation,
+
+.. code-block:: console
+
+   # netstat -antp
+   ...
+   tcp        0      0 127.0.0.1:8086          0.0.0.0:*               LISTEN      620804/influxd  
+                       ^^^^^^^^^
+   ...
+
+CLI Setup
+---------
 
 .. sidebar::
 
@@ -85,20 +111,74 @@ A-ha - a statically linked executable. I have
    $ influx --help
    ... help screen ...
 
+Next ...
+--------
 
-AAAARGGHHH
-----------
-
-The server is listening on the wildcard interface,
+View Server Configuration
+.........................
 
 .. code-block:: console
 
-   # netstat -antp
-   ...
-   tcp6       0      0 :::8086                 :::*                    LISTEN      1297/influxd        
-   ...
+   $ influx server-config
+   Error: failed to retrieve config: 401 Unauthorized: unauthorized access
 
-This does not look like I want that (anybody could connect from
-outside, which is not a sane default IMO).
+Viewing the config is a "server config command",
+obviously. https://docs.influxdata.com/influxdb/v2/reference/config-options/
+says
 
-Stop it, and fix it before continuing here.
+..
+
+  Server configuration commands require an Operator token.
+
+Create operator token:
+https://docs.influxdata.com/influxdb/v2/admin/tokens/#operator-token
+
+Confusion, 
+
+..
+
+  Operator tokens are created in the InfluxDB setup process. To create
+  an operator token manually with the InfluxDB UI, api/v2 API, or influx
+  CLI after the setup process is completed, you must use an existing
+  Operator token.
+
+Where's the pre-existing operator token?
+
+Stop here, and point browser to ``http://localhost:8086``
+
+Initial Configuration
+---------------------
+
+* Create initial setup. Mine is
+
+  * Username: ``jfasch``
+  * Password: ``jfasch777``
+  * Initial organization name: ``faschingbauer``
+  * Initial bucket name: ``my-bucket``
+
+  Here the "Operator token" miracle is solved; mine is
+  ``Wor6XXn5emD6DpKPkHHt5_UMqbUb9N0_EW_SY9L29bIyjpe56E7lgxK0Ce4XkQNWxjvpyrzfS0OJi3D5xkl5CA==``
+  (*Note* that this is not an information disclosure as you don't
+  reach my database from outside my own computer)
+
+Python Client
+-------------
+
+Click through http://localhost:8086/orgs/218d89cad71fac28/new-user-setup/python
+
+Another token, an "all-access token" (created as I click through), is
+needed to authenticate a Python client program against the database,
+
+.. code-block:: console
+
+   $ export INFLUXDB_TOKEN=b9JzaHkTEQdmivCxAMwgHWDLrFnrigq7lz26_-w5dRpXcydDM77M60GRz5WnpMUoJv9xasAuAVnwy9__Bh8QzQ==
+
+As they say,
+
+.. 
+
+   Creating an all-access token is not the best security practice! We
+   recommend you delete this token in the Tokens page after setting
+   up, and create your own token with a specific set of permissions
+   later.
+
