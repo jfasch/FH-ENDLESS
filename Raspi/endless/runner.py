@@ -4,21 +4,21 @@ from contextlib import asynccontextmanager
 from asyncio import TaskGroup
 
 
-class Runner:
-    class NotConnected(Exception): pass
-    class NullErrorHandler(ErrorHandler):
-        async def _handle_error(self, error): pass
+class SourceNotConnected(Exception): pass
+class NullErrorHandler(ErrorHandler):
+    async def _handle_error(self, error): pass
 
+class Runner:
     def __init__(self, sources, sinks, errorhandler=None):
         for source in sources:
             if source.sink is None:
-                raise self.NotConnected(f'source "{source.name}" is not connected')
+                raise SourceNotConnected(f'source "{source.name}" is not connected')
 
         self.sources = sources
         self.sinks = sinks
         
         if errorhandler is None:
-            self.errorhandler = self.NullErrorHandler()
+            self.errorhandler = NullErrorHandler()
         else:
             self.errorhandler = errorhandler
         

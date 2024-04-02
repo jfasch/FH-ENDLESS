@@ -1,6 +1,6 @@
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
-from endless.runner import Runner
+from endless.runner import Runner, SourceNotConnected
 from endless.async_util import mock_timestamps
 from endless.sample import Sample
 
@@ -45,3 +45,11 @@ async def test_m_to_n():
 
     assert sink1.samples[0] == Sample(name='source1', timestamp=datetime(2024, 3, 20, 12, 51), temperature=pytest.approx(36.5))
     assert sink2.samples[0] == Sample(name='source2', timestamp=datetime(2024, 3, 20, 12, 52), temperature=pytest.approx(0.5))
+
+@pytest.mark.asyncio
+async def test_source_not_connected():
+    source = MockSource(name='source', timestamps=mock_timestamps(start=datetime(2024, 3, 20, 12, 51), interval=timedelta(seconds=3)), temperature=36.5)
+
+    with pytest.raises(SourceNotConnected):
+        async with Runner(sources=(source,), sinks=()):
+            pass
