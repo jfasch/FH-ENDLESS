@@ -1,5 +1,6 @@
 from .sample import Sample
 from .source import Source
+from .async_util import wallclock_timestamps_nosleep
 
 import socket
 import struct
@@ -14,17 +15,20 @@ _DATA_LAYOUT = "<Ii"
 
 
 class CANSource(Source):
-    def __init__(self, name, can_iface, can_id):
+    def __init__(self, name, can_iface, can_id, timestamps=None):
         super().__init__(name)
 
         self.name = name
         self.can_iface = can_iface
         self.can_id = can_id
 
+        if timestamps is None:
+            self.timestamps = wallclock_timestamps_nosleep
+        else:
+            self.timestamps = timestamps
+
     async def _run(self):
-        can_socket = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
-        can_socket.bind((self.can_iface,))
-        can_socket.setblocking(False)
+        can_socket = self._create_socket()
 
         while True:
             # cannot mix endiannesses in one single struct, so I have
@@ -38,9 +42,17 @@ class CANSource(Source):
                 continue
 
             timestamp_ms, temperature = struct.unpack(_DATA_LAYOUT, frame_data)
+            temperature /= 1000
 
             # FIXME: we are overriding the timestamps from the
             # controller with the wall clock time that *we* see.
-            my_own_timestamp = datetime.now()
+            my_own_timestamp = next(self.timestamps)
 
             await self.sink.put(Sample(name=self.name, timestamp=my_own_timestamp, temperature=temperature))
+
+    def _create_socket(self):
+        s = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+        s.bind((self.can_iface,))
+        s.setblocking(False)
+        
+        return s

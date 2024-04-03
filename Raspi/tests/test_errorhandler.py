@@ -14,8 +14,9 @@ async def test_non_endless_exception():
         raise RuntimeError('boom')
 
     source = MockSource(name='name', 
-                        timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 20, 15, 36), 
-                                                              interval=timedelta(seconds=1)),
+                        timestamps=async_util.mock_timestamps_async(
+                            start=datetime(2024, 3, 20, 15, 36), 
+                            interval=timedelta(seconds=1)),
                         temperature=errorfunc)
     sink = MockSink()
     source.connect(sink)

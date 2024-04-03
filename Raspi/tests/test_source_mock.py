@@ -12,9 +12,10 @@ from datetime import datetime, timedelta
 async def test_basic():
     have_5, cond = have_n_samples(5)
     sink = MockSink(cond)
-    source = MockSource('mock',
-                        timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
-                        temperature=37.5)
+    source = MockSource(
+        'mock',
+        timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
+        temperature=37.5)
     source.connect(sink)
 
     async with Runner(sources=[source], sinks=[sink]) as runner:
@@ -46,7 +47,7 @@ async def test_value_is_function_of_timestamp():
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond)
     source = MockSource('mock',
-                        timestamps=async_util.mock_timestamps(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
+                        timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
                         temperature=myfunc)
     source.connect(sink)
 

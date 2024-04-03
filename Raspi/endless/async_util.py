@@ -6,12 +6,21 @@ async def iter_queue_blocking(q):
     while True:
         yield await q.get()
 
-async def wallclock_timestamps(interval):
+async def wallclock_timestamps_sleep(interval):
     while True:
         yield datetime.now()
         await asyncio.sleep(interval.microseconds / 1_000_000)
 
-async def mock_timestamps(start, interval):
+async def wallclock_timestamps_nosleep(interval):
+    while True:
+        yield datetime.now()
+
+async def mock_timestamps_async(start, interval):
+    while True:
+        yield start
+        start += interval
+
+def mock_timestamps_sync(start, interval):
     while True:
         yield start
         start += interval
