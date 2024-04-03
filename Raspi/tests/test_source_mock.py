@@ -22,21 +22,25 @@ async def test_basic():
         await have_5
         runner.stop()
 
-    assert sink.samples[0] == Sample(name="mock",
-                                     timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10),
-                                     data=pytest.approx(37.5))
-    assert sink.samples[1] == Sample(name="mock", 
-                                     timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10), 
-                                     data=pytest.approx(37.5))
-    assert sink.samples[2] == Sample(name="mock", 
-                                     timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10), 
-                                     data=pytest.approx(37.5))
-    assert sink.samples[3] == Sample(name="mock", 
-                                     timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10), 
-                                     data=pytest.approx(37.5))
-    assert sink.samples[4] == Sample(name="mock", 
-                                     timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10), 
-                                     data=pytest.approx(37.5))
+    assert sink.samples[0].name == "mock"
+    assert sink.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10)
+    assert sink.samples[0].data == pytest.approx(37.5)
+
+    assert sink.samples[1].name == "mock"
+    assert sink.samples[1].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10)
+    assert sink.samples[1].data == pytest.approx(37.5)
+
+    assert sink.samples[2].name == "mock"
+    assert sink.samples[2].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10)
+    assert sink.samples[2].data == pytest.approx(37.5)
+
+    assert sink.samples[3].name == "mock"
+    assert sink.samples[3].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10)
+    assert sink.samples[3].data == pytest.approx(37.5)
+
+    assert sink.samples[4].name == "mock"
+    assert sink.samples[4].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10)
+    assert sink.samples[4].data == pytest.approx(37.5)
 
 @pytest.mark.asyncio
 async def test_data_is_function_of_timestamp():
@@ -55,7 +59,6 @@ async def test_data_is_function_of_timestamp():
         await have_1
         runner.stop()
 
-    assert sink.samples[0] == Sample(name="mock",
-                                     timestamp=datetime(2024, 3, 14, 8, 46),
-                                     data=pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp())),
-                                     )
+    assert sink.samples[0].name == "mock"
+    assert sink.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
+    assert sink.samples[0].data == pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp()))

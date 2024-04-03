@@ -19,8 +19,13 @@ async def test_basic():
         await have_2
         runner.stop()
 
-    assert sink.samples[0] == Sample('name1', datetime(2024, 3, 14, 8, 46), pytest.approx(42.666))
-    assert sink.samples[1] == Sample('name2', datetime(2024, 3, 14, 8, 47), pytest.approx(-273.15))
+    assert sink.samples[0].name == 'name1'
+    assert sink.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
+    assert sink.samples[0].data == pytest.approx(42.666)
+
+    assert sink.samples[1].name == 'name2'
+    assert sink.samples[1].timestamp == datetime(2024, 3, 14, 8, 47)
+    assert sink.samples[1].data == pytest.approx(-273.15)
 
 def test_is_a_sink():
     assert issubclass(MockSink, Sink)

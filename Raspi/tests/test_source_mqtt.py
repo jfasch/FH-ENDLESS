@@ -48,5 +48,11 @@ async def test_basic(monkeypatch):
         await have_2
         runner.stop()
 
-    assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, data=pytest.approx(37.5))
-    assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, data=pytest.approx(38.3))
+    assert sink.samples[0].name == 'a-name'
+    assert sink.samples[0].timestamp == ts1
+    assert sink.samples[0].data == pytest.approx(37.5)
+
+    assert sink.samples[1].name == 'a-name'
+    assert sink.samples[1].timestamp == ts2
+    assert sink.samples[1].data == pytest.approx(38.3)
+

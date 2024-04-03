@@ -27,11 +27,3 @@ def test_frozen():
 def test_check_timestamp_type():
     with pytest.raises(RuntimeError):
         Sample('name', 100, 42.666)
-
-def test_equality():
-    sample = Sample('name', datetime(2024, 3, 14, 8, 46), 42.666)
-
-    assert sample == Sample('name', datetime(2024, 3, 14, 8, 46), pytest.approx(42.666))
-    assert sample != Sample('name1', datetime(2024, 3, 14, 8, 46), pytest.approx(42.666))
-    assert sample != Sample('name', datetime(2024, 2, 14, 8, 46), pytest.approx(42.666))
-    assert sample != Sample('name', datetime(2024, 3, 14, 8, 46), pytest.approx(0))

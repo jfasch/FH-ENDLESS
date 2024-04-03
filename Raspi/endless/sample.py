@@ -26,9 +26,3 @@ class Sample:
         
     @property
     def data(self): return self._data
-        
-    def __eq__(self, rhs):
-        '''for tests only. we are comparing temperature (float) for
-        equality, and the user is supposed to know that - and pass a pytest.approx object'''
-
-        return self._name == rhs._name and self._timestamp == rhs._timestamp and self._data == rhs._data

@@ -22,5 +22,10 @@ async def test_basic():
 
         runner.stop()
 
-    assert sink1.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), data=pytest.approx(42.666))
-    assert sink2.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), data=pytest.approx(42.666))
+    assert sink1.samples[0].name == 'name'
+    assert sink1.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
+    assert sink1.samples[0].data == pytest.approx(42.666)
+
+    assert sink2.samples[0].name == 'name'
+    assert sink2.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
+    assert sink2.samples[0].data == pytest.approx(42.666)

@@ -27,7 +27,10 @@ async def test_basic():
 
     assert source.task is None
     assert sink.task is None
-    assert sink.samples[0] == Sample('source', datetime(2024, 3, 20, 10, 56), pytest.approx(36.5))
+
+    assert sink.samples[0].name == 'source'
+    assert sink.samples[0].timestamp == datetime(2024, 3, 20, 10, 56)
+    assert sink.samples[0].data == pytest.approx(36.5)
 
 @pytest.mark.asyncio
 async def test_m_to_n():
@@ -52,8 +55,13 @@ async def test_m_to_n():
         await have2_1
         runner.stop()
 
-    assert sink1.samples[0] == Sample(name='source1', timestamp=datetime(2024, 3, 20, 12, 51), data=pytest.approx(36.5))
-    assert sink2.samples[0] == Sample(name='source2', timestamp=datetime(2024, 3, 20, 12, 52), data=pytest.approx(0.5))
+    assert sink1.samples[0].name == 'source1'
+    assert sink1.samples[0].timestamp == datetime(2024, 3, 20, 12, 51)
+    assert sink1.samples[0].data == pytest.approx(36.5)
+
+    assert sink2.samples[0].name == 'source2'
+    assert sink2.samples[0].timestamp == datetime(2024, 3, 20, 12, 52)
+    assert sink2.samples[0].data == pytest.approx(0.5)
 
 @pytest.mark.asyncio
 async def test_source_not_connected():
