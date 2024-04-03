@@ -17,7 +17,6 @@ class CANSource(Source):
     def __init__(self, name, can_iface, can_id, parsedata, timestamps=None):
         super().__init__(name)
 
-        self.name = name
         self.can_iface = can_iface
         self.can_id = can_id
         self.parsedata = parsedata

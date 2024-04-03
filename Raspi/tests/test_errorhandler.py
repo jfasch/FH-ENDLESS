@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 
 @pytest.mark.asyncio
-async def test_non_endless_exception():
+async def test_source__non_endless_exception_terminates_runner():
     def errorfunc(timestamp):
         raise RuntimeError('boom')
 
