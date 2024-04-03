@@ -28,5 +28,5 @@ class MQTTSource(Source):
         return Sample(
             name = self.name,
             timestamp = datetime.fromisoformat(mqtt_sample['timestamp']),
-            temperature = mqtt_sample['temperature'],
+            data = mqtt_sample['data'],
         )

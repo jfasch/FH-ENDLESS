@@ -15,7 +15,7 @@ async def test_basic():
     source = MockSource(
         'mock',
         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
-        temperature=37.5)
+        data=37.5)
     source.connect(sink)
 
     async with Runner(sources=[source], sinks=[sink]) as runner:
@@ -24,22 +24,22 @@ async def test_basic():
 
     assert sink.samples[0] == Sample(name="mock",
                                      timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10),
-                                     temperature=pytest.approx(37.5))
+                                     data=pytest.approx(37.5))
     assert sink.samples[1] == Sample(name="mock", 
                                      timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10), 
-                                     temperature=pytest.approx(37.5))
+                                     data=pytest.approx(37.5))
     assert sink.samples[2] == Sample(name="mock", 
                                      timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10), 
-                                     temperature=pytest.approx(37.5))
+                                     data=pytest.approx(37.5))
     assert sink.samples[3] == Sample(name="mock", 
                                      timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10), 
-                                     temperature=pytest.approx(37.5))
+                                     data=pytest.approx(37.5))
     assert sink.samples[4] == Sample(name="mock", 
                                      timestamp=datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10), 
-                                     temperature=pytest.approx(37.5))
+                                     data=pytest.approx(37.5))
 
 @pytest.mark.asyncio
-async def test_value_is_function_of_timestamp():
+async def test_data_is_function_of_timestamp():
     import math
     def myfunc(ts): 
         return math.sin(ts.timestamp())
@@ -48,7 +48,7 @@ async def test_value_is_function_of_timestamp():
     sink = MockSink(cond)
     source = MockSource('mock',
                         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
-                        temperature=myfunc)
+                        data=myfunc)
     source.connect(sink)
 
     async with Runner(sources=[source], sinks=[sink]) as runner:
@@ -57,5 +57,5 @@ async def test_value_is_function_of_timestamp():
 
     assert sink.samples[0] == Sample(name="mock",
                                      timestamp=datetime(2024, 3, 14, 8, 46),
-                                     temperature=pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp())),
+                                     data=pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp())),
                                      )

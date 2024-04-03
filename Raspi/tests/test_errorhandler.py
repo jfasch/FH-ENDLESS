@@ -17,7 +17,7 @@ async def test_non_endless_exception():
                         timestamps=async_util.mock_timestamps_async(
                             start=datetime(2024, 3, 20, 15, 36), 
                             interval=timedelta(seconds=1)),
-                        temperature=errorfunc)
+                        data=errorfunc)
     sink = MockSink()
     source.connect(sink)
 

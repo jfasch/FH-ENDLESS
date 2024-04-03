@@ -22,8 +22,8 @@ async def test_basic(monkeypatch):
         def __init__(self, hostname, port):
             self.host = hostname
             self.port = port
-            self._messages = [Message(payload='{"timestamp": "'+ts1.isoformat()+'", "temperature": 37.5}'),
-                              Message(payload='{"timestamp": "'+ts2.isoformat()+'", "temperature": 38.3}'),
+            self._messages = [Message(payload='{"timestamp": "'+ts1.isoformat()+'", "data": 37.5}'),
+                              Message(payload='{"timestamp": "'+ts2.isoformat()+'", "data": 38.3}'),
                              ]
 
         @property
@@ -48,5 +48,5 @@ async def test_basic(monkeypatch):
         await have_2
         runner.stop()
 
-    assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, temperature=pytest.approx(37.5))
-    assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, temperature=pytest.approx(38.3))
+    assert sink.samples[0] == Sample(name='a-name', timestamp=ts1, data=pytest.approx(37.5))
+    assert sink.samples[1] == Sample(name='a-name', timestamp=ts2, data=pytest.approx(38.3))

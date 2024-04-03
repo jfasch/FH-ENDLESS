@@ -41,7 +41,7 @@ async def test_basic(monkeypatch):
 
     async with Runner(sources=(), sinks=[sink]) as runner:
         # first sample
-        await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), temperature=37.5))
+        await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), data=37.5))
 
         await has_published
 
@@ -52,16 +52,16 @@ async def test_basic(monkeypatch):
         py_payload = json.loads(out_payload)
         assert len(py_payload) == 2
         assert py_payload['timestamp'] == datetime(2024, 3, 14, 8, 46).isoformat()
-        assert py_payload['temperature'] == pytest.approx(37.5)
+        assert py_payload['data'] == pytest.approx(37.5)
 
         # second sample
         has_published = asyncio.get_running_loop().create_future()
-        await sink.put(Sample(name='sensor-2', timestamp=datetime(2024, 3, 14, 8, 47), temperature=38.5))
+        await sink.put(Sample(name='sensor-2', timestamp=datetime(2024, 3, 14, 8, 47), data=38.5))
         await has_published
         assert out_topic == 'topic-2'
         py_payload = json.loads(out_payload)
         assert len(py_payload) == 2
         assert py_payload['timestamp'] == datetime(2024, 3, 14, 8, 47).isoformat()
-        assert py_payload['temperature'] == pytest.approx(38.5)
+        assert py_payload['data'] == pytest.approx(38.5)
 
         runner.stop()

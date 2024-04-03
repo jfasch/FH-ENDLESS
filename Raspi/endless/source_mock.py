@@ -6,20 +6,20 @@ import asyncio
 
 
 class MockSource(Source):
-    def __init__(self, name, timestamps, temperature):
+    def __init__(self, name, timestamps, data):
         super().__init__(name)
         self.timestamps = timestamps
-        self.temperature = temperature
+        self.data = data
 
     async def _run(self):
         async for ts in self.timestamps:
-            if callable(self.temperature):
+            if callable(self.data):
                 async with ErrorReporter(self.errorhandler):
-                    temperature = self.temperature(ts)
+                    data = self.data(ts)
             else:
-                temperature = self.temperature
+                data = self.data
 
-            await self.sink.put(Sample(name=self.name, timestamp=ts, temperature=temperature))
+            await self.sink.put(Sample(name=self.name, timestamp=ts, data=data))
 
 
             # if queue is unbounded (and timestamps are of the

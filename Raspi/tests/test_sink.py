@@ -13,8 +13,8 @@ async def test_basic():
     sink = MockSink(cond)
 
     async with Runner(sources=(), sinks=[sink]) as runner:
-        await sink.put(Sample(name='name1', timestamp=datetime(2024, 3, 14, 8, 46), temperature=42.666))
-        await sink.put(Sample(name='name2', timestamp=datetime(2024, 3, 14, 8, 47), temperature=-273.15))
+        await sink.put(Sample(name='name1', timestamp=datetime(2024, 3, 14, 8, 46), data=42.666))
+        await sink.put(Sample(name='name2', timestamp=datetime(2024, 3, 14, 8, 47), data=-273.15))
 
         await have_2
         runner.stop()

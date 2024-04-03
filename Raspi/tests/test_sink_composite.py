@@ -15,12 +15,12 @@ async def test_basic():
     compsink = CompositeSink([sink1, sink2])
 
     async with Runner(sources=(), sinks=[compsink]) as runner:
-        await compsink.put(Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=42.666))
+        await compsink.put(Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), data=42.666))
 
         await have_1_1
         await have_1_2
 
         runner.stop()
 
-    assert sink1.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=pytest.approx(42.666))
-    assert sink2.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), temperature=pytest.approx(42.666))
+    assert sink1.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), data=pytest.approx(42.666))
+    assert sink2.samples[0] == Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 46), data=pytest.approx(42.666))
