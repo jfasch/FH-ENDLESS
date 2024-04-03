@@ -13,7 +13,7 @@ from datetime import datetime
 @pytest.mark.asyncio
 async def test_basic(monkeypatch):
     out_host = out_port = out_topic = out_payload = None
-    has_published = asyncio.get_running_loop().create_future()
+    has_published = None
 
     class MyClient:  # aiomqtt.Client replacement
         def __init__(self, hostname, port):
@@ -33,16 +33,24 @@ async def test_basic(monkeypatch):
 
     monkeypatch.setattr(aiomqtt, 'Client', MyClient)
 
+    def make_payload(sample):
+        return json.dumps({
+            'timestamp': sample.timestamp.isoformat(),
+            'data': sample.data,
+        })
+
+
     sink = MQTTSink(host='blah.com', port=6666, 
                     topics={
                         'sensor-1': 'topic-1',
                         'sensor-2': 'topic-2',
-                    })
+                    },
+                    payloadfunc=make_payload)
 
     async with Runner(sources=(), sinks=[sink]) as runner:
         # first sample
+        has_published = asyncio.get_running_loop().create_future()
         await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), data=37.5))
-
         await has_published
 
         assert out_host == 'blah.com'
