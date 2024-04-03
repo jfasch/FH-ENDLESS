@@ -11,7 +11,7 @@ async def wallclock_timestamps_sleep(interval):
         yield datetime.now()
         await asyncio.sleep(interval.microseconds / 1_000_000)
 
-async def wallclock_timestamps_nosleep(interval):
+def wallclock_timestamps_nosleep():
     while True:
         yield datetime.now()
 

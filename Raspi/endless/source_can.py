@@ -23,7 +23,7 @@ class CANSource(Source):
         self.parsedata = parsedata
 
         if timestamps is None:
-            self.timestamps = wallclock_timestamps_nosleep
+            self.timestamps = wallclock_timestamps_nosleep()
         else:
             self.timestamps = timestamps
 
