@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime
 
 
-async def iter_queue_blocking(q):
+async def async_iter_queue(q):
     while True:
         yield await q.get()
 

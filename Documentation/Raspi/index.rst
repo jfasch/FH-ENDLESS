@@ -6,3 +6,4 @@ The Raspberry Pi
 
    datalogger
    image-preparation
+   refactoring-components

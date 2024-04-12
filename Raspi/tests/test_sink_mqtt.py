@@ -47,7 +47,7 @@ async def test_basic(monkeypatch):
                     },
                     payloadfunc=make_payload)
 
-    async with Runner(sources=(), sinks=[sink]) as runner:
+    async with Runner((sink,)) as runner:
         # first sample
         has_published = asyncio.get_running_loop().create_future()
         await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), data=37.5))

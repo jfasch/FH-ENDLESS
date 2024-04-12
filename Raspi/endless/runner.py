@@ -1,50 +1,51 @@
-from .errorhandler import ErrorHandler
+from .component import Component
 
 from asyncio import TaskGroup
 
 
-class SourceNotConnected(Exception): pass
-class NullErrorHandler(ErrorHandler):
-    async def _handle_error(self, error): pass
+class _NullErrorHandler:
+    def __init__(self):
+        self.errors = self
+    def report_error(self, error):
+        pass
 
 class Runner:
-    def __init__(self, sources, sinks, errorhandler=None):
-        for source in sources:
-            if source.sink is None:
-                raise SourceNotConnected(f'source "{source.name}" is not connected')
+    def __init__(self, components, errorhandler=None):
+        for component in components:
+            assert isinstance(component, Component), component
 
-        self.sources = sources
-        self.sinks = sinks
-        
-        if errorhandler is None:
-            self.errorhandler = NullErrorHandler()
-        else:
+        self.components = components
+        if errorhandler is not None:
             self.errorhandler = errorhandler
-        
-        self._task_group = None
+        else:
+            self.errorhandler = _NullErrorHandler()
+
+        for component in self.components:
+            component.errors_to.connect(self.errorhandler.errors)
+
+        self.task_group = None
 
     async def __aenter__(self):
-        self.errorhandler.start()
+        if hasattr(self.errorhandler, 'lifetime'):
+            self.errorhandler.lifetime.start()
 
-        self._task_group = TaskGroup()
-        await self._task_group.__aenter__()
+        self.task_group = TaskGroup()
+        await self.task_group.__aenter__()
 
-        for sink in self.sinks:
-            sink.start(self._task_group)
-        for source in self.sources:
-            source.errors_to(self.errorhandler)
-            source.start(self._task_group)
+        for component in self.components:
+            if hasattr(component, "lifetime"):
+                component.lifetime.start(self.task_group)
 
         return self
 
     async def __aexit__(self, exc_type, exc_value, exc_traceback):
         try:
-            await self._task_group.__aexit__(exc_type, exc_value, exc_traceback)
+            await self.task_group.__aexit__(exc_type, exc_value, exc_traceback)
         finally:
-            await self.errorhandler.stop()
+            if hasattr(self.errorhandler, 'lifetime'):
+                await self.errorhandler.lifetime.stop()
 
     def stop(self):
-        for source in self.sources:
-            source.stop()
-        for sink in self.sinks:
-            sink.stop()
+        for component in self.components:
+            if hasattr(component, "lifetime"):
+                component.lifetime.stop()

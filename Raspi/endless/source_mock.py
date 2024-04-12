@@ -1,29 +1,32 @@
+from .component import Component
 from .sample import Sample
-from .source import Source
-from .errorhandler import ErrorHandler, ErrorReporter
+from .outlet import Outlet
+from .lifetime import Lifetime
+from .errorhandler import ErrorStrategy
 
 import asyncio
 
 
-class MockSource(Source):
+class MockSource(Component):
     def __init__(self, name, timestamps, data):
-        super().__init__(name)
+        super().__init__()
+
+        self.name = name
         self.timestamps = timestamps
         self.data = data
 
+        self.outlet = Outlet()
+        self.lifetime = Lifetime(self._run)
+
     async def _run(self):
         async for ts in self.timestamps:
+            produced_data = None
             if callable(self.data):
-                async with ErrorReporter(self.errorhandler):
-                    data = self.data(ts)
+                async with ErrorStrategy(self.errors_to):
+                    produced_data = self.data(ts)
             else:
-                data = self.data
+                produced_data = self.data
 
-            await self.sink.put(Sample(name=self.name, timestamp=ts, data=data))
-
-
-            # if queue is unbounded (and timestamps are of the
-            # quick-rush-through variant, without any real delay),
-            # then queue.put() wont schedule and the entire program
-            # will hang. add a manual scheduling point.
-            await asyncio.sleep(0)
+            if produced_data is not None:
+                await self.outlet.produce_sample(
+                    Sample(name=self.name, timestamp=ts, data=produced_data))

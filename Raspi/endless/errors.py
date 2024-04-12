@@ -1,2 +1,2 @@
-class EndlessException(Exeption):
+class EndlessException(Exception):
     pass

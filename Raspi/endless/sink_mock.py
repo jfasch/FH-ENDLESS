@@ -1,4 +1,5 @@
-from .sink_simple import SimpleSink
+from .inlet import Inlet
+from .component import Component
 
 import asyncio
 
@@ -6,18 +7,20 @@ import asyncio
 def have_n_samples(n):
     future = asyncio.get_running_loop().create_future()
     def cond(mocksink):
-        if len(mocksink.samples) == n:
+        if len(mocksink.collected_samples) == n:
             future.set_result(True)
     return future, cond
 
-class MockSink(SimpleSink):
+class MockSink(Component):
     def __init__(self, cond=None):
         super().__init__()
-        self.samples = []
+        self.collected_samples = []
         self.cond = cond
 
-    async def _handle_put(self, sample):
-        self.samples.append(sample)
+        self.inlet = Inlet(self._incoming_sample)
+
+    async def _incoming_sample(self, sample):
+        self.collected_samples.append(sample)
 
         if self.cond is not None:
             self.cond(self)
