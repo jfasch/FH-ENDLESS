@@ -1,27 +1,33 @@
-from .errorhandler import Error
 from .errors import EndlessException
 
+from contextlib import asynccontextmanager
+import sys
 
-class ErrorStrategy:
-    '''Async context manager, used to report exceptions.
 
-    Suggested usage inside a ``Component`` subclass:
+@asynccontextmanager
+async def ErrorStrategy(component):
+    '''Async context manager, used to report exceptions inside
+    components.
+
+    Suggested usage (where ``self`` is the component):
 
     .. code-block:: python
 
-       async with ErrorStrategy(self.errors_to):
+       async with ErrorStrategy(self):
            temperature = self.temperature(ts)
 
     '''
-    def __init__(self, errors_to):
-        self.errors_to = errors_to
-    async def __aenter__(self):
-        return self
-    async def __aexit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type is not None:
-            assert exc_value is not None
-            assert exc_traceback is not None
-            await self.errors_to.report_error(Error(exc_type=exc_type, exc_value=exc_value, exc_traceback=exc_traceback))
 
-            if issubclass(exc_type, EndlessException):
-                return True
+    try:
+        yield
+    except:
+        # this is new in 3.11. see python doc for sys.exception(), and
+        # https://peps.python.org/pep-3134/
+        exception = sys.exception()
+
+        # should probably try/except around this, and terminate after
+        # failure
+        await component.errorhandler.report_exception(exception)
+
+        if not isinstance(exception, EndlessException):
+            raise

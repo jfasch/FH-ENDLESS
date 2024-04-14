@@ -1,17 +1,17 @@
 from .component import Component
+from .errorhandler import ErrorHandler
 
 from asyncio import TaskGroup
 
 
-class _NullErrorHandler:
-    def __init__(self):
-        self.errors = self
-    def report_error(self, error):
+class _NullErrorHandler(ErrorHandler):
+    def report_exception(self, e):
         pass
 
 class Runner:
     def __init__(self, components, errorhandler=None):
         for component in components:
+
             assert isinstance(component, Component), component
 
         self.components = components
@@ -21,7 +21,7 @@ class Runner:
             self.errorhandler = _NullErrorHandler()
 
         for component in self.components:
-            component.errors_to.connect(self.errorhandler.errors)
+            component.errors_to(self.errorhandler)
 
         self.task_group = None
 

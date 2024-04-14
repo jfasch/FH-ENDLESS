@@ -2,12 +2,19 @@ from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
 from endless.runner import Runner
 from endless.async_util import mock_timestamps_async
-from endless.errorhandler_mock import MockErrorHandler_Lifetime
 from endless.errors import EndlessException
+from endless.errorhandler import ErrorHandler
 
 import pytest
 from datetime import datetime, timedelta
 
+
+class _MockErrorHandler(ErrorHandler):
+    def __init__(self):
+        super().__init__()
+        self.exceptions = []
+    async def report_exception(self, e):
+        self.exceptions.append(e)
 
 @pytest.mark.asyncio
 async def test_error_during_runtime__non_endless_exception():
@@ -25,7 +32,7 @@ async def test_error_during_runtime__non_endless_exception():
 
     source.outlet.connect(sink.inlet)
 
-    errorhandler = MockErrorHandler_Lifetime()
+    errorhandler = _MockErrorHandler()
 
     try:
         async with Runner((source, sink), errorhandler=errorhandler):
@@ -34,12 +41,10 @@ async def test_error_during_runtime__non_endless_exception():
     except* RuntimeError: # exception passes through, terminates all (cancelling have_1000)
         pass
 
-    error = errorhandler.collected_errors[0]   # and is reported
+    exception = errorhandler.exceptions[0]   # and is reported
 
-    assert type(error.exc_value) is RuntimeError
-    assert str(error.exc_value) == 'boom!'
-    assert error.exc_type is RuntimeError
-    assert error.exc_traceback is not None
+    assert type(exception) is RuntimeError
+    assert str(exception) == 'boom!'
 
 @pytest.mark.asyncio
 async def test_error_during_runtime__endless_error():
@@ -65,18 +70,16 @@ async def test_error_during_runtime__endless_error():
 
     source.outlet.connect(sink.inlet)
 
-    errorhandler = MockErrorHandler_Lifetime()
+    errorhandler = _MockErrorHandler()
 
     async with Runner((source,), errorhandler=errorhandler) as runner:
         await have_10
         runner.stop()
 
-    error = errorhandler.collected_errors[0]   # and is reported
+    exception = errorhandler.exceptions[0]   # and is reported
 
-    assert type(error.exc_value) is EndlessException
-    assert str(error.exc_value) == 'boom!'
-    assert error.exc_type is EndlessException
-    assert error.exc_traceback is not None
+    assert type(exception) is EndlessException
+    assert str(exception) == 'boom!'
 
     assert len(sink.collected_samples) >= 10
     for sample in sink.collected_samples:

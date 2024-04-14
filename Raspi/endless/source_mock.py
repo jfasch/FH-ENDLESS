@@ -22,7 +22,7 @@ class MockSource(Component):
         async for ts in self.timestamps:
             produced_data = None
             if callable(self.data):
-                async with ErrorStrategy(self.errors_to):
+                async with ErrorStrategy(self):
                     produced_data = self.data(ts)
             else:
                 produced_data = self.data
