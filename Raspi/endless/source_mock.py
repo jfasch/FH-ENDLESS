@@ -2,7 +2,7 @@ from .component import Component
 from .sample import Sample
 from .outlet import Outlet
 from .lifetime import Lifetime
-from .errorhandler import ErrorStrategy
+from .error_strategy import ErrorStrategy
 
 import asyncio
 
