@@ -1,6 +1,6 @@
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 from endless.errors import EndlessException
 from endless.errorhandler import ErrorHandler
@@ -74,7 +74,7 @@ async def test_error_during_runtime__endless_error():
 
     async with Runner((source,sink), errorhandler=errorhandler) as runner:
         await have_10
-        runner.stop()
+        raise StopRunning
 
     exception = errorhandler.exceptions[0]   # and is reported
 

@@ -2,7 +2,7 @@ from endless.component import Component
 from endless.errorhandler import ErrorHandler
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 
 import pytest
@@ -35,10 +35,13 @@ async def test_basic_run():
     source.outlet.connect(sink.inlet)
 
     async with Runner((source,sink)) as runner:
+        assert source.task is not None
+        assert sink.task is not None
         await have_1
-        runner.stop()
+        raise StopRunning
 
-    assert source.lifetime.task is None
+    assert source.task is None
+    assert sink.task is None
 
     assert sink.collected_samples[0].name == 'source'
     assert sink.collected_samples[0].timestamp == datetime(2024, 4, 12, 9, 19)
