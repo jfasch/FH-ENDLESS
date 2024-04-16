@@ -1,22 +1,19 @@
-from .component import Component
+from .component import LifetimeComponent, receptacle
 from .sample import Sample
-from .outlet import Outlet
-from .lifetime import Lifetime
+from .interfaces import Inlet
 from .error_strategy import ErrorStrategy
 
 import asyncio
 
 
-class MockSource(Component):
+@receptacle('outlet', Inlet)
+class MockSource(LifetimeComponent):
     def __init__(self, name, timestamps, data):
-        super().__init__()
+        super().__init__(self._run)
 
         self.name = name
         self.timestamps = timestamps
         self.data = data
-
-        self.outlet = Outlet()
-        self.lifetime = Lifetime(self._run)
 
     async def _run(self):
         async for ts in self.timestamps:
@@ -28,5 +25,4 @@ class MockSource(Component):
                 produced_data = self.data
 
             if produced_data is not None:
-                await self.outlet.produce_sample(
-                    Sample(name=self.name, timestamp=ts, data=produced_data))
+                await self._outlet.consume_sample(Sample(name=self.name, timestamp=ts, data=produced_data))

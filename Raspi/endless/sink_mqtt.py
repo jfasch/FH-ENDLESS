@@ -3,7 +3,7 @@ from .sink import Sink
 import aiomqtt
 
 
-class MQTTSink(Sink):
+class MQTTSink(Component):
     def __init__(self, host, topics, payloadfunc, port = 1883):
         ''':param host: MQTT broker to establish a connection to
         :param payloadfunc: function that takes a Sample and converts it to a bytes object (the MQTT payload that is published)

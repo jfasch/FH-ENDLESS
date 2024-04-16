@@ -1,6 +1,6 @@
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 from endless.sample import Sample
 
@@ -21,9 +21,9 @@ async def test_basic():
 
     source.outlet.connect(sink.inlet)
 
-    async with Runner((source,)) as runner:
+    async with Runner((source,sink)):
         await have_1
-        runner.stop()
+        raise StopRunning
 
     assert sink.collected_samples[0].name == 'source'
     assert sink.collected_samples[0].timestamp == datetime(2024, 3, 20, 10, 56)
@@ -47,10 +47,10 @@ async def test_m_to_n():
     sink2 = MockSink(cond=cond2)
     source2.outlet.connect(sink2.inlet)
     
-    async with Runner((source1, source2)) as runner:
+    async with Runner((source1, source2, sink1, sink2),):
         await have1_1
         await have2_1
-        runner.stop()
+        raise StopRunning
 
     assert sink1.collected_samples[0].name == 'source1'
     assert sink1.collected_samples[0].timestamp == datetime(2024, 3, 20, 12, 51)

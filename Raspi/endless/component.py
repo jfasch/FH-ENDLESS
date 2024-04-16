@@ -13,8 +13,21 @@ class Component:
 
     def errors_to(self, errorhandler):
         assert self.errorhandler is None
-        assert isinstance(errorhandler, ErrorHandler)
+        assert isinstance(errorhandler, ErrorHandler), errorhandler
         self.errorhandler = errorhandler
+
+class LifetimeComponent(Component):
+    def __init__(self, func):
+        super().__init__()
+        self.func = func
+        self.task = None
+    def start(self, taskgroup):
+        assert self.task is None
+        self.task = taskgroup.create_task(self.func())
+    def stop(self):
+        assert self.task is not None
+        self.task.cancel()
+        self.task = None
 
 class facet:
     def __init__(self, name, basetype, methodspec):
@@ -74,7 +87,32 @@ class facet:
         return trampoline
 
 class receptacle:
-    class receptacle_public_accessor:
+    def __init__(self, name, basetype):
+        self.receptacle_name = name
+        self.receptacle_basetype = basetype
+
+    def __call__(self, component_class):
+        if not issubclass(component_class, Component):
+            raise TypeError(f'{component_class.__name__} must be derived from {Component.__name__}')
+
+        def receptacle_public_getter(self_component):
+            return self._receptacle_public_accessor(
+                receptacle_name=self.receptacle_name, 
+                component=self_component, 
+                required_type=self.receptacle_basetype)
+
+        setattr(component_class, self.receptacle_name, property(receptacle_public_getter))
+
+        def receptacle_private_getter(self_component):
+            return self._receptacle_private_accessor(
+                receptacle_name=self.receptacle_name, 
+                component=self_component)
+
+        setattr(component_class, '_'+self.receptacle_name, property(receptacle_private_getter))
+
+        return component_class
+
+    class _receptacle_public_accessor:
         def __init__(self, receptacle_name, component, required_type):
             self.receptacle_name = receptacle_name
             self.component = component
@@ -87,28 +125,10 @@ class receptacle:
                 raise ReceptacleAlreadyConnected(f'Receptacle {self.receptacle_name} is already connected (connected object: {connected_object})')
             self.component._receptacles[self.receptacle_name] = obj
 
-    class receptacle_private_accessor:
+    class _receptacle_private_accessor:
         def __init__(self, receptacle_name, component):
             self.receptacle_name = receptacle_name
             self.component = component
         def __getattr__(self, attrname):
             return getattr(self.component._receptacles[self.receptacle_name], attrname)
-
-    def __init__(self, name, basetype):
-        self.receptacle_name = name
-        self.receptacle_basetype = basetype
-
-    def __call__(self, component_class):
-        if not issubclass(component_class, Component):
-            raise TypeError(f'{component_class.__name__} must be derived from {Component.__name__}')
-
-        def receptacle_public_getter(self_component):
-            return self.receptacle_public_accessor(receptacle_name=self.receptacle_name, component=self_component, required_type=self.receptacle_basetype)
-        setattr(component_class, self.receptacle_name, property(receptacle_public_getter))
-
-        def receptacle_private_getter(self_component):
-            return self.receptacle_private_accessor(receptacle_name=self.receptacle_name, component=self_component)
-        setattr(component_class, '_'+self.receptacle_name, property(receptacle_private_getter))
-
-        return component_class
 

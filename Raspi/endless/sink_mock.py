@@ -1,5 +1,5 @@
-from .inlet import Inlet
-from .component import Component
+from .interfaces import Inlet
+from .component import LifetimeComponent, facet
 
 import asyncio
 
@@ -11,16 +11,24 @@ def have_n_samples(n):
             future.set_result(True)
     return future, cond
 
-class MockSink(Component):
+@facet('inlet', basetype=Inlet, methodspec=(('consume_sample', '_incoming_sample'),))
+class MockSink(LifetimeComponent):
     def __init__(self, cond=None):
-        super().__init__()
+        super().__init__(self._run)
         self.collected_samples = []
         self.cond = cond
 
-        self.inlet = Inlet(self._incoming_sample)
+        self.queue = asyncio.Queue()
 
     async def _incoming_sample(self, sample):
-        self.collected_samples.append(sample)
+        await self.queue.put(sample)
 
-        if self.cond is not None:
-            self.cond(self)
+        await asyncio.sleep(0)
+
+    async def _run(self):
+        while True:
+            sample = await self.queue.get()
+            self.collected_samples.append(sample)
+
+            if self.cond is not None:
+                self.cond(self)
