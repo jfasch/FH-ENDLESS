@@ -1,5 +1,6 @@
+from .component import LifetimeComponent, receptacle
+from .interfaces import Inlet
 from .sample import Sample
-from .source import Source
 from .async_util import wallclock_timestamps_nosleep
 
 import socket
@@ -13,10 +14,12 @@ _FRAME_LAYOUT = "=IB3x8s"
 _FRAME_SIZE = struct.calcsize(_FRAME_LAYOUT)
 
 
-class CANSource(Source):
+@receptacle('outlet', Inlet)
+class CANSource(LifetimeComponent):
     def __init__(self, name, can_iface, can_id, parsedata, timestamps=None):
-        super().__init__(name)
+        super().__init__(self._run)
 
+        self.name = name
         self.can_iface = can_iface
         self.can_id = can_id
         self.parsedata = parsedata
@@ -43,7 +46,7 @@ class CANSource(Source):
             data = self.parsedata(frame_data[:frame_can_dlc])
             timestamp = next(self.timestamps)
 
-            await self.sink.put(Sample(name=self.name, timestamp=timestamp, data=data))
+            await self._outlet.consume_sample(Sample(name=self.name, timestamp=timestamp, data=data))
 
     def _create_socket(self):
         s = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)

@@ -1,7 +1,7 @@
 from endless.sink_mock import MockSink, have_n_samples
 from endless.source_can import CANSource
 from endless.sample import Sample
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 from endless import async_util
 
 import pytest
@@ -29,12 +29,12 @@ async def test_basic(monkeypatch):
     source = CANSource(name='a-name', can_iface='blah', can_id=42,
                        parsedata=lambda data: data,
                        timestamps=async_util.mock_timestamps_sync(start=datetime(2024, 4, 3, 9, 4), interval=timedelta(seconds=1)))
-    source.connect(sink)
+    source.outlet.connect(sink.inlet)
 
-    async with Runner(sources=[source], sinks=[sink]) as runner:
+    async with Runner((source, sink)) as runner:
         await have_1
-        runner.stop()
+        raise StopRunning
 
-    assert sink.samples[0].name == 'a-name'
-    assert sink.samples[0].timestamp == datetime(2024, 4, 3, 9, 4)
-    assert sink.samples[0].data == b'hello'
+    assert sink.collected_samples[0].name == 'a-name'
+    assert sink.collected_samples[0].timestamp == datetime(2024, 4, 3, 9, 4)
+    assert sink.collected_samples[0].data == b'hello'
