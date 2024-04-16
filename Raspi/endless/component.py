@@ -1,12 +1,15 @@
 from .errorhandler import ErrorHandler
+from .errors import ReceptacleAlreadyConnected
 
-import functools
+import abc
+import inspect
 
 
 class Component:
     def __init__(self):
         self.errorhandler = None
         self._facets = {}
+        self._receptacles = {}
 
     def errors_to(self, errorhandler):
         assert self.errorhandler is None
@@ -19,11 +22,11 @@ class facet:
         self.facet_basetype = basetype
         self.facet_methodspec = methodspec
 
-    def __call__(self, cls):
-        if not issubclass(cls, Component):
-            raise TypeError(f'{cls.__name__} must be derived from {Component.__name__}')
+    def __call__(self, component_class):
+        if not issubclass(component_class, Component):
+            raise TypeError(f'{component_class.__name__} must be derived from {Component.__name__}')
 
-        facet_class = self._create_facet_class(cls)
+        facet_class = self._create_facet_class(component_class)
 
         def facet_getter(self_component):
             facet_obj = self_component._facets.get(self.facet_name)
@@ -33,9 +36,9 @@ class facet:
                 self_component._facets[self.facet_name] = facet_obj
             return facet_obj
 
-        setattr(cls, self.facet_name, property(facet_getter))
+        setattr(component_class, self.facet_name, property(facet_getter))
 
-        return cls
+        return component_class
 
     def _create_facet_class(self, component_class):
         facet_clsname = f'{self.facet_basetype.__name__}_{self.facet_name}'
@@ -69,3 +72,43 @@ class facet:
             return component_method(*newargs, **kwargs)
 
         return trampoline
+
+class receptacle:
+    class receptacle_public_accessor:
+        def __init__(self, receptacle_name, component, required_type):
+            self.receptacle_name = receptacle_name
+            self.component = component
+            self.required_type = required_type
+        def connect(self, obj):
+            if not isinstance(obj, self.required_type):
+                raise TypeError(f'{obj} must be derived from {self.required_type.__name__}')
+            connected_object = self.component._receptacles.get(self.receptacle_name)
+            if connected_object is not None:
+                raise ReceptacleAlreadyConnected(f'Receptacle {self.receptacle_name} is already connected (connected object: {connected_object})')
+            self.component._receptacles[self.receptacle_name] = obj
+
+    class receptacle_private_accessor:
+        def __init__(self, receptacle_name, component):
+            self.receptacle_name = receptacle_name
+            self.component = component
+        def __getattr__(self, attrname):
+            return getattr(self.component._receptacles[self.receptacle_name], attrname)
+
+    def __init__(self, name, basetype):
+        self.receptacle_name = name
+        self.receptacle_basetype = basetype
+
+    def __call__(self, component_class):
+        if not issubclass(component_class, Component):
+            raise TypeError(f'{component_class.__name__} must be derived from {Component.__name__}')
+
+        def receptacle_public_getter(self_component):
+            return self.receptacle_public_accessor(receptacle_name=self.receptacle_name, component=self_component, required_type=self.receptacle_basetype)
+        setattr(component_class, self.receptacle_name, property(receptacle_public_getter))
+
+        def receptacle_private_getter(self_component):
+            return self.receptacle_private_accessor(receptacle_name=self.receptacle_name, component=self_component)
+        setattr(component_class, '_'+self.receptacle_name, property(receptacle_private_getter))
+
+        return component_class
+
