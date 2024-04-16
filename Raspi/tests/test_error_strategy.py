@@ -84,3 +84,6 @@ async def test_error_during_runtime__endless_error():
     assert len(sink.collected_samples) >= 10
     for sample in sink.collected_samples:
         assert sample.data == 42
+
+def test_errorhandler_lifetime():
+    assert False
