@@ -1,7 +1,7 @@
 from endless.sample import Sample
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 from endless import async_util
 
 import pytest
@@ -16,31 +16,31 @@ async def test_basic():
         'mock',
         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
         data=37.5)
-    source.connect(sink)
+    source.outlet.connect(sink.inlet)
 
-    async with Runner(sources=[source], sinks=[sink]) as runner:
+    async with Runner((source,sink)) as runner:
         await have_5
-        runner.stop()
+        raise StopRunning
 
-    assert sink.samples[0].name == "mock"
-    assert sink.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10)
-    assert sink.samples[0].data == pytest.approx(37.5)
+    assert sink.collected_samples[0].name == "mock"
+    assert sink.collected_samples[0].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10)
+    assert sink.collected_samples[0].data == pytest.approx(37.5)
 
-    assert sink.samples[1].name == "mock"
-    assert sink.samples[1].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10)
-    assert sink.samples[1].data == pytest.approx(37.5)
+    assert sink.collected_samples[1].name == "mock"
+    assert sink.collected_samples[1].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10)
+    assert sink.collected_samples[1].data == pytest.approx(37.5)
 
-    assert sink.samples[2].name == "mock"
-    assert sink.samples[2].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10)
-    assert sink.samples[2].data == pytest.approx(37.5)
+    assert sink.collected_samples[2].name == "mock"
+    assert sink.collected_samples[2].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10)
+    assert sink.collected_samples[2].data == pytest.approx(37.5)
 
-    assert sink.samples[3].name == "mock"
-    assert sink.samples[3].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10)
-    assert sink.samples[3].data == pytest.approx(37.5)
+    assert sink.collected_samples[3].name == "mock"
+    assert sink.collected_samples[3].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10)
+    assert sink.collected_samples[3].data == pytest.approx(37.5)
 
-    assert sink.samples[4].name == "mock"
-    assert sink.samples[4].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10)
-    assert sink.samples[4].data == pytest.approx(37.5)
+    assert sink.collected_samples[4].name == "mock"
+    assert sink.collected_samples[4].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10)
+    assert sink.collected_samples[4].data == pytest.approx(37.5)
 
 @pytest.mark.asyncio
 async def test_data_is_function_of_timestamp():
@@ -53,12 +53,12 @@ async def test_data_is_function_of_timestamp():
     source = MockSource('mock',
                         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
                         data=myfunc)
-    source.connect(sink)
+    source.outlet.connect(sink.inlet)
 
-    async with Runner(sources=[source], sinks=[sink]) as runner:
+    async with Runner((source, sink)) as runner:
         await have_1
-        runner.stop()
+        raise StopRunning
 
-    assert sink.samples[0].name == "mock"
-    assert sink.samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
-    assert sink.samples[0].data == pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp()))
+    assert sink.collected_samples[0].name == "mock"
+    assert sink.collected_samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
+    assert sink.collected_samples[0].data == pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp()))
