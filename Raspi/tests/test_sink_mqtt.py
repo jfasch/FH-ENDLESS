@@ -1,6 +1,6 @@
 from endless.sink_mqtt import MQTTSink
 from endless.sample import Sample
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 
 
 import pytest
@@ -47,10 +47,10 @@ async def test_basic(monkeypatch):
                     },
                     payloadfunc=make_payload)
 
-    async with Runner((sink,)) as runner:
+    async with Runner((sink,)):
         # first sample
         has_published = asyncio.get_running_loop().create_future()
-        await sink.put(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), data=37.5))
+        await sink.inlet.consume_sample(Sample(name='sensor-1', timestamp=datetime(2024, 3, 14, 8, 46), data=37.5))
         await has_published
 
         assert out_host == 'blah.com'
@@ -64,7 +64,7 @@ async def test_basic(monkeypatch):
 
         # second sample
         has_published = asyncio.get_running_loop().create_future()
-        await sink.put(Sample(name='sensor-2', timestamp=datetime(2024, 3, 14, 8, 47), data=38.5))
+        await sink.inlet.consume_sample(Sample(name='sensor-2', timestamp=datetime(2024, 3, 14, 8, 47), data=38.5))
         await has_published
         assert out_topic == 'topic-2'
         py_payload = json.loads(out_payload)
@@ -72,4 +72,4 @@ async def test_basic(monkeypatch):
         assert py_payload['timestamp'] == datetime(2024, 3, 14, 8, 47).isoformat()
         assert py_payload['data'] == pytest.approx(38.5)
 
-        runner.stop()
+        raise StopRunning
