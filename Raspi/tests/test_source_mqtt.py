@@ -24,7 +24,7 @@ async def test_basic(monkeypatch):
             self.port = port
             self._messages = [Message(payload='{"timestamp": "'+ts1.isoformat()+'", "data": 37.5}'),
                               Message(payload='{"timestamp": "'+ts2.isoformat()+'", "data": 38.3}'),
-                             ]
+                              ]
 
         @property
         async def messages(self):

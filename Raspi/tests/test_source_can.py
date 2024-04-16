@@ -27,7 +27,6 @@ async def test_basic(monkeypatch):
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond)
     source = CANSource(name='a-name', can_iface='blah', can_id=42,
-                       parsedata=lambda data: data,
                        timestamps=async_util.mock_timestamps_sync(start=datetime(2024, 4, 3, 9, 4), interval=timedelta(seconds=1)))
     source.outlet.connect(sink.inlet)
 

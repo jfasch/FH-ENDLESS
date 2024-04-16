@@ -14,11 +14,10 @@ config = open(args.configfile).read()
 context = {}
 exec(config, context)
 
-sources = context['SOURCES']
-sinks = context['SINKS']
+components = context['COMPONENTS']
 
 async def main():
-    async with Runner(sources=sources, sinks=sinks) as runner:
+    async with Runner(components):
         pass
 
 try:

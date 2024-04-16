@@ -16,13 +16,12 @@ _FRAME_SIZE = struct.calcsize(_FRAME_LAYOUT)
 
 @receptacle('outlet', Inlet)
 class CANSource(LifetimeComponent):
-    def __init__(self, name, can_iface, can_id, parsedata, timestamps=None):
+    def __init__(self, name, can_iface, can_id, timestamps=None):
         super().__init__(self._run)
 
         self.name = name
         self.can_iface = can_iface
         self.can_id = can_id
-        self.parsedata = parsedata
 
         if timestamps is None:
             self.timestamps = wallclock_timestamps_nosleep()
@@ -43,10 +42,9 @@ class CANSource(LifetimeComponent):
             if frame_can_id != self.can_id: # ignore foreign frames
                 continue
 
-            data = self.parsedata(frame_data[:frame_can_dlc])
             timestamp = next(self.timestamps)
 
-            await self._outlet.consume_sample(Sample(name=self.name, timestamp=timestamp, data=data))
+            await self._outlet.consume_sample(Sample(name=self.name, timestamp=timestamp, data=frame_data[:frame_can_dlc]))
 
     def _create_socket(self):
         s = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
