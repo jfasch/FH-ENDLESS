@@ -1,7 +1,7 @@
 from endless.sink_mock import MockSink, have_n_samples
 from endless.source_mqtt import MQTTSource
 from endless.sample import Sample
-from endless.runner import Runner
+from endless.runner import Runner, StopRunning
 
 from dataclasses import dataclass
 import pytest
@@ -42,17 +42,17 @@ async def test_basic(monkeypatch):
     have_2, cond = have_n_samples(2)
     sink = MockSink(cond)
     source = MQTTSource(name='a-name', host='blah.com', port=6666, topic='a-topic')
-    source.connect(sink)
+    source.outlet.connect(sink.inlet)
 
-    async with Runner(sources=[source], sinks=[sink]) as runner:
+    async with Runner((source,sink)) as runner:
         await have_2
-        runner.stop()
+        raise StopRunning
 
-    assert sink.samples[0].name == 'a-name'
-    assert sink.samples[0].timestamp == ts1
-    assert sink.samples[0].data == pytest.approx(37.5)
+    assert sink.collected_samples[0].name == 'a-name'
+    assert sink.collected_samples[0].timestamp == ts1
+    assert sink.collected_samples[0].data == pytest.approx(37.5)
 
-    assert sink.samples[1].name == 'a-name'
-    assert sink.samples[1].timestamp == ts2
-    assert sink.samples[1].data == pytest.approx(38.3)
+    assert sink.collected_samples[1].name == 'a-name'
+    assert sink.collected_samples[1].timestamp == ts2
+    assert sink.collected_samples[1].data == pytest.approx(38.3)
 

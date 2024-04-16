@@ -72,7 +72,7 @@ async def test_error_during_runtime__endless_error():
 
     errorhandler = _MockErrorHandler()
 
-    async with Runner((source,), errorhandler=errorhandler) as runner:
+    async with Runner((source,sink), errorhandler=errorhandler) as runner:
         await have_10
         runner.stop()
 

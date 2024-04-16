@@ -34,7 +34,7 @@ async def test_basic_run():
 
     source.outlet.connect(sink.inlet)
 
-    async with Runner((source,)) as runner:
+    async with Runner((source,sink)) as runner:
         await have_1
         runner.stop()
 

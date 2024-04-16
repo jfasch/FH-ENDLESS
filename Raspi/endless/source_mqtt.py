@@ -1,4 +1,5 @@
-from .source import Source
+from .component import LifetimeComponent, receptacle
+from .interfaces import Inlet
 from .sample import Sample
 
 import json
@@ -6,20 +7,23 @@ import aiomqtt
 from datetime import datetime
 
 
-class MQTTSource(Source):
+@receptacle('outlet', Inlet)
+class MQTTSource(LifetimeComponent):
     def __init__(self, name, host, topic, port = 1883):
-        super().__init__(name)
+        super().__init__(self._run)
 
         self.host = host
         self.port = port
         self.topic = topic
+
+        self.name = name
 
     async def _run(self):
         async with aiomqtt.Client(hostname=self.host, port=self.port) as client:
             await client.subscribe(self.topic)
             async for message in client.messages:
                 sample = self._make_sample(message.payload)
-                await self.sink.put(sample)
+                await self._outlet.consume_sample(sample)
 
     def _make_sample(self, payload):
         mqtt_sample = json.loads(payload)
