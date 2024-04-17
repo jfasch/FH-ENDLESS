@@ -109,7 +109,7 @@ def test_methodspec__componentmethod_not_defined_in_component():
         class MyComponent(Component): 
             def componentmethod(self): pass
 
-def test_coroutinefunction():
+def test_async_methods():
     class FacetBaseType:
         def regular_function(self): pass
         async def coroutine_function(self): pass

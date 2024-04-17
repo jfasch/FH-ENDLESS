@@ -46,8 +46,8 @@ FRAME_LAYOUT = "=IB3x8s"
 FRAME_SIZE = struct.calcsize(FRAME_LAYOUT)
 
 # cannot mix endiannesses in one single struct, so I have to compose
-# the "data" part separately: (timestamp, temperature) as little
-# endian uint32
+# the "data" part separately: (temperature, humidity) as little endian
+# (int32, uint32)
 DATA_LAYOUT = "<iI"
 assert struct.calcsize(DATA_LAYOUT) == 8
 
