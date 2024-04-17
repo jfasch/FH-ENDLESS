@@ -36,4 +36,5 @@ async def test_basic(monkeypatch):
 
     assert sink.collected_samples[0].name == 'a-name'
     assert sink.collected_samples[0].timestamp == datetime(2024, 4, 3, 9, 4)
-    assert sink.collected_samples[0].data == b'hello'
+    assert sink.collected_samples[0].data.can_id == 42
+    assert sink.collected_samples[0].data.payload == b'hello'

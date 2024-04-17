@@ -8,11 +8,17 @@ import struct
 import sys
 import asyncio
 from datetime import datetime
+from dataclasses import dataclass
 
 
 _FRAME_LAYOUT = "=IB3x8s"
 _FRAME_SIZE = struct.calcsize(_FRAME_LAYOUT)
 
+
+@dataclass
+class CANFrame:
+    can_id: int
+    payload: bytes
 
 @receptacle('outlet', Inlet)
 class CANSource(LifetimeComponent):
@@ -44,7 +50,14 @@ class CANSource(LifetimeComponent):
 
             timestamp = next(self.timestamps)
 
-            await self._outlet.consume_sample(Sample(name=self.name, timestamp=timestamp, data=frame_data[:frame_can_dlc]))
+            await self._outlet.consume_sample(Sample(
+                name=self.name,
+                timestamp=timestamp, 
+                data=CANFrame(
+                    can_id=frame_can_id, 
+                    payload=frame_data[:frame_can_dlc],
+                ),
+            ))
 
     def _create_socket(self):
         s = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
