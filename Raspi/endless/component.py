@@ -72,17 +72,23 @@ class facet:
             component_method = getattr(component_class, component_methodname)
         except AttributeError:
             raise TypeError(f'Method "{component_methodname}()" is not defined in {component_class.__name__}')
-            
-        def trampoline(*args, **kwargs):
-            # args[0] is the facet instance (self). compmethod is a
-            # method called on the component instance, but with the
-            # same signature otherwise.
 
-            # exchange facet-self with component-self, and call the
-            # component method.
+        # create trampoline. 
 
-            newargs = (args[0].component,) + args[1:]
-            return component_method(*newargs, **kwargs)
+        # args[0] is the facet instance (self). compmethod is a method
+        # called on the component instance, but with the same
+        # signature otherwise.
+
+        # exchange facet-self with component-self, and call the
+        # component method.
+        if inspect.iscoroutinefunction(component_method):
+            async def trampoline(*args, **kwargs):
+                newargs = (args[0].component,) + args[1:]
+                return await component_method(*newargs, **kwargs)
+        else:
+            def trampoline(*args, **kwargs):
+                newargs = (args[0].component,) + args[1:]
+                return component_method(*newargs, **kwargs)
 
         return trampoline
 

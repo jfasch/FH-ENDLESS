@@ -1,6 +1,7 @@
 from endless.component import Component, facet
 
 import pytest
+import inspect
 
 
 def test_manual_facet():
@@ -107,3 +108,26 @@ def test_methodspec__componentmethod_not_defined_in_component():
                                              ),))
         class MyComponent(Component): 
             def componentmethod(self): pass
+
+def test_coroutinefunction():
+    class FacetBaseType:
+        def regular_function(self): pass
+        async def coroutine_function(self): pass
+
+    @facet('facetname', FacetBaseType, (('regular_function', '_regular_function'), 
+                                        ('coroutine_function', '_coroutine_function'),
+                                        ))
+    class MyComponent(Component):
+        def _regular_function(self): pass
+        async def _coroutine_function(self): pass
+
+    comp = MyComponent()
+
+    assert inspect.iscoroutinefunction(comp.facetname.coroutine_function)
+
+    # inspect.ismethod() qualifies coroutine function as functions. I
+    # put this here just to remember, and to make that clear.
+    assert inspect.ismethod(comp.facetname.coroutine_function)
+
+    assert not inspect.iscoroutinefunction(comp.facetname.regular_function)
+    assert inspect.ismethod(comp.facetname.regular_function)
