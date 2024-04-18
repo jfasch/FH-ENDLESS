@@ -1,4 +1,4 @@
-from endless.component import Component, receptacle
+from endless.component import Component, receptacle, MappedMethodNotAsync
 from endless.errors import ReceptacleAlreadyConnected
 
 import pytest

@@ -5,6 +5,18 @@ import abc
 import inspect
 
 
+class MappedMethodNotAsync(TypeError):
+    def __init__(self, baseclass, componentmethodname):
+        super().__init__(f'Component method {componentmethodname} is not "async" as defined in base class {baseclass.__name__}')
+        self.baseclass = baseclass
+        self.componentmethodname = componentmethodname
+
+class MappedMethodNotSync(TypeError):
+    def __init__(self, baseclass, componentmethodname):
+        super().__init__(f'Component method {componentmethodname} is not a plain function as defined in base class {baseclass.__name__}')
+        self.baseclass = baseclass
+        self.componentmethodname = componentmethodname
+
 class Component:
     def __init__(self):
         self.errorhandler = None
@@ -63,7 +75,7 @@ class facet:
     def _create_trampoline_method(self, facet_methodname, component_methodname, component_class):
         # require facet method to be defined in base type
         try:
-            getattr(self.facet_basetype, facet_methodname)
+            base_method = getattr(self.facet_basetype, facet_methodname)
         except AttributeError:
             raise TypeError(f'Facet method "{facet_methodname}()" is not defined in base type {self.facet_basetype.__name__}')
 
@@ -72,6 +84,12 @@ class facet:
             component_method = getattr(component_class, component_methodname)
         except AttributeError:
             raise TypeError(f'Method "{component_methodname}()" is not defined in {component_class.__name__}')
+
+        # verify that no function/coro mismatch exists
+        if inspect.iscoroutinefunction(base_method) and not inspect.iscoroutinefunction(component_method):
+            raise MappedMethodNotAsync(baseclass=self.facet_basetype, componentmethodname=component_methodname)
+        if inspect.iscoroutinefunction(component_method) and not inspect.iscoroutinefunction(base_method):
+            raise MappedMethodNotSync(baseclass=self.facet_basetype, componentmethodname=component_methodname)
 
         # create trampoline. 
 

@@ -1,4 +1,4 @@
-from endless.component import Component, facet
+from endless.component import Component, facet, MappedMethodNotAsync, MappedMethodNotSync
 
 import pytest
 import inspect
@@ -131,3 +131,31 @@ def test_async_methods():
 
     assert not inspect.iscoroutinefunction(comp.facetname.regular_function)
     assert inspect.ismethod(comp.facetname.regular_function)
+
+def test_connect__sync_async_mismatch__interface_coro__component_func():
+    class Interface:
+        async def func(self):                 # async
+            pass
+
+    with pytest.raises(MappedMethodNotAsync) as excinfo:
+        @facet('interface', Interface, (('func', '_func_impl'),))
+        class MyComponent(Component):
+            def _func_impl(self):             # sync
+                pass
+        
+    assert excinfo.value.baseclass == Interface
+    assert excinfo.value.componentmethodname == '_func_impl'
+
+def test_connect__sync_async_mismatch__interface_func__component_coro():
+    class Interface:
+        def func(self):                       # sync
+            pass
+
+    with pytest.raises(MappedMethodNotSync) as excinfo:
+        @facet('interface', Interface, (('func', '_func_impl'),))
+        class MyComponent(Component):
+            async def _func_impl(self):       # async
+                pass
+
+    assert excinfo.value.baseclass == Interface
+    assert excinfo.value.componentmethodname == '_func_impl'
