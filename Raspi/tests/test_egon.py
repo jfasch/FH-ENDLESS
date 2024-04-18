@@ -1,4 +1,7 @@
-from endless.egon import CANFrameToHumidityTemperature, HumidityTemperatureToJSon, HumidityTemperature
+from endless.egon import CANFrameToHumidityTemperatureConverter, \
+    HumidityTemperatureToJSonConverter, \
+    HumidityTemperatureToTemperatureConverter, \
+    HumidityTemperature
 from endless.sample import Sample
 from endless.source_can import CANFrame
 from endless.interfaces import Inlet
@@ -71,3 +74,30 @@ async def test_humtemp_to_json():
     assert len(json_structure) == 2
     assert json_structure['humidity'] == pytest.approx(23.3)
     assert json_structure['temperature'] == pytest.approx(37.5)
+
+@pytest.mark.asyncio
+async def test_humtemp_to_temp():
+    class MyTemperatureConsumer(Inlet):
+        async def consume_sample(self, sample):
+            self.sample = sample
+
+    temp_consumer = MyTemperatureConsumer()
+    humtemp2temp = HumidityTemperatureToTemperatureConverter()
+    
+    humtemp2temp.outlet.connect(temp_consumer)
+
+    # inject a humidity/temperature sample
+    await humtemp2temp.inlet.consume_sample(
+        Sample(
+            name='name',
+            timestamp=datetime(2024, 4, 17, 17, 6),
+            data=HumidityTemperature(
+                humidity=23.3,
+                temperature=37.5,
+            ),
+        )
+    )
+
+    assert temp_consumer.sample.name == 'name'
+    assert temp_consumer.sample.timestamp == datetime(2024, 4, 17, 17, 6)
+    assert temp_consumer.sample.data == pytest.approx(37.5)

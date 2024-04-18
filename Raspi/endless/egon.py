@@ -47,3 +47,15 @@ class HumidityTemperatureToJSonConverter(Component):
                    data=json_bytes
                    )
         )
+
+@facet('inlet', Inlet, (('consume_sample', '_transform_hum_temp_to_temp'),))
+@receptacle('outlet', Inlet)
+class HumidityTemperatureToTemperatureConverter(Component):
+    async def _transform_hum_temp_to_temp(self, sample: Sample):
+        await self._outlet.consume_sample(
+            Sample(name=sample.name,
+                   timestamp=sample.timestamp,
+                   data=sample.data.temperature,
+                   )
+        )
+
