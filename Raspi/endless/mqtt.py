@@ -1,5 +1,5 @@
 from .sink import Sink
-from .component import LifetimeComponent, facet
+from .component import Component, LifetimeComponent, facet, receptacle
 from .interfaces import Inlet
 
 import aiomqtt
@@ -24,7 +24,7 @@ class MQTTClient(LifetimeComponent):
         self.queue = asyncio.Queue()
 
     async def _publish(self, topic, message):
-        await self.queue.put(_PublishRequest(topic=topic, message=message))
+        await self.queue.put(self._PublishRequest(topic=topic, message=message))
         await asyncio.sleep(0)
 
     async def _run(self):
@@ -33,8 +33,17 @@ class MQTTClient(LifetimeComponent):
                 publish_request = await self.queue.get()
                 await client.publish(topic=publish_request.topic, payload=publish_request.message)
 
-@dataclass
-class _PublishRequest:
-    topic: str
-    message: bytes
+    @dataclass
+    class _PublishRequest:
+        topic: str
+        message: bytes
 
+@facet('inlet', Inlet, (('consume_sample', '_publish_sample_by_tag'),))
+@receptacle('publisher', Publisher)
+class MQTT_PublishSampleTagToTopic(Component):
+    def __init__(self, tag2topic):
+        super().__init__()
+        self.tag2topic = tag2topic
+    async def _publish_sample_by_tag(self, sample):
+        assert type(sample.data) is bytes
+        await self._publisher.publish(topic=self.tag2topic[sample.name], message=sample.data)
