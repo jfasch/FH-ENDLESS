@@ -1,4 +1,4 @@
-from endless.mqtt_client import MQTTClient
+from endless.mqtt import MQTTClient
 from endless.sample import Sample
 from endless.runner import Runner, StopRunning
 

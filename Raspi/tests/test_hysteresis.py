@@ -11,7 +11,7 @@ async def test_basic():
     class MySwitch(Switch):
         def __init__(self):
             self.state = None
-        def set_state(self, state: bool):
+        async def set_state(self, state: bool):
             assert type(state) is bool
             self.state = state
 
