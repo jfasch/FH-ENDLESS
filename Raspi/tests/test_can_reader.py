@@ -1,5 +1,5 @@
 from endless.sink_mock import MockSink, have_n_samples
-from endless.source_can import CANSource
+from endless.can_reader import CANReader
 from endless.sample import Sample
 from endless.runner import Runner, StopRunning
 from endless import async_util
@@ -17,7 +17,7 @@ async def test_basic(monkeypatch):
 
     def my_create_can_socket(self):
         return left
-    monkeypatch.setattr(CANSource, '_create_socket', my_create_can_socket)
+    monkeypatch.setattr(CANReader, '_create_socket', my_create_can_socket)
 
     # inject frame
     data = b'hello'
@@ -26,7 +26,7 @@ async def test_basic(monkeypatch):
 
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond)
-    source = CANSource(name='a-name', can_iface='blah', can_id=42,
+    source = CANReader(name='a-name', can_iface='blah', can_id=42,
                        timestamps=async_util.mock_timestamps_sync(start=datetime(2024, 4, 3, 9, 4), interval=timedelta(seconds=1)))
     source.outlet.connect(sink.inlet)
 

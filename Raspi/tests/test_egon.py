@@ -1,9 +1,7 @@
-from endless.egon import CANFrameToHumidityTemperatureConverter, \
-    HumidityTemperatureToJSonConverter, \
-    HumidityTemperatureToTemperatureConverter, \
-    HumidityTemperature
+from endless import egon
 from endless.sample import Sample
-from endless.source_can import CANFrame
+from endless.sample_converter import SampleConverter
+from endless.can_reader import CANFrame
 from endless.interfaces import Inlet
 
 import pytest
@@ -19,7 +17,7 @@ async def test_canframe_to_humtemp():
             self.sample = sample
 
     humtemp_consumer = MySampleConsumer()
-    can2humtemp = CANFrameToHumidityTemperatureConverter()
+    can2humtemp = SampleConverter(egon.transform_can_frame_to_hum_temp)
 
     can2humtemp.outlet.connect(humtemp_consumer)
 
@@ -50,7 +48,7 @@ async def test_humtemp_to_json():
             self.sample = sample
 
     json_consumer = MyJSONConsumer()
-    humtemp2json = HumidityTemperatureToJSonConverter()
+    humtemp2json = SampleConverter(egon.transform_hum_temp_to_json)
     
     humtemp2json.outlet.connect(json_consumer)
 
@@ -59,7 +57,7 @@ async def test_humtemp_to_json():
         Sample(
             name='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
-            data=HumidityTemperature(
+            data=egon.HumidityTemperature(
                 humidity=23.3,
                 temperature=37.5,
             ),
@@ -82,7 +80,7 @@ async def test_humtemp_to_temp():
             self.sample = sample
 
     temp_consumer = MyTemperatureConsumer()
-    humtemp2temp = HumidityTemperatureToTemperatureConverter()
+    humtemp2temp = SampleConverter(egon.transform_hum_temp_to_temp)
     
     humtemp2temp.outlet.connect(temp_consumer)
 
@@ -91,7 +89,7 @@ async def test_humtemp_to_temp():
         Sample(
             name='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
-            data=HumidityTemperature(
+            data=egon.HumidityTemperature(
                 humidity=23.3,
                 temperature=37.5,
             ),

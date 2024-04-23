@@ -22,7 +22,7 @@ class CANFrame:
     payload: bytes
 
 @receptacle('outlet', Inlet)
-class CANSource(LifetimeComponent):
+class CANReader(LifetimeComponent):
     def __init__(self, name, can_iface, can_id, timestamps=None):
         super().__init__(self._run)
 
