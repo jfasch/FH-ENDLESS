@@ -3,6 +3,7 @@ from endless.can_reader import CANReader
 from endless.sample import Sample
 from endless.runner import Runner, StopRunning
 from endless import async_util
+from endless import can_util
 
 import pytest
 import socket
@@ -17,7 +18,7 @@ async def test_basic(monkeypatch):
 
     def my_create_can_socket(self):
         return left
-    monkeypatch.setattr(CANReader, '_create_socket', my_create_can_socket)
+    monkeypatch.setattr(can_util, 'create_socket', my_create_can_socket)
 
     # inject frame
     data = b'hello'

@@ -85,5 +85,6 @@ async def test_error_during_runtime__endless_error():
     for sample in sink.collected_samples:
         assert sample.data == 42
 
+@pytest.mark.skip(reason='to be done: verify errorhandler lifetime extends past components')
 def test_errorhandler_lifetime():
     assert False

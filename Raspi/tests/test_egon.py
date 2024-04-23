@@ -1,7 +1,7 @@
 from endless import egon
 from endless.sample import Sample
 from endless.sample_converter import SampleConverter
-from endless.can_reader import CANFrame
+from endless.can_util import CANFrame
 from endless.interfaces import Inlet
 
 import pytest
