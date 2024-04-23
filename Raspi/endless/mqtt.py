@@ -1,5 +1,7 @@
 from .sink import Sink
-from .component import Component, LifetimeComponent, facet, receptacle
+from .component import Component, LifetimeComponent
+from .facet import facet
+from .receptacle import receptacle
 from .interfaces import Inlet
 
 import aiomqtt

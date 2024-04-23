@@ -1,5 +1,6 @@
 from .interfaces import Inlet
-from .component import LifetimeComponent, facet
+from .component import LifetimeComponent
+from .facet import facet
 
 import asyncio
 

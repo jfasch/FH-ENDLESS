@@ -1,4 +1,5 @@
-from .component import LifetimeComponent, receptacle
+from .component import LifetimeComponent
+from .receptacle import receptacle
 from .interfaces import Inlet
 from .sample import Sample
 from .async_util import wallclock_timestamps_nosleep

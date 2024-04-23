@@ -1,4 +1,6 @@
-from .component import Component, facet, receptacle
+from .component import Component
+from .receptacle import receptacle
+from .facet import facet
 from .interfaces import Inlet
 
 

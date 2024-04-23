@@ -1,4 +1,6 @@
-from endless.component import Component, facet, MappedMethodNotAsync, MappedMethodNotSync
+from endless.component import Component
+from endless.errors import MappedMethodNotAsync, MappedMethodNotSync
+from endless.facet import facet
 
 import pytest
 import inspect

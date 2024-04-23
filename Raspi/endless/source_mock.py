@@ -1,4 +1,5 @@
-from .component import LifetimeComponent, receptacle
+from .component import LifetimeComponent
+from .receptacle import receptacle
 from .sample import Sample
 from .interfaces import Inlet
 from .error_strategy import ErrorStrategy
