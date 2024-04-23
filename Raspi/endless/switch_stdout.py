@@ -1,4 +1,5 @@
-from .component import Component, facet
+from .component import Component
+from .facet import facet
 from .interfaces import Switch
 
 
@@ -7,5 +8,8 @@ class StdoutSwitch(Component):
     def __init__(self, prefix):
         super().__init__()
         self.prefix = prefix
+        self.state = False
     async def _set_state(self, state):
-        print(self.prefix, state)
+        if self.state != state:
+            print(self.prefix, state)
+            self.state = state
