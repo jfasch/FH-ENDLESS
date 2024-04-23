@@ -39,10 +39,6 @@ class CANSource(LifetimeComponent):
         can_socket = self._create_socket()
 
         while True:
-            # cannot mix endiannesses in one single struct, so I have
-            # to decompose the "data" part separately: (timestamp,
-            # temperature) as little endian uint32
-
             frame = await asyncio.get_running_loop().sock_recv(can_socket, _FRAME_SIZE)
             frame_can_id, frame_can_dlc, frame_data = struct.unpack(_FRAME_LAYOUT, frame)
 
