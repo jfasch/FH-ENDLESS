@@ -1,5 +1,5 @@
 from .component import Component
-from .errors import ReceptacleAlreadyConnected
+from .errors import ReceptacleAlreadyConnected, ReceptacleNotConnected
 
 
 class receptacle:
@@ -46,5 +46,7 @@ class receptacle:
             self.receptacle_name = receptacle_name
             self.component = component
         def __getattr__(self, attrname):
-            return getattr(self.component._receptacles[self.receptacle_name], attrname)
-
+            connected_iface = self.component._receptacles.get(self.receptacle_name)
+            if connected_iface is None:
+                raise ReceptacleNotConnected(f'Receptacle {self.receptacle_name} is not connected')
+            return getattr(connected_iface, attrname)

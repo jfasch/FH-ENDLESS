@@ -1,7 +1,7 @@
 from endless.component import Component
 from endless.errors import MappedMethodNotAsync
 from endless.receptacle import receptacle
-from endless.errors import ReceptacleAlreadyConnected
+from endless.errors import ReceptacleAlreadyConnected, ReceptacleNotConnected
 
 import pytest
 
@@ -39,6 +39,21 @@ def test_already_connected():
 
     with pytest.raises(ReceptacleAlreadyConnected):
         comp.receptaclename.connect(Implementation())
+
+def test_not_connected():
+    class Interface: 
+        def method(self): pass
+    class Implementation(Interface): pass
+
+    @receptacle('receptaclename', basetype=Interface)
+    class MyComponent(Component): 
+        def use_receptacle(self):
+            self._receptaclename.method()
+
+    comp = MyComponent()
+
+    with pytest.raises(ReceptacleNotConnected):
+        comp.use_receptacle()
 
 def test_connect_wrong_type():
     class Interface:
