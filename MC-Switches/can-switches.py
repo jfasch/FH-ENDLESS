@@ -23,7 +23,7 @@ class Switch:
     def set_state(self, state):
         if self.state != state:
             self.state = state
-            print(f'{number}: {"ON" if self.state else "OFF"}')
+            print(f'{self.number}: {"ON" if self.state else "OFF"}')
 
 switches = [Switch(number) for number in range(16)]
 
@@ -34,7 +34,7 @@ for switch in switches:
 FRAME_LAYOUT = "=IB3x8s"
 FRAME_SIZE = struct.calcsize(FRAME_LAYOUT)
 
-DATA_LAYOUT = "<II"  # (number, state)
+DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
 assert struct.calcsize(DATA_LAYOUT) == 8
 
 can_socket = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
@@ -48,3 +48,4 @@ while True:
     frame_payload = frame_payload[:frame_can_dlc]
     switch_number, switch_state = struct.unpack(DATA_LAYOUT, frame_payload)
 
+    switches[switch_number].set_state(switch_state)
