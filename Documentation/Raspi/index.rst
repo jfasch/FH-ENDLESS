@@ -1,9 +1,8 @@
-The Raspberry Pi
-================
+The Raspberry Pi Application
+============================
 
 .. toctree::
    :maxdepth: 1
 
-   datalogger
+   sourcedoc/index
    image-preparation
-   refactoring-components

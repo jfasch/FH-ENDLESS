@@ -47,9 +47,9 @@ default configuration,
 Add the following line to ``/etc/influxdb/config.toml``,
 
 .. code-block:: console
-   :caption:``/etc/influxdb/config.toml``
 
-   # "LOCALHOST ONLY" should be the default but isn't                                                                                                                                            http-bind-address = "127.0.0.1:8086"
+   # "LOCALHOST ONLY" should be the default but isnt
+   http-bind-address = "127.0.0.1:8086"
 
 Startup
 .......

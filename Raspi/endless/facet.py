@@ -5,6 +5,35 @@ import inspect
 
 
 class facet:
+    '''Class decorator for component classes.
+
+    .. code-block:: python
+
+       @facet('facetname', FacetInterface, (('method1', '_implementation_method1'), ('method2', '_implementation_method2')))
+       class MyComponent(Component):
+           def _implementation_method1(self, ...):
+               # do something
+               pass
+           def _implementation_method2(self, ...):
+               # do something
+               pass
+
+    This creates a property ``facetname`` on ``MyComponent``
+    instances, of base type
+    ``FacetInterface``. ``FacetInterface.method1`` is implemented as a
+    simple trampoline that calls into the associated component
+    object's ``_implementation_method1``.
+
+    With this, the component can be used as follows,
+
+    .. code-block:: python
+
+       my_comp = MyComponent()
+       my_comp.facetname.method1('blah')
+
+    '''
+
+
     def __init__(self, name, basetype, methodspec):
         self.facet_name = name
         self.facet_basetype = basetype
@@ -72,4 +101,3 @@ class facet:
                 return component_method(*newargs, **kwargs)
 
         return trampoline
-
