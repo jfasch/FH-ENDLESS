@@ -2,18 +2,13 @@ from .sink import Sink
 from .component import Component, LifetimeComponent
 from .facet import facet
 from .receptacle import receptacle
-from .interfaces import Inlet
+from .interfaces import Inlet, Publisher
 
 import aiomqtt
 import asyncio
 import abc
 from dataclasses import dataclass
 
-
-class Publisher(abc.ABC):
-    @abc.abstractmethod
-    async def publish(self, topic, message):
-        raise NotImplementedError
 
 @facet('publisher', Publisher, (('publish', '_publish'),))
 class MQTTClient(LifetimeComponent):

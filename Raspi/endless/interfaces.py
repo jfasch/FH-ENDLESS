@@ -8,6 +8,12 @@ class Inlet(abc.ABC):
 
 class Switch(abc.ABC):
     @abc.abstractmethod
-    async def set_state(self, state):
+    async def set_state(self, state: bool):
         raise NotImplementedError
     
+class Publisher(abc.ABC):
+    '''MQTT style "publish" interface. Not necessarily coupled to MQTT.'''
+    @abc.abstractmethod
+    async def publish(self, topic, message):
+        '''Publish ``message`` on ``topic``'''
+        raise NotImplementedError
