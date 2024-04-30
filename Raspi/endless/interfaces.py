@@ -17,3 +17,10 @@ class Publisher(abc.ABC):
     async def publish(self, topic, message):
         '''Publish ``message`` on ``topic``'''
         raise NotImplementedError
+
+class CANInputHandler(abc.ABC):
+    '''Handles CAN-style input: binary payload, associated with an CAN ID'''
+    @abc.abstractmethod
+    async def handle_frame(self, can_id, payload):
+        raise NotImplementedError
+        
