@@ -1,13 +1,13 @@
 from .component import Component
 from .facet import facet
-from .interfaces import Inlet
+from .interfaces import SampleInlet
 from . import can_util
 
 import struct
 import asyncio
 
 
-@facet('inlet', Inlet, (('consume_sample', '_write_frame'),))
+@facet('inlet', SampleInlet, (('consume_sample', '_write_frame'),))
 class CANWriter(Component):
     def __init__(self, can_iface):
         super().__init__()

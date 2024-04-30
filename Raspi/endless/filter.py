@@ -1,11 +1,11 @@
 from .component import Component
 from .receptacle import receptacle
 from .facet import facet
-from .interfaces import Inlet
+from .interfaces import SampleInlet
 
 
-@facet('inlet', Inlet, (('consume_sample', '_handle_sample'),))
-@receptacle('outlet', Inlet)
+@facet('inlet', SampleInlet, (('consume_sample', '_handle_sample'),))
+@receptacle('outlet', SampleInlet)
 class TagFilter(Component):
     def __init__(self, tag):
         super().__init__()

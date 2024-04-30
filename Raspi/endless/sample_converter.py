@@ -1,11 +1,11 @@
 from .component import Component
 from .facet import facet
 from .receptacle import receptacle
-from .interfaces import Inlet
+from .interfaces import SampleInlet
 
 
-@facet('inlet', Inlet, (('consume_sample', '_convert'),))
-@receptacle('outlet', Inlet)
+@facet('inlet', SampleInlet, (('consume_sample', '_convert'),))
+@receptacle('outlet', SampleInlet)
 class SampleConverter(Component):
     def __init__(self, func):
         super().__init__()

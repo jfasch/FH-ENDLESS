@@ -1,6 +1,6 @@
 from endless.sample_converter import SampleConverter
 from endless.sample import Sample
-from endless.interfaces import Inlet
+from endless.interfaces import SampleInlet
 
 import pytest
 from datetime import datetime, timedelta
@@ -16,7 +16,7 @@ async def test_basic():
         )
     converter = SampleConverter(funky_convert)
 
-    class MyConsumer(Inlet):
+    class MyConsumer(SampleInlet):
         async def consume_sample(self, sample):
             self.sample = sample
 

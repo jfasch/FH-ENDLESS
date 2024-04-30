@@ -1,6 +1,6 @@
 from .component import LifetimeComponent
 from .receptacle import receptacle
-from .interfaces import Inlet
+from .interfaces import SampleInlet
 from .sample import Sample
 from .async_util import wallclock_timestamps_nosleep
 from . import can_util
@@ -12,7 +12,7 @@ import asyncio
 from datetime import datetime
 
 
-@receptacle('outlet', Inlet)
+@receptacle('outlet', SampleInlet)
 class CANReader(LifetimeComponent):
     def __init__(self, tag, can_iface, can_id, timestamps=None):
         super().__init__(self._run)

@@ -1,7 +1,7 @@
 from .component import Component
 from .facet import facet
 from .receptacle import receptacle
-from .interfaces import Inlet, Switch
+from .interfaces import SampleInlet, Switch
 from .sample import Sample
 from .can_util import CANFrame
 
@@ -49,7 +49,7 @@ def transform_hum_temp_to_temp(sample):
                   )
 
 @facet('switch', Switch, (('set_state', '_set_state'),))
-@receptacle('outlet', Inlet)
+@receptacle('outlet', SampleInlet)
 class CANSwitch(Component):
     DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
 

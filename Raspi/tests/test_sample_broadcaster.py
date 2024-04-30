@@ -1,4 +1,4 @@
-from endless.tee import Tee
+from endless.sample_broadcaster import SampleBroadcaster
 from endless.source_mock import MockSource
 from endless.sink_mock import MockSink, have_n_samples
 from endless.runner import Runner, StopRunning
@@ -21,13 +21,13 @@ async def test_basic():
     have_2, cond_2 = have_n_samples(1)
     sink_2 = MockSink(cond=cond_2)
 
-    tee = Tee()
+    broadcaster = SampleBroadcaster()
 
-    source.outlet.connect(tee.inlet)
-    tee.outlet.connect(sink_1.inlet)
-    tee.outlet.connect(sink_2.inlet)
+    source.outlet.connect(broadcaster.inlet)
+    broadcaster.outlet.connect(sink_1.inlet)
+    broadcaster.outlet.connect(sink_2.inlet)
 
-    async with Runner((source, sink_1, sink_2, tee)):
+    async with Runner((source, sink_1, sink_2, broadcaster)):
         await have_1
         await have_2
         raise StopRunning

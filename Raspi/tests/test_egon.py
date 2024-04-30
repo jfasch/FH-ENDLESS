@@ -2,7 +2,7 @@ from endless import egon
 from endless.sample import Sample
 from endless.sample_converter import SampleConverter
 from endless.can_util import CANFrame
-from endless.interfaces import Inlet
+from endless.interfaces import SampleInlet
 
 import pytest
 from datetime import datetime
@@ -12,7 +12,7 @@ import json
 
 @pytest.mark.asyncio
 async def test_canframe_to_humtemp():
-    class MySampleConsumer(Inlet):
+    class MySampleConsumer(SampleInlet):
         async def consume_sample(self, sample: Sample):
             self.sample = sample
 
@@ -43,7 +43,7 @@ async def test_canframe_to_humtemp():
 
 @pytest.mark.asyncio
 async def test_humtemp_to_json():
-    class MyJSONConsumer(Inlet):
+    class MyJSONConsumer(SampleInlet):
         async def consume_sample(self, sample):
             self.sample = sample
 
@@ -75,7 +75,7 @@ async def test_humtemp_to_json():
 
 @pytest.mark.asyncio
 async def test_humtemp_to_temp():
-    class MyTemperatureConsumer(Inlet):
+    class MyTemperatureConsumer(SampleInlet):
         async def consume_sample(self, sample):
             self.sample = sample
 

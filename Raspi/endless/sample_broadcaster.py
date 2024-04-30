@@ -1,10 +1,10 @@
 from .component import Component
 from .facet import facet
-from .interfaces import Inlet
+from .interfaces import SampleInlet
 
 
-@facet('inlet', Inlet, (('consume_sample', '_put_sample'),))
-class Tee(Component):
+@facet('inlet', SampleInlet, (('consume_sample', '_put_sample'),))
+class SampleBroadcaster(Component):
     def __init__(self):
         super().__init__()
         self._outlet = self._multi_outlet()
@@ -17,7 +17,7 @@ class Tee(Component):
         def __init__(self):
             self.targets = []
         def connect(self, target):
-            assert isinstance(target, Inlet)
+            assert isinstance(target, SampleInlet)
             self.targets.append(target)
         async def consume_sample(self, sample):
             for target in self.targets:

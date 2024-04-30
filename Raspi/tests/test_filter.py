@@ -1,6 +1,6 @@
 from endless.filter import TagFilter
 from endless.sample import Sample
-from endless.interfaces import Inlet
+from endless.interfaces import SampleInlet
 
 import pytest
 from datetime import datetime
@@ -8,7 +8,7 @@ from datetime import datetime
 
 @pytest.mark.asyncio
 async def test_basic():
-    class MyConsumer(Inlet):
+    class MyConsumer(SampleInlet):
         async def consume_sample(self, sample):
             self.sample = sample
 

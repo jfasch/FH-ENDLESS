@@ -2,7 +2,7 @@ from .sink import Sink
 from .component import Component, LifetimeComponent
 from .facet import facet
 from .receptacle import receptacle
-from .interfaces import Inlet, Publisher
+from .interfaces import SampleInlet, Publisher
 
 import aiomqtt
 import asyncio
@@ -35,7 +35,7 @@ class MQTTClient(LifetimeComponent):
         topic: str
         message: bytes
 
-@facet('inlet', Inlet, (('consume_sample', '_publish_sample_by_tag'),))
+@facet('inlet', SampleInlet, (('consume_sample', '_publish_sample_by_tag'),))
 @receptacle('publisher', Publisher)
 class MQTT_PublishSampleTagToTopic(Component):
     def __init__(self, tag2topic):
