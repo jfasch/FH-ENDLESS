@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 async def test_basic():
     def funky_convert(sample):
         return Sample(
-            name = 'newname',
+            tag = 'newname',
             timestamp = sample.timestamp + timedelta(seconds=1),
             data = sample.data + 1
         )
@@ -24,12 +24,12 @@ async def test_basic():
     converter.outlet.connect(consumer)
 
     await converter.inlet.consume_sample(
-        Sample(name='name',
+        Sample(tag='name',
                timestamp=datetime(2024, 4, 23, 8, 20),
                data=42
                )
     )
 
-    assert consumer.sample.name == 'newname'
+    assert consumer.sample.tag == 'newname'
     assert consumer.sample.timestamp == datetime(2024, 4, 23, 8, 20, 1)
     assert consumer.sample.data == 43

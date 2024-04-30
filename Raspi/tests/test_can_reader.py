@@ -27,7 +27,7 @@ async def test_basic(monkeypatch):
 
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond)
-    source = CANReader(name='a-name', can_iface='blah', can_id=42,
+    source = CANReader(tag='a-name', can_iface='blah', can_id=42,
                        timestamps=async_util.mock_timestamps_sync(start=datetime(2024, 4, 3, 9, 4), interval=timedelta(seconds=1)))
     source.outlet.connect(sink.inlet)
 
@@ -35,7 +35,7 @@ async def test_basic(monkeypatch):
         await have_1
         raise StopRunning
 
-    assert sink.collected_samples[0].name == 'a-name'
+    assert sink.collected_samples[0].tag == 'a-name'
     assert sink.collected_samples[0].timestamp == datetime(2024, 4, 3, 9, 4)
     assert sink.collected_samples[0].data.can_id == 42
     assert sink.collected_samples[0].data.payload == b'hello'

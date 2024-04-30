@@ -14,10 +14,10 @@ from datetime import datetime
 
 @receptacle('outlet', Inlet)
 class CANReader(LifetimeComponent):
-    def __init__(self, name, can_iface, can_id, timestamps=None):
+    def __init__(self, tag, can_iface, can_id, timestamps=None):
         super().__init__(self._run)
 
-        self.name = name
+        self.tag = tag
         self.can_iface = can_iface
         self.can_id = can_id
 
@@ -39,7 +39,7 @@ class CANReader(LifetimeComponent):
             timestamp = next(self.timestamps)
 
             await self._outlet.consume_sample(Sample(
-                name=self.name,
+                tag=self.tag,
                 timestamp=timestamp, 
                 data=can_util.CANFrame(
                     can_id=frame_can_id, 

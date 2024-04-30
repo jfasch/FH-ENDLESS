@@ -21,7 +21,7 @@ async def test_error_during_runtime__non_endless_exception():
     def errorfunc(timestamp):
         raise RuntimeError('boom!')           # non-"endless" exception
 
-    source = MockSource(name='name', 
+    source = MockSource(tag='name', 
                         timestamps=mock_timestamps_async(
                             start=datetime(2024, 4, 12, 10, 41), 
                             interval=timedelta(seconds=1)),
@@ -58,7 +58,7 @@ async def test_error_during_runtime__endless_error():
         
         return 42
 
-    source = MockSource(name='name', 
+    source = MockSource(tag='name', 
                         timestamps=mock_timestamps_async(
                             start=datetime(2024, 4, 12, 10, 41), 
                             interval=timedelta(seconds=1)),

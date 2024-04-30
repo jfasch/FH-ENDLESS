@@ -19,11 +19,11 @@ async def test_basic():
 
     await filter.inlet.consume_sample(
         Sample(
-            name='tag-good',
+            tag='tag-good',
             timestamp=datetime(2024, 4, 18, 18, 52),
             data=42))
 
-    assert consumer.sample.name == 'tag-good'
+    assert consumer.sample.tag == 'tag-good'
     assert consumer.sample.timestamp == datetime(2024, 4, 18, 18, 52)
     assert consumer.sample.data == 42
 
@@ -31,7 +31,7 @@ async def test_basic():
 
     await filter.inlet.consume_sample(
         Sample(
-            name='tag-bad',
+            tag='tag-bad',
             timestamp=datetime(2024, 4, 18, 18, 52),
             data=42))
 

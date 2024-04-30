@@ -5,21 +5,21 @@ import datetime
 
 class Sample:
     __slots__ = (
-        '_name',
+        '_tag',
         '_timestamp',
         '_data',
     )
 
-    def __init__(self, name, timestamp, data):
+    def __init__(self, tag, timestamp, data):
         if type(timestamp) is not datetime.datetime:
             raise RuntimeError(f'timestamp {timestamp} must be datetime.datetime (was {type(timestamp)})')
 
-        self._name = name
+        self._tag = tag
         self._timestamp = timestamp
         self._data = data
 
     @property
-    def name(self): return self._name
+    def tag(self): return self._tag
         
     @property
     def timestamp(self): return self._timestamp

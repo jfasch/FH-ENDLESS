@@ -21,7 +21,7 @@ def transform_can_frame_to_hum_temp(sample):
     temperature, humidity = struct.unpack(_FORMAT, sample.data.payload)
 
     return Sample(
-        name=sample.name, 
+        tag=sample.tag, 
         timestamp=sample.timestamp, 
         data=HumidityTemperature(
             temperature=temperature/10, 
@@ -37,13 +37,13 @@ def transform_hum_temp_to_json(sample):
     json_str = json.dumps(json_pydict)
     json_bytes = bytes(json_str, encoding='ascii')
 
-    return Sample(name=sample.name,
+    return Sample(tag=sample.tag,
                   timestamp=sample.timestamp,
                   data=json_bytes
                   )
 
 def transform_hum_temp_to_temp(sample):
-    return Sample(name=sample.name,
+    return Sample(tag=sample.tag,
                   timestamp=sample.timestamp,
                   data=sample.data.temperature,
                   )
@@ -61,7 +61,7 @@ class CANSwitch(Component):
     async def _set_state(self, state):
         frame = CANFrame(can_id = self.can_id, payload = struct.pack(self.DATA_LAYOUT, self.number, state))
         await self._outlet.consume_sample(
-            Sample(name='irrelevant', # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
+            Sample(tag='irrelevant', # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
                    timestamp=datetime.now(), # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
                    data=frame,
                    )

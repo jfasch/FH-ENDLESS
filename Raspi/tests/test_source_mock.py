@@ -22,23 +22,23 @@ async def test_basic():
         await have_5
         raise StopRunning
 
-    assert sink.collected_samples[0].name == "mock"
+    assert sink.collected_samples[0].tag == "mock"
     assert sink.collected_samples[0].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=0*10)
     assert sink.collected_samples[0].data == pytest.approx(37.5)
 
-    assert sink.collected_samples[1].name == "mock"
+    assert sink.collected_samples[1].tag == "mock"
     assert sink.collected_samples[1].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=1*10)
     assert sink.collected_samples[1].data == pytest.approx(37.5)
 
-    assert sink.collected_samples[2].name == "mock"
+    assert sink.collected_samples[2].tag == "mock"
     assert sink.collected_samples[2].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=2*10)
     assert sink.collected_samples[2].data == pytest.approx(37.5)
 
-    assert sink.collected_samples[3].name == "mock"
+    assert sink.collected_samples[3].tag == "mock"
     assert sink.collected_samples[3].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=3*10)
     assert sink.collected_samples[3].data == pytest.approx(37.5)
 
-    assert sink.collected_samples[4].name == "mock"
+    assert sink.collected_samples[4].tag == "mock"
     assert sink.collected_samples[4].timestamp == datetime(2024, 3, 14, 8, 46)+timedelta(milliseconds=4*10)
     assert sink.collected_samples[4].data == pytest.approx(37.5)
 
@@ -59,6 +59,6 @@ async def test_data_is_function_of_timestamp():
         await have_1
         raise StopRunning
 
-    assert sink.collected_samples[0].name == "mock"
+    assert sink.collected_samples[0].tag == "mock"
     assert sink.collected_samples[0].timestamp == datetime(2024, 3, 14, 8, 46)
     assert sink.collected_samples[0].data == pytest.approx(math.sin(datetime(2024, 3, 14, 8, 46).timestamp()))

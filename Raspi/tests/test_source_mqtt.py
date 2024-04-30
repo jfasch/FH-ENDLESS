@@ -41,18 +41,18 @@ async def test_basic(monkeypatch):
 
     have_2, cond = have_n_samples(2)
     sink = MockSink(cond)
-    source = MQTTSource(name='a-name', host='blah.com', port=6666, topic='a-topic')
+    source = MQTTSource(tag='a-name', host='blah.com', port=6666, topic='a-topic')
     source.outlet.connect(sink.inlet)
 
     async with Runner((source,sink)) as runner:
         await have_2
         raise StopRunning
 
-    assert sink.collected_samples[0].name == 'a-name'
+    assert sink.collected_samples[0].tag == 'a-name'
     assert sink.collected_samples[0].timestamp == ts1
     assert sink.collected_samples[0].data == pytest.approx(37.5)
 
-    assert sink.collected_samples[1].name == 'a-name'
+    assert sink.collected_samples[1].tag == 'a-name'
     assert sink.collected_samples[1].timestamp == ts2
     assert sink.collected_samples[1].data == pytest.approx(38.3)
 

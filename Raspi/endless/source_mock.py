@@ -9,10 +9,10 @@ import asyncio
 
 @receptacle('outlet', Inlet)
 class MockSource(LifetimeComponent):
-    def __init__(self, name, timestamps, data):
+    def __init__(self, tag, timestamps, data):
         super().__init__(self._run)
 
-        self.name = name
+        self.tag = tag
         self.timestamps = timestamps
         self.data = data
 
@@ -26,4 +26,4 @@ class MockSource(LifetimeComponent):
                 produced_data = self.data
 
             if produced_data is not None:
-                await self._outlet.consume_sample(Sample(name=self.name, timestamp=ts, data=produced_data))
+                await self._outlet.consume_sample(Sample(tag=self.tag, timestamp=ts, data=produced_data))

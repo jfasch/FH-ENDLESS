@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 @pytest.mark.asyncio
 async def test_basic():
     source = MockSource(
-        name='source', 
+        tag='source', 
         timestamps=mock_timestamps_async(start=datetime(2024, 4, 16, 14, 48), interval=timedelta(seconds=3)), 
         data=42)
 
@@ -32,10 +32,10 @@ async def test_basic():
         await have_2
         raise StopRunning
 
-    assert sink_1.collected_samples[0].name == 'source'
+    assert sink_1.collected_samples[0].tag == 'source'
     assert sink_1.collected_samples[0].timestamp == datetime(2024, 4, 16, 14, 48)
     assert sink_1.collected_samples[0].data == pytest.approx(42)
 
-    assert sink_1.collected_samples[0].name == 'source'
+    assert sink_1.collected_samples[0].tag == 'source'
     assert sink_1.collected_samples[0].timestamp == datetime(2024, 4, 16, 14, 48)
     assert sink_1.collected_samples[0].data == pytest.approx(42)

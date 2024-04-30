@@ -11,5 +11,5 @@ class TagFilter(Component):
         super().__init__()
         self.tag = tag
     async def _handle_sample(self, sample):
-        if sample.name == self.tag:
+        if sample.tag == self.tag:
             await self._outlet.consume_sample(sample)

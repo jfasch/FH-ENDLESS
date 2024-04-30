@@ -24,7 +24,7 @@ async def test_canframe_to_humtemp():
     # inject can-frame sample, as if produced by the raw CAN reader
     await can2humtemp.inlet.consume_sample(
         Sample(
-            name='name', 
+            tag='name', 
             timestamp=datetime(2024, 4, 17, 16, 5), 
             data=CANFrame(
                 can_id=0x42, 
@@ -36,7 +36,7 @@ async def test_canframe_to_humtemp():
         )
     )
 
-    assert humtemp_consumer.sample.name == 'name'
+    assert humtemp_consumer.sample.tag == 'name'
     assert humtemp_consumer.sample.timestamp == datetime(2024, 4, 17, 16, 5)
     assert humtemp_consumer.sample.data.temperature == pytest.approx(42.5)
     assert humtemp_consumer.sample.data.humidity == pytest.approx(71.4)
@@ -55,7 +55,7 @@ async def test_humtemp_to_json():
     # inject a humidity/temperature sample
     await humtemp2json.inlet.consume_sample(
         Sample(
-            name='name',
+            tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
             data=egon.HumidityTemperature(
                 humidity=23.3,
@@ -64,7 +64,7 @@ async def test_humtemp_to_json():
         )
     )
 
-    assert json_consumer.sample.name == 'name'
+    assert json_consumer.sample.tag == 'name'
     assert json_consumer.sample.timestamp == datetime(2024, 4, 17, 17, 6)
     assert type(json_consumer.sample.data) is bytes
 
@@ -87,7 +87,7 @@ async def test_humtemp_to_temp():
     # inject a humidity/temperature sample
     await humtemp2temp.inlet.consume_sample(
         Sample(
-            name='name',
+            tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
             data=egon.HumidityTemperature(
                 humidity=23.3,
@@ -96,6 +96,6 @@ async def test_humtemp_to_temp():
         )
     )
 
-    assert temp_consumer.sample.name == 'name'
+    assert temp_consumer.sample.tag == 'name'
     assert temp_consumer.sample.timestamp == datetime(2024, 4, 17, 17, 6)
     assert temp_consumer.sample.data == pytest.approx(37.5)

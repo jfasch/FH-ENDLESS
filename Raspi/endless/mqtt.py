@@ -48,4 +48,4 @@ class MQTT_PublishSampleTagToTopic(Component):
         self.tag2topic = tag2topic
     async def _publish_sample_by_tag(self, sample):
         assert type(sample.data) is bytes
-        await self._publisher.publish(topic=self.tag2topic[sample.name], message=sample.data)
+        await self._publisher.publish(topic=self.tag2topic[sample.tag], message=sample.data)

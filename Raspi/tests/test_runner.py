@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 @pytest.mark.asyncio
 async def test_basic():
     source = MockSource(
-        name='source', 
+        tag='source', 
         timestamps=mock_timestamps_async(start=datetime(2024, 3, 20, 10, 56), interval=timedelta(seconds=3)), 
         data=36.5)
 
@@ -25,14 +25,14 @@ async def test_basic():
         await have_1
         raise StopRunning
 
-    assert sink.collected_samples[0].name == 'source'
+    assert sink.collected_samples[0].tag == 'source'
     assert sink.collected_samples[0].timestamp == datetime(2024, 3, 20, 10, 56)
     assert sink.collected_samples[0].data == pytest.approx(36.5)
 
 @pytest.mark.asyncio
 async def test_m_to_n():
     source1 = MockSource(
-        name='source1', 
+        tag='source1', 
         timestamps=mock_timestamps_async(start=datetime(2024, 3, 20, 12, 51), interval=timedelta(seconds=3)), 
         data=36.5)
     have1_1, cond1 = have_n_samples(1)
@@ -40,7 +40,7 @@ async def test_m_to_n():
     source1.outlet.connect(sink1.inlet)
 
     source2 = MockSource(
-        name='source2', 
+        tag='source2', 
         timestamps=mock_timestamps_async(start=datetime(2024, 3, 20, 12, 52), interval=timedelta(seconds=3)), 
         data=0.5)
     have2_1, cond2 = have_n_samples(1)
@@ -52,11 +52,11 @@ async def test_m_to_n():
         await have2_1
         raise StopRunning
 
-    assert sink1.collected_samples[0].name == 'source1'
+    assert sink1.collected_samples[0].tag == 'source1'
     assert sink1.collected_samples[0].timestamp == datetime(2024, 3, 20, 12, 51)
     assert sink1.collected_samples[0].data == pytest.approx(36.5)
 
-    assert sink2.collected_samples[0].name == 'source2'
+    assert sink2.collected_samples[0].tag == 'source2'
     assert sink2.collected_samples[0].timestamp == datetime(2024, 3, 20, 12, 52)
     assert sink2.collected_samples[0].data == pytest.approx(0.5)
 

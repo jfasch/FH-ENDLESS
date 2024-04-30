@@ -22,7 +22,7 @@ async def test_basic(monkeypatch):
 
     writer = CANWriter(can_iface='the-iface')
     await writer.inlet.consume_sample(
-        Sample(name='some-tag',
+        Sample(tag='some-tag',
                timestamp=datetime(2024, 4, 23, 14, 54),
                data=can_util.CANFrame(
                    can_id=0x42,

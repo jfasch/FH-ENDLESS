@@ -24,7 +24,7 @@ async def test_basic():
 
     await mqtt_splitter.inlet.consume_sample(
         Sample(
-            name='tag1',
+            tag='tag1',
             timestamp=datetime(2024, 4, 18, 16, 27),
             data=b'payload1',
         )
@@ -35,7 +35,7 @@ async def test_basic():
 
     await mqtt_splitter.inlet.consume_sample(
         Sample(
-            name='tag2',
+            tag='tag2',
             timestamp=datetime(2024, 4, 18, 16, 29),
             data=b'payload2',
         )

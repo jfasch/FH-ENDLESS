@@ -6,12 +6,12 @@ import pytest
 
 def test_basic():
     sample = Sample('name', datetime(2024, 3, 14, 8, 46), 42.666)
-    assert sample.name == 'name'
+    assert sample.tag == 'name'
     assert sample.timestamp == datetime(2024, 3, 14, 8, 46)
     assert sample.data == pytest.approx(42.666)
 
-    sample = Sample(name='name', timestamp=datetime(2024, 3, 14, 8, 47), data=42.666)
-    assert sample.name == 'name'
+    sample = Sample(tag='name', timestamp=datetime(2024, 3, 14, 8, 47), data=42.666)
+    assert sample.tag == 'name'
     assert sample.timestamp == datetime(2024, 3, 14, 8, 47)
     assert sample.data == pytest.approx(42.666)
 

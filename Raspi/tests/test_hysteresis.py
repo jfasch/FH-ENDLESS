@@ -23,7 +23,7 @@ async def test_basic():
     # below low
     await hysteresis.inlet.consume_sample(
         Sample(
-            name='name',
+            tag='name',
             timestamp=datetime(2024, 4, 18, 17, 0),
             data=35,
         )
@@ -33,7 +33,7 @@ async def test_basic():
     # between low and high -> no change
     await hysteresis.inlet.consume_sample(
         Sample(
-            name='name',
+            tag='name',
             timestamp=datetime(2024, 4, 18, 17, 1),
             data=37.1,
         )
@@ -43,7 +43,7 @@ async def test_basic():
     # above high
     await hysteresis.inlet.consume_sample(
         Sample(
-            name='name',
+            tag='name',
             timestamp=datetime(2024, 4, 18, 17, 2),
             data=38.5,
         )

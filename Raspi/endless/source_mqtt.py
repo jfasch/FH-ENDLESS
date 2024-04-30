@@ -10,14 +10,14 @@ from datetime import datetime
 
 @receptacle('outlet', Inlet)
 class MQTTSource(LifetimeComponent):
-    def __init__(self, name, host, topic, port = 1883):
+    def __init__(self, tag, host, topic, port = 1883):
         super().__init__(self._run)
 
         self.host = host
         self.port = port
         self.topic = topic
 
-        self.name = name
+        self.tag = tag
 
     async def _run(self):
         async with aiomqtt.Client(hostname=self.host, port=self.port) as client:
@@ -31,7 +31,7 @@ class MQTTSource(LifetimeComponent):
         if len(mqtt_sample) != 2:
             raise RuntimeError(f'Invalid sample (#entries=={len(mqtt_sample)}):', payload)
         return Sample(
-            name = self.name,
+            tag = self.tag,
             timestamp = datetime.fromisoformat(mqtt_sample['timestamp']),
             data = mqtt_sample['data'],
         )
