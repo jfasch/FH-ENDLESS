@@ -1,9 +1,10 @@
 from .component import Component
 from .facet import facet
 from .receptacle import receptacle, ONE
-from .interfaces import SampleInlet, Switch
+from .interfaces import CANInputHandler, SampleInlet, Switch
 from .sample import Sample
 from .can_util import CANFrame
+from .async_util import wallclock_timestamps_nosleep
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -16,18 +17,35 @@ class HumidityTemperature:
     humidity: float
     temperature: float
 
-def transform_can_frame_to_hum_temp(sample):
-    _FORMAT = '<iI'
-    temperature, humidity = struct.unpack(_FORMAT, sample.data.payload)
+@facet('can_in', CANInputHandler, (('handle_frame', '_handle_frame'),))
+@receptacle('outlet', SampleInlet, multiplicity=ONE)
+class HumidityTemperatureSensor(Component):
+    PAYLOAD_FORMAT = '<iI'
 
-    return Sample(
-        tag=sample.tag, 
-        timestamp=sample.timestamp, 
-        data=HumidityTemperature(
-            temperature=temperature/10, 
-            humidity=humidity/10,
-        )
-    )
+    def __init__(self, can_id, tag, timestamps=None):
+        super().__init__()
+        self.can_id = can_id
+        self.tag = tag
+        if timestamps is None:
+            self.timestamps = iter(wallclock_timestamps_nosleep())
+        else:
+            self.timestamps = iter(timestamps)
+
+    async def _handle_frame(self, can_id, payload):
+        if can_id != self.can_id:
+            return
+
+        temperature, humidity = struct.unpack(self.PAYLOAD_FORMAT, payload)
+        timestamp = next(self.timestamps)
+
+        await self._outlet.consume_sample(
+            Sample(
+                tag=self.tag, 
+                timestamp=timestamp,
+                data=HumidityTemperature(
+                    temperature=temperature/10, 
+                    humidity=humidity/10,
+                )))
 
 def transform_hum_temp_to_json(sample):
     json_pydict = {

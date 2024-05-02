@@ -10,7 +10,7 @@ import asyncio
 from datetime import datetime
 
 
-@receptacle('handler', CANInputHandler, multiplicity=ONE_OR_MANY)
+@receptacle('frame_out', CANInputHandler, multiplicity=ONE_OR_MANY)
 class CANReader(LifetimeComponent):
     def __init__(self, can_iface):
         super().__init__(self._run)

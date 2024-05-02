@@ -1,12 +1,18 @@
 The ENDLESS Project
 ===================
 
+Documentation
+-------------
+
+ReadTheDocs
+...........
+
 See `the docs CI on readthedocs
 <https://fh-endless.readthedocs.io/en/latest/>`__ for the latest
 documentation build.
 
 Building Documentation Locally
-------------------------------
+..............................
 
 * ``requirements.txt`` contains a lot, it's probably best to use a
   virtual environment

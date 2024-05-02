@@ -3,6 +3,8 @@ from endless.sample import Sample
 from endless.sample_converter import SampleConverter
 from endless.can_util import CANFrame
 from endless.interfaces import SampleInlet
+from endless.runner import Runner, StopRunning
+from endless.sink_mock import MockSink, have_n_samples
 
 import pytest
 from datetime import datetime
@@ -11,35 +13,37 @@ import json
 
 
 @pytest.mark.asyncio
-async def test_canframe_to_humtemp():
-    class MySampleConsumer(SampleInlet):
-        async def consume_sample(self, sample: Sample):
-            self.sample = sample
+async def test_canframe_to_humtemp(monkeypatch):
+    sensor_0x33 = egon.HumidityTemperatureSensor(can_id=0x33, tag='CAN@0x33', timestamps=(datetime(2024, 5, 2, 10, 11,  7),))
+    sensor_0x34 = egon.HumidityTemperatureSensor(can_id=0x34, tag='CAN@0x34', timestamps=(datetime(2024, 5, 2, 10, 11, 15),))
 
-    humtemp_consumer = MySampleConsumer()
-    can2humtemp = SampleConverter(egon.transform_can_frame_to_hum_temp)
+    two_ready, cond = have_n_samples(2)
+    sample_sink = MockSink(cond)
 
-    can2humtemp.outlet.connect(humtemp_consumer)
+    sensor_0x33.outlet.connect(sample_sink.inlet)
+    sensor_0x34.outlet.connect(sample_sink.inlet)
 
-    # inject can-frame sample, as if produced by the raw CAN reader
-    await can2humtemp.inlet.consume_sample(
-        Sample(
-            tag='name', 
-            timestamp=datetime(2024, 4, 17, 16, 5), 
-            data=CANFrame(
-                can_id=0x42, 
-                payload=struct.pack('<iI', 
-                                    425, # 42.5
-                                    714, # 71.4
-                                    ),
-            ),
-        )
-    )
+    async with Runner((sensor_0x33, sensor_0x34, sample_sink)):
+        payload_0x33 = struct.pack('<iI', int(-42.7*10), int(83.2*10))
+        await sensor_0x33.can_in.handle_frame(0x33, payload_0x33)
+        await sensor_0x34.can_in.handle_frame(0x33, payload_0x33) # ignored
 
-    assert humtemp_consumer.sample.tag == 'name'
-    assert humtemp_consumer.sample.timestamp == datetime(2024, 4, 17, 16, 5)
-    assert humtemp_consumer.sample.data.temperature == pytest.approx(42.5)
-    assert humtemp_consumer.sample.data.humidity == pytest.approx(71.4)
+        payload_0x34 = struct.pack('<iI', int(666.4*10), int(50.1*10))
+        await sensor_0x33.can_in.handle_frame(0x34, payload_0x34)
+        await sensor_0x34.can_in.handle_frame(0x34, payload_0x34) # ignored
+
+        await two_ready
+        raise StopRunning
+
+    assert sample_sink.collected_samples[0].tag == 'CAN@0x33'
+    assert sample_sink.collected_samples[0].timestamp == datetime(2024, 5, 2, 10, 11, 7)
+    assert sample_sink.collected_samples[0].data.temperature == pytest.approx(-42.7)
+    assert sample_sink.collected_samples[0].data.humidity == pytest.approx(83.2)
+
+    assert sample_sink.collected_samples[1].tag == 'CAN@0x34'
+    assert sample_sink.collected_samples[1].timestamp == datetime(2024, 5, 2, 10, 11, 15)
+    assert sample_sink.collected_samples[1].data.temperature == pytest.approx(666.4)
+    assert sample_sink.collected_samples[1].data.humidity == pytest.approx(50.1)
 
 @pytest.mark.asyncio
 async def test_humtemp_to_json():

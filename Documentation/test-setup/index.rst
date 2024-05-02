@@ -199,7 +199,7 @@ start a second instance of the sensor. For example,
 	  --phase-shift-humidity pi/2 \
 	  --vertical-shift-humidity 80
 
-Note that a 10 millisecond sample intervall could be a bit too
+Note that a 10 millisecond sample interval could be a bit too
 optimistic - it is a performance test for the application and
 connected components like MQTT and databases.
 
