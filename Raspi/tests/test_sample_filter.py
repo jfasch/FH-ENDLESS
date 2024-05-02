@@ -1,4 +1,4 @@
-from endless.filter import TagFilter
+from endless.sample_filter import TagFilter
 from endless.sample import Sample
 from endless.interfaces import SampleInlet
 

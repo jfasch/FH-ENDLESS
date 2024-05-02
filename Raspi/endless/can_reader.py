@@ -23,4 +23,4 @@ class CANReader(LifetimeComponent):
             frame = await asyncio.get_running_loop().sock_recv(can_socket, can_util.FRAME_SIZE)
             frame_can_id, frame_can_dlc, frame_data = struct.unpack(can_util.FRAME_LAYOUT, frame)
 
-            await self._handler.handle_frame(frame_can_id, frame_data[:frame_can_dlc])
+            await self._frame_out.handle_frame(frame_can_id, frame_data[:frame_can_dlc])
