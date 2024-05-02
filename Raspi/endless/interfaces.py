@@ -6,6 +6,11 @@ class SampleInlet(abc.ABC):
     async def consume_sample(self, sample):
         raise NotImplementedError
 
+class Control(abc.ABC):
+    @abc.abstractmethod
+    async def adapt(self, timestamp, value):
+        raise NotImplementedError
+
 class Switch(abc.ABC):
     @abc.abstractmethod
     async def set_state(self, state: bool):
