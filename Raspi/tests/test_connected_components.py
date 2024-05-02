@@ -1,6 +1,6 @@
 from endless.component import Component
 from endless.facet import facet
-from endless.receptacle import receptacle
+from endless.receptacle import receptacle, ONE
 
 import pytest
 import abc
@@ -60,7 +60,7 @@ def test_connected_components():
         def _get_running_average(self):
             return self._running_average
 
-    @receptacle('statistical_outlet', SuperStatistics)
+    @receptacle('statistical_outlet', SuperStatistics, multiplicity=ONE)
     class ValueProducer(Component):
         '''Produces values from an iterable, and injects it into
         another component that is connected via the

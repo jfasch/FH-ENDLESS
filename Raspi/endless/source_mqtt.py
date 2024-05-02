@@ -1,5 +1,5 @@
 from .component import LifetimeComponent
-from .receptacle import receptacle
+from .receptacle import receptacle, ONE
 from .interfaces import SampleInlet
 from .sample import Sample
 
@@ -8,7 +8,7 @@ import aiomqtt
 from datetime import datetime
 
 
-@receptacle('outlet', SampleInlet)
+@receptacle('outlet', SampleInlet, multiplicity=ONE)
 class MQTTSource(LifetimeComponent):
     def __init__(self, tag, host, topic, port = 1883):
         super().__init__(self._run)

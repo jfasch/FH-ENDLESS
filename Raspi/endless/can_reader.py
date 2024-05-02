@@ -1,5 +1,5 @@
 from .component import LifetimeComponent
-from .receptacle import receptacle
+from .receptacle import receptacle, ONE_OR_MANY
 from .interfaces import CANInputHandler
 from . import can_util
 
@@ -10,7 +10,7 @@ import asyncio
 from datetime import datetime
 
 
-@receptacle('handler', CANInputHandler)
+@receptacle('handler', CANInputHandler, multiplicity=ONE_OR_MANY)
 class CANReader(LifetimeComponent):
     def __init__(self, can_iface):
         super().__init__(self._run)

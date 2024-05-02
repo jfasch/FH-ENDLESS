@@ -1,6 +1,10 @@
 class EndlessException(Exception): pass
+
 class ReceptacleAlreadyConnected(EndlessException): pass
 class ReceptacleNotConnected(EndlessException): pass
+class ReceptacleMultiReturnsValue(EndlessException): pass
+class ReceptacleAttributeNotMethod(EndlessException): pass
+class ReceptacleAttributeNotInBasetype(EndlessException): pass
 
 class MappedMethodNotAsync(TypeError):
     def __init__(self, baseclass, componentmethodname):

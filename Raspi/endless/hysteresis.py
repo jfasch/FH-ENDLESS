@@ -1,11 +1,11 @@
 from .component import Component
 from .facet import facet
-from .receptacle import receptacle
+from .receptacle import receptacle, ONE
 from .interfaces import SampleInlet, Switch
 
 
 @facet('inlet', SampleInlet, (('consume_sample', '_new_value'),))
-@receptacle('switch', Switch)
+@receptacle('switch', Switch, multiplicity=ONE)
 class Hysteresis(Component):
     def __init__(self, low, high):
         super().__init__()

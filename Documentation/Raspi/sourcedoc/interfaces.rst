@@ -16,9 +16,12 @@ Available Interfaces (Facets and Receptacles)
 .. autoclass:: endless.interfaces.Switch
    :members:
 
-``Publisher`` (MQTT Style, But Not Necessarily)
------------------------------------------------
+MQTT, CAN, ...
+--------------
 
-.. autoclass:: endless.mqtt.Publisher
+.. autoclass:: endless.interfaces.Publisher
+   :members:
+
+.. autoclass:: endless.interfaces.CANInputHandler
    :members:
 

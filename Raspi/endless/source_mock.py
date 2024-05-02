@@ -1,5 +1,5 @@
 from .component import LifetimeComponent
-from .receptacle import receptacle
+from .receptacle import receptacle, ONE
 from .sample import Sample
 from .interfaces import SampleInlet
 from .error_strategy import ErrorStrategy
@@ -7,7 +7,7 @@ from .error_strategy import ErrorStrategy
 import asyncio
 
 
-@receptacle('outlet', SampleInlet)
+@receptacle('outlet', SampleInlet, multiplicity=ONE)
 class MockSource(LifetimeComponent):
     def __init__(self, tag, timestamps, data):
         super().__init__(self._run)
