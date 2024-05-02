@@ -29,3 +29,9 @@ class CANInputHandler(abc.ABC):
     async def handle_frame(self, can_id, payload):
         raise NotImplementedError
         
+class CANOutputHandler(abc.ABC):
+    '''Handles CAN-style output: binary payload, associated with an CAN ID'''
+    @abc.abstractmethod
+    async def write_frame(self, can_id, payload):
+        raise NotImplementedError
+        

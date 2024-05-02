@@ -78,7 +78,7 @@ async def test_humtemp_to_json():
     assert json_structure['temperature'] == pytest.approx(37.5)
 
 @pytest.mark.asyncio
-async def test_humtemp_to_temp():
+async def test__humtemp_sample__to__control():
     class MyControl(Control):
         async def adapt(self, timestamp, value):
             self.timestamp = timestamp

@@ -21,13 +21,7 @@ async def test_basic(monkeypatch):
     monkeypatch.setattr(can_util, 'create_socket', my_create_can_socket)
 
     writer = CANWriter(can_iface='the-iface')
-    await writer.sample_in.consume_sample(
-        Sample(tag='some-tag',
-               timestamp=datetime(2024, 4, 23, 14, 54),
-               data=can_util.CANFrame(
-                   can_id=0x42,
-                   payload=b'hello'))
-    )
+    await writer.frame_in.write_frame(can_id=0x42, payload=b'hello')
 
     frame = left.recv(1024)
 

@@ -1,7 +1,7 @@
 from .component import Component
 from .facet import facet
 from .receptacle import receptacle, ONE
-from .interfaces import CANInputHandler, SampleInlet, Switch, Control
+from .interfaces import CANInputHandler, CANOutputHandler, SampleInlet, Switch, Control
 from .sample import Sample
 from .can_util import CANFrame
 from .async_util import wallclock_timestamps_nosleep
@@ -73,7 +73,7 @@ def transform_hum_temp_to_temp(sample):
                   )
 
 @facet('switch', Switch, (('set_state', '_set_state'),))
-@receptacle('sample_out', SampleInlet, multiplicity=ONE)
+@receptacle('frame_in', CANOutputHandler, multiplicity=ONE)
 class CANSwitch(Component):
     DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
 
@@ -83,10 +83,6 @@ class CANSwitch(Component):
         self.number = number
 
     async def _set_state(self, state):
-        frame = CANFrame(can_id = self.can_id, payload = struct.pack(self.DATA_LAYOUT, self.number, state))
-        await self._sample_out.consume_sample(
-            Sample(tag='irrelevant', # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
-                   timestamp=datetime.now(), # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
-                   data=frame,
-                   )
-        )
+        await self._frame_in.write_frame(
+            can_id=self.can_id, 
+            payload=struct.pack(self.DATA_LAYOUT, self.number, state))
