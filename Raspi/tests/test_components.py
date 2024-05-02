@@ -1,7 +1,7 @@
 from endless.component import Component
 from endless.errorhandler import ErrorHandler
 from endless.source_mock import MockSource
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 
@@ -30,7 +30,7 @@ async def test_basic_run():
         data=36.5)
 
     have_1, cond = have_n_samples(1)
-    sink = MockSink(cond=cond)
+    sink = SampleReceiver(cond=cond)
 
     source.sample_out.connect(sink.sample_in)
 

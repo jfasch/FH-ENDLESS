@@ -1,6 +1,6 @@
 from endless.sample_broadcaster import SampleBroadcaster
 from endless.source_mock import MockSource
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 
@@ -16,10 +16,10 @@ async def test_basic():
         data=42)
 
     have_1, cond_1 = have_n_samples(1)
-    sink_1 = MockSink(cond=cond_1)
+    sink_1 = SampleReceiver(cond=cond_1)
 
     have_2, cond_2 = have_n_samples(1)
-    sink_2 = MockSink(cond=cond_2)
+    sink_2 = SampleReceiver(cond=cond_2)
 
     broadcaster = SampleBroadcaster()
 

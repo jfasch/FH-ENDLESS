@@ -13,7 +13,7 @@ def have_n_samples(n):
     return future, cond
 
 @facet('sample_in', basetype=SampleInlet, methodspec=(('consume_sample', '_incoming_sample'),))
-class MockSink(LifetimeComponent):
+class SampleReceiver(LifetimeComponent):
     def __init__(self, cond=None):
         super().__init__(self._run)
         self.collected_samples = []

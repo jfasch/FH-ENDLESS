@@ -1,5 +1,5 @@
 from endless.source_mock import MockSource
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 from endless.sample import Sample
@@ -17,7 +17,7 @@ async def test_basic():
         data=36.5)
 
     have_1, cond = have_n_samples(1)
-    sink = MockSink(cond=cond)
+    sink = SampleReceiver(cond=cond)
 
     source.sample_out.connect(sink.sample_in)
 
@@ -36,7 +36,7 @@ async def test_m_to_n():
         timestamps=mock_timestamps_async(start=datetime(2024, 3, 20, 12, 51), interval=timedelta(seconds=3)), 
         data=36.5)
     have1_1, cond1 = have_n_samples(1)
-    sink1 = MockSink(cond=cond1)
+    sink1 = SampleReceiver(cond=cond1)
     source1.sample_out.connect(sink1.sample_in)
 
     source2 = MockSource(
@@ -44,7 +44,7 @@ async def test_m_to_n():
         timestamps=mock_timestamps_async(start=datetime(2024, 3, 20, 12, 52), interval=timedelta(seconds=3)), 
         data=0.5)
     have2_1, cond2 = have_n_samples(1)
-    sink2 = MockSink(cond=cond2)
+    sink2 = SampleReceiver(cond=cond2)
     source2.sample_out.connect(sink2.sample_in)
     
     async with Runner((source1, source2, sink1, sink2),):

@@ -1,6 +1,6 @@
 from endless.sample import Sample
 from endless.source_mock import MockSource
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.runner import Runner, StopRunning
 from endless import async_util
 
@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 @pytest.mark.asyncio
 async def test_basic():
     have_5, cond = have_n_samples(5)
-    sink = MockSink(cond)
+    sink = SampleReceiver(cond)
     source = MockSource(
         'mock',
         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
@@ -49,7 +49,7 @@ async def test_data_is_function_of_timestamp():
         return math.sin(ts.timestamp())
 
     have_1, cond = have_n_samples(1)
-    sink = MockSink(cond)
+    sink = SampleReceiver(cond)
     source = MockSource('mock',
                         timestamps=async_util.mock_timestamps_async(start=datetime(2024, 3, 14, 8, 46), interval=timedelta(milliseconds=10)), 
                         data=myfunc)

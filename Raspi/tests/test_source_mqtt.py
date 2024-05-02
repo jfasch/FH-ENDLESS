@@ -1,4 +1,4 @@
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.source_mqtt import MQTTSource
 from endless.sample import Sample
 from endless.runner import Runner, StopRunning
@@ -40,7 +40,7 @@ async def test_basic(monkeypatch):
     monkeypatch.setattr(aiomqtt, 'Client', MyClient)
 
     have_2, cond = have_n_samples(2)
-    sink = MockSink(cond)
+    sink = SampleReceiver(cond)
     source = MQTTSource(tag='a-name', host='blah.com', port=6666, topic='a-topic')
     source.sample_out.connect(sink.sample_in)
 

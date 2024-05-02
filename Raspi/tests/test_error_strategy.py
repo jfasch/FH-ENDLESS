@@ -1,5 +1,5 @@
 from endless.source_mock import MockSource
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 from endless.runner import Runner, StopRunning
 from endless.async_util import mock_timestamps_async
 from endless.errors import EndlessException
@@ -28,7 +28,7 @@ async def test_error_during_runtime__non_endless_exception():
                         data=errorfunc)
 
     have_1000, cond = have_n_samples(1000)  # awaiting 1000, though we won't even see 1
-    sink = MockSink(cond=cond)
+    sink = SampleReceiver(cond=cond)
 
     source.sample_out.connect(sink.sample_in)
 
@@ -66,7 +66,7 @@ async def test_error_during_runtime__endless_error():
 
     # awaiting 10 which we see because an EndlessException does *not* terminate us
     have_10, cond = have_n_samples(10)
-    sink = MockSink(cond=cond)
+    sink = SampleReceiver(cond=cond)
 
     source.sample_out.connect(sink.sample_in)
 

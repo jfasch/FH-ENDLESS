@@ -4,7 +4,7 @@ from endless.sample_filter import SampleFilter
 from endless.can_util import CANFrame
 from endless.interfaces import SampleInlet, Control
 from endless.runner import Runner, StopRunning
-from endless.sink_mock import MockSink, have_n_samples
+from endless.sample_receiver import SampleReceiver, have_n_samples
 
 import pytest
 from datetime import datetime
@@ -18,7 +18,7 @@ async def test_canframe_to_humtemp():
     sensor_0x34 = egon.HumidityTemperatureSensor(can_id=0x34, tag='CAN@0x34', timestamps=(datetime(2024, 5, 2, 10, 11, 15),))
 
     two_ready, cond = have_n_samples(2)
-    sample_sink = MockSink(cond)
+    sample_sink = SampleReceiver(cond)
 
     sensor_0x33.sample_out.connect(sample_sink.sample_in)
     sensor_0x34.sample_out.connect(sample_sink.sample_in)
