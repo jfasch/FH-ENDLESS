@@ -1,6 +1,6 @@
 from endless import egon
 from endless.sample import Sample
-from endless.sample_converter import SampleConverter
+from endless.sample_filter import SampleFilter
 from endless.can_util import CANFrame
 from endless.interfaces import SampleInlet
 from endless.runner import Runner, StopRunning
@@ -52,7 +52,7 @@ async def test_humtemp_to_json():
             self.sample = sample
 
     json_consumer = MyJSONConsumer()
-    humtemp2json = SampleConverter(egon.transform_hum_temp_to_json)
+    humtemp2json = SampleFilter(egon.transform_hum_temp_to_json)
     
     humtemp2json.sample_out.connect(json_consumer)
 
@@ -84,7 +84,7 @@ async def test_humtemp_to_temp():
             self.sample = sample
 
     temp_consumer = MyTemperatureConsumer()
-    humtemp2temp = SampleConverter(egon.transform_hum_temp_to_temp)
+    humtemp2temp = SampleFilter(egon.transform_hum_temp_to_temp)
     
     humtemp2temp.sample_out.connect(temp_consumer)
 
