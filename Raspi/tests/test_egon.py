@@ -2,7 +2,7 @@ from endless import egon
 from endless.sample import Sample
 from endless.sample_filter import SampleFilter
 from endless.can_util import CANFrame
-from endless.interfaces import SampleInlet
+from endless.interfaces import SampleInlet, Control
 from endless.runner import Runner, StopRunning
 from endless.sink_mock import MockSink, have_n_samples
 
@@ -13,7 +13,7 @@ import json
 
 
 @pytest.mark.asyncio
-async def test_canframe_to_humtemp(monkeypatch):
+async def test_canframe_to_humtemp():
     sensor_0x33 = egon.HumidityTemperatureSensor(can_id=0x33, tag='CAN@0x33', timestamps=(datetime(2024, 5, 2, 10, 11,  7),))
     sensor_0x34 = egon.HumidityTemperatureSensor(can_id=0x34, tag='CAN@0x34', timestamps=(datetime(2024, 5, 2, 10, 11, 15),))
 
@@ -79,17 +79,17 @@ async def test_humtemp_to_json():
 
 @pytest.mark.asyncio
 async def test_humtemp_to_temp():
-    class MyTemperatureConsumer(SampleInlet):
-        async def consume_sample(self, sample):
-            self.sample = sample
+    class MyControl(Control):
+        async def adapt(self, timestamp, value):
+            self.timestamp = timestamp
+            self.value = value
 
-    temp_consumer = MyTemperatureConsumer()
-    humtemp2temp = SampleFilter(egon.transform_hum_temp_to_temp)
-    
-    humtemp2temp.sample_out.connect(temp_consumer)
+    ctl = MyControl()
+    sample_controller = egon.HumidityTemperature2Control()
+    sample_controller.control.connect(ctl)
 
     # inject a humidity/temperature sample
-    await humtemp2temp.sample_in.consume_sample(
+    await sample_controller.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
@@ -100,6 +100,5 @@ async def test_humtemp_to_temp():
         )
     )
 
-    assert temp_consumer.sample.tag == 'name'
-    assert temp_consumer.sample.timestamp == datetime(2024, 4, 17, 17, 6)
-    assert temp_consumer.sample.data == pytest.approx(37.5)
+    assert ctl.timestamp == datetime(2024, 4, 17, 17, 6)
+    assert ctl.value == pytest.approx(37.5)

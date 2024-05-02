@@ -1,7 +1,7 @@
 from .component import Component
 from .facet import facet
 from .receptacle import receptacle, ONE
-from .interfaces import CANInputHandler, SampleInlet, Switch
+from .interfaces import CANInputHandler, SampleInlet, Switch, Control
 from .sample import Sample
 from .can_util import CANFrame
 from .async_util import wallclock_timestamps_nosleep
@@ -59,6 +59,12 @@ def transform_hum_temp_to_json(sample):
                   timestamp=sample.timestamp,
                   data=json_bytes
                   )
+
+@facet('sample_in', SampleInlet, (('consume_sample', '_consume_sample'),))
+@receptacle('control', Control, multiplicity=ONE)
+class HumidityTemperature2Control(Component):
+    async def _consume_sample(self, sample):
+        await self._control.adapt(timestamp=sample.timestamp, value=sample.data.temperature)
 
 def transform_hum_temp_to_temp(sample):
     return Sample(tag=sample.tag,
