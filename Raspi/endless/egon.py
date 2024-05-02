@@ -73,7 +73,7 @@ def transform_hum_temp_to_temp(sample):
                   )
 
 @facet('switch', Switch, (('set_state', '_set_state'),))
-@receptacle('frame_in', CANOutputHandler, multiplicity=ONE)
+@receptacle('frame_out', CANOutputHandler, multiplicity=ONE)
 class CANSwitch(Component):
     DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
 
@@ -83,6 +83,6 @@ class CANSwitch(Component):
         self.number = number
 
     async def _set_state(self, state):
-        await self._frame_in.write_frame(
+        await self._frame_out.write_frame(
             can_id=self.can_id, 
             payload=struct.pack(self.DATA_LAYOUT, self.number, state))
