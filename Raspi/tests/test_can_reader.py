@@ -32,7 +32,7 @@ async def test_basic(monkeypatch):
     handler = MyCANInputHandler()
 
     rdr = CANReader(can_iface='blah')
-    rdr.handler.connect(handler)
+    rdr.frame_out.connect(handler)
 
     async with Runner((rdr,)) as runner:
         await handler.frame_ready

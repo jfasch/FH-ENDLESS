@@ -22,7 +22,7 @@ async def test_basic():
     
     mqtt_splitter.publisher.connect(my_publisher)
 
-    await mqtt_splitter.inlet.consume_sample(
+    await mqtt_splitter.sample_in.consume_sample(
         Sample(
             tag='tag1',
             timestamp=datetime(2024, 4, 18, 16, 27),
@@ -33,7 +33,7 @@ async def test_basic():
     assert my_publisher.topic == 'topic1'
     assert my_publisher.message == b'payload1'
 
-    await mqtt_splitter.inlet.consume_sample(
+    await mqtt_splitter.sample_in.consume_sample(
         Sample(
             tag='tag2',
             timestamp=datetime(2024, 4, 18, 16, 29),

@@ -35,7 +35,7 @@ class MQTTClient(LifetimeComponent):
         topic: str
         message: bytes
 
-@facet('inlet', SampleInlet, (('consume_sample', '_publish_sample_by_tag'),))
+@facet('sample_in', SampleInlet, (('consume_sample', '_publish_sample_by_tag'),))
 @receptacle('publisher', Publisher, multiplicity=ONE)
 class MQTT_PublishSampleTagToTopic(Component):
     def __init__(self, tag2topic):

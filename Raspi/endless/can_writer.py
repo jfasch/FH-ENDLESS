@@ -7,7 +7,7 @@ import struct
 import asyncio
 
 
-@facet('inlet', SampleInlet, (('consume_sample', '_write_frame'),))
+@facet('sample_in', SampleInlet, (('consume_sample', '_write_frame'),))
 class CANWriter(Component):
     def __init__(self, can_iface):
         super().__init__()

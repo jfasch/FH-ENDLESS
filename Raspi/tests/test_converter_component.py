@@ -21,9 +21,9 @@ async def test_basic():
             self.sample = sample
 
     consumer = MyConsumer()
-    converter.outlet.connect(consumer)
+    converter.sample_out.connect(consumer)
 
-    await converter.inlet.consume_sample(
+    await converter.sample_in.consume_sample(
         Sample(tag='name',
                timestamp=datetime(2024, 4, 23, 8, 20),
                data=42

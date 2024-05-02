@@ -7,7 +7,7 @@ from .error_strategy import ErrorStrategy
 import asyncio
 
 
-@receptacle('outlet', SampleInlet, multiplicity=ONE)
+@receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class MockSource(LifetimeComponent):
     def __init__(self, tag, timestamps, data):
         super().__init__(self._run)
@@ -26,4 +26,4 @@ class MockSource(LifetimeComponent):
                 produced_data = self.data
 
             if produced_data is not None:
-                await self._outlet.consume_sample(Sample(tag=self.tag, timestamp=ts, data=produced_data))
+                await self._sample_out.consume_sample(Sample(tag=self.tag, timestamp=ts, data=produced_data))

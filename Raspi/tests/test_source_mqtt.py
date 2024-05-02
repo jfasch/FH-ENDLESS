@@ -42,7 +42,7 @@ async def test_basic(monkeypatch):
     have_2, cond = have_n_samples(2)
     sink = MockSink(cond)
     source = MQTTSource(tag='a-name', host='blah.com', port=6666, topic='a-topic')
-    source.outlet.connect(sink.inlet)
+    source.sample_out.connect(sink.sample_in)
 
     async with Runner((source,sink)) as runner:
         await have_2

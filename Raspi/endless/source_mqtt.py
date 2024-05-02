@@ -8,7 +8,7 @@ import aiomqtt
 from datetime import datetime
 
 
-@receptacle('outlet', SampleInlet, multiplicity=ONE)
+@receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class MQTTSource(LifetimeComponent):
     def __init__(self, tag, host, topic, port = 1883):
         super().__init__(self._run)
@@ -24,7 +24,7 @@ class MQTTSource(LifetimeComponent):
             await client.subscribe(self.topic)
             async for message in client.messages:
                 sample = self._make_sample(message.payload)
-                await self._outlet.consume_sample(sample)
+                await self._sample_out.consume_sample(sample)
 
     def _make_sample(self, payload):
         mqtt_sample = json.loads(payload)

@@ -21,7 +21,7 @@ async def test_basic():
     hysteresis.switch.connect(my_switch)
 
     # below low
-    await hysteresis.inlet.consume_sample(
+    await hysteresis.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 18, 17, 0),
@@ -31,7 +31,7 @@ async def test_basic():
     assert my_switch.state is True
 
     # between low and high -> no change
-    await hysteresis.inlet.consume_sample(
+    await hysteresis.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 18, 17, 1),
@@ -41,7 +41,7 @@ async def test_basic():
     assert my_switch.state is True
 
     # above high
-    await hysteresis.inlet.consume_sample(
+    await hysteresis.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 18, 17, 2),

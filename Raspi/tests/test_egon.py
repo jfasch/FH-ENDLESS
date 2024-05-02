@@ -20,8 +20,8 @@ async def test_canframe_to_humtemp(monkeypatch):
     two_ready, cond = have_n_samples(2)
     sample_sink = MockSink(cond)
 
-    sensor_0x33.outlet.connect(sample_sink.inlet)
-    sensor_0x34.outlet.connect(sample_sink.inlet)
+    sensor_0x33.sample_out.connect(sample_sink.sample_in)
+    sensor_0x34.sample_out.connect(sample_sink.sample_in)
 
     async with Runner((sensor_0x33, sensor_0x34, sample_sink)):
         payload_0x33 = struct.pack('<iI', int(-42.7*10), int(83.2*10))
@@ -54,10 +54,10 @@ async def test_humtemp_to_json():
     json_consumer = MyJSONConsumer()
     humtemp2json = SampleConverter(egon.transform_hum_temp_to_json)
     
-    humtemp2json.outlet.connect(json_consumer)
+    humtemp2json.sample_out.connect(json_consumer)
 
     # inject a humidity/temperature sample
-    await humtemp2json.inlet.consume_sample(
+    await humtemp2json.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
@@ -86,10 +86,10 @@ async def test_humtemp_to_temp():
     temp_consumer = MyTemperatureConsumer()
     humtemp2temp = SampleConverter(egon.transform_hum_temp_to_temp)
     
-    humtemp2temp.outlet.connect(temp_consumer)
+    humtemp2temp.sample_out.connect(temp_consumer)
 
     # inject a humidity/temperature sample
-    await humtemp2temp.inlet.consume_sample(
+    await humtemp2temp.sample_in.consume_sample(
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),

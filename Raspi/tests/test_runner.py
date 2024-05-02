@@ -19,7 +19,7 @@ async def test_basic():
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond=cond)
 
-    source.outlet.connect(sink.inlet)
+    source.sample_out.connect(sink.sample_in)
 
     async with Runner((source,sink)):
         await have_1
@@ -37,7 +37,7 @@ async def test_m_to_n():
         data=36.5)
     have1_1, cond1 = have_n_samples(1)
     sink1 = MockSink(cond=cond1)
-    source1.outlet.connect(sink1.inlet)
+    source1.sample_out.connect(sink1.sample_in)
 
     source2 = MockSource(
         tag='source2', 
@@ -45,7 +45,7 @@ async def test_m_to_n():
         data=0.5)
     have2_1, cond2 = have_n_samples(1)
     sink2 = MockSink(cond=cond2)
-    source2.outlet.connect(sink2.inlet)
+    source2.sample_out.connect(sink2.sample_in)
     
     async with Runner((source1, source2, sink1, sink2),):
         await have1_1

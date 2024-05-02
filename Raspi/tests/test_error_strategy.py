@@ -30,7 +30,7 @@ async def test_error_during_runtime__non_endless_exception():
     have_1000, cond = have_n_samples(1000)  # awaiting 1000, though we won't even see 1
     sink = MockSink(cond=cond)
 
-    source.outlet.connect(sink.inlet)
+    source.sample_out.connect(sink.sample_in)
 
     errorhandler = _MockErrorHandler()
 
@@ -68,7 +68,7 @@ async def test_error_during_runtime__endless_error():
     have_10, cond = have_n_samples(10)
     sink = MockSink(cond=cond)
 
-    source.outlet.connect(sink.inlet)
+    source.sample_out.connect(sink.sample_in)
 
     errorhandler = _MockErrorHandler()
 

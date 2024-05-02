@@ -23,9 +23,9 @@ async def test_basic():
 
     broadcaster = SampleBroadcaster()
 
-    source.outlet.connect(broadcaster.inlet)
-    broadcaster.outlet.connect(sink_1.inlet)
-    broadcaster.outlet.connect(sink_2.inlet)
+    source.sample_out.connect(broadcaster.sample_in)
+    broadcaster.sample_out.connect(sink_1.sample_in)
+    broadcaster.sample_out.connect(sink_2.sample_in)
 
     async with Runner((source, sink_1, sink_2, broadcaster)):
         await have_1

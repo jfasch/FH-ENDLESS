@@ -15,9 +15,9 @@ async def test_basic():
     consumer = MyConsumer()
     filter = TagFilter('tag-good')
 
-    filter.outlet.connect(consumer)
+    filter.sample_out.connect(consumer)
 
-    await filter.inlet.consume_sample(
+    await filter.sample_in.consume_sample(
         Sample(
             tag='tag-good',
             timestamp=datetime(2024, 4, 18, 18, 52),
@@ -29,7 +29,7 @@ async def test_basic():
 
     consumer.sample = None
 
-    await filter.inlet.consume_sample(
+    await filter.sample_in.consume_sample(
         Sample(
             tag='tag-bad',
             timestamp=datetime(2024, 4, 18, 18, 52),

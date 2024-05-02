@@ -3,15 +3,15 @@ from .facet import facet
 from .interfaces import SampleInlet
 
 
-@facet('inlet', SampleInlet, (('consume_sample', '_put_sample'),))
+@facet('sample_in', SampleInlet, (('consume_sample', '_put_sample'),))
 class SampleBroadcaster(Component):
     def __init__(self):
         super().__init__()
-        self._outlet = self._multi_outlet()
-        self.outlet = self._outlet
+        self._sample_out = self._multi_outlet()
+        self.sample_out = self._sample_out
 
     async def _put_sample(self, sample):
-        await self._outlet.consume_sample(sample)
+        await self._sample_out.consume_sample(sample)
 
     class _multi_outlet:
         def __init__(self):

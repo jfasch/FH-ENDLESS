@@ -18,7 +18,7 @@ class HumidityTemperature:
     temperature: float
 
 @facet('can_in', CANInputHandler, (('handle_frame', '_handle_frame'),))
-@receptacle('outlet', SampleInlet, multiplicity=ONE)
+@receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class HumidityTemperatureSensor(Component):
     PAYLOAD_FORMAT = '<iI'
 
@@ -38,7 +38,7 @@ class HumidityTemperatureSensor(Component):
         temperature, humidity = struct.unpack(self.PAYLOAD_FORMAT, payload)
         timestamp = next(self.timestamps)
 
-        await self._outlet.consume_sample(
+        await self._sample_out.consume_sample(
             Sample(
                 tag=self.tag, 
                 timestamp=timestamp,
@@ -67,7 +67,7 @@ def transform_hum_temp_to_temp(sample):
                   )
 
 @facet('switch', Switch, (('set_state', '_set_state'),))
-@receptacle('outlet', SampleInlet, multiplicity=ONE)
+@receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class CANSwitch(Component):
     DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
 
@@ -78,7 +78,7 @@ class CANSwitch(Component):
 
     async def _set_state(self, state):
         frame = CANFrame(can_id = self.can_id, payload = struct.pack(self.DATA_LAYOUT, self.number, state))
-        await self._outlet.consume_sample(
+        await self._sample_out.consume_sample(
             Sample(tag='irrelevant', # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
                    timestamp=datetime.now(), # crap: https://www.faschingbauer.me/trainings/material/soup/cxx-design-patterns/oo-principles.html#interface-segregation
                    data=frame,

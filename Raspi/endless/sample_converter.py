@@ -4,8 +4,8 @@ from .receptacle import receptacle, ONE
 from .interfaces import SampleInlet
 
 
-@facet('inlet', SampleInlet, (('consume_sample', '_convert'),))
-@receptacle('outlet', SampleInlet, multiplicity=ONE)
+@facet('sample_in', SampleInlet, (('consume_sample', '_convert'),))
+@receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class SampleConverter(Component):
     def __init__(self, func):
         super().__init__()
@@ -13,4 +13,4 @@ class SampleConverter(Component):
 
     async def _convert(self, sample):
         converted = self.func(sample)
-        await self._outlet.consume_sample(converted)
+        await self._sample_out.consume_sample(converted)

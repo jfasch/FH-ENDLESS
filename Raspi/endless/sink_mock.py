@@ -12,7 +12,7 @@ def have_n_samples(n):
             future.set_result(True)
     return future, cond
 
-@facet('inlet', basetype=SampleInlet, methodspec=(('consume_sample', '_incoming_sample'),))
+@facet('sample_in', basetype=SampleInlet, methodspec=(('consume_sample', '_incoming_sample'),))
 class MockSink(LifetimeComponent):
     def __init__(self, cond=None):
         super().__init__(self._run)

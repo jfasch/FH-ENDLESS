@@ -32,7 +32,7 @@ async def test_basic_run():
     have_1, cond = have_n_samples(1)
     sink = MockSink(cond=cond)
 
-    source.outlet.connect(sink.inlet)
+    source.sample_out.connect(sink.sample_in)
 
     async with Runner((source,sink)) as runner:
         assert source.task is not None

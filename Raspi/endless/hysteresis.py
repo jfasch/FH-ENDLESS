@@ -4,7 +4,7 @@ from .receptacle import receptacle, ONE
 from .interfaces import SampleInlet, Switch
 
 
-@facet('inlet', SampleInlet, (('consume_sample', '_new_value'),))
+@facet('sample_in', SampleInlet, (('consume_sample', '_new_value'),))
 @receptacle('switch', Switch, multiplicity=ONE)
 class Hysteresis(Component):
     def __init__(self, low, high):
