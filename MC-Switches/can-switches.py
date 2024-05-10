@@ -34,8 +34,8 @@ for switch in switches:
 FRAME_LAYOUT = "=IB3x8s"
 FRAME_SIZE = struct.calcsize(FRAME_LAYOUT)
 
-DATA_LAYOUT = "<II"  # (le uint32_t number, le uint32_t state)
-assert struct.calcsize(DATA_LAYOUT) == 8
+DATA_LAYOUT = "????"      # 4 bool values for 4 outputs
+assert struct.calcsize(DATA_LAYOUT) == 4
 
 can_socket = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
 can_socket.bind((can_iface,))
@@ -46,6 +46,8 @@ while True:
     if can_id != frame_can_id:
         continue
     frame_payload = frame_payload[:frame_can_dlc]
-    switch_number, switch_state = struct.unpack(DATA_LAYOUT, frame_payload)
 
-    switches[switch_number].set_state(switch_state)
+    desired_states = struct.unpack(DATA_LAYOUT, frame_payload)
+
+    for switch_number in range(4):
+        switches[switch_number].set_state(desired_states[switch_number])
