@@ -84,7 +84,7 @@ class CANSwitch(Component):
 
     async def _set_state(self, state):
         states = [0,0,0,0]
-        states[self.number] = 1
+        states[self.number] = state
 
         payload = struct.pack(self.DATA_LAYOUT, *states)
 
