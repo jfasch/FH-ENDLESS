@@ -25,7 +25,7 @@ class Switch:
             self.state = state
             print(f'{self.number}: {"ON" if self.state else "OFF"}')
 
-switches = [Switch(number) for number in range(16)]
+switches = [Switch(number) for number in range(4)]
 
 print(f'{len(switches)} switches available:')
 for switch in switches:
@@ -46,8 +46,6 @@ while True:
     if can_id != frame_can_id:
         continue
     frame_payload = frame_payload[:frame_can_dlc]
-
     desired_states = struct.unpack(DATA_LAYOUT, frame_payload)
-
     for switch_number in range(4):
         switches[switch_number].set_state(desired_states[switch_number])
