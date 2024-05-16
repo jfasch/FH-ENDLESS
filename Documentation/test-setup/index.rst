@@ -136,7 +136,7 @@ Run Application
 .. code-block:: console
 
    $ cd <FH-ENDLESS>/Raspi                   # subdir Raspi/ of repository root
-   $ export PYTHONPATH=$(pwd)/$PYTHONPATH
+   $ export PYTHONPATH=$(pwd)/src:$PYTHONPATH
 
 .. code-block:: console
 
