@@ -35,3 +35,7 @@ class CANOutputHandler(abc.ABC):
     async def write_frame(self, can_id, payload):
         raise NotImplementedError
         
+class Counter(abc.ABC):
+    @abc.abstractmethod
+    async def get_count(self):
+        raise NotImplementedError

@@ -1,10 +1,10 @@
-from .component import Component
-from .facet import facet
-from .receptacle import receptacle, ONE
-from .interfaces import CANInputHandler, CANOutputHandler, SampleInlet, Switch, Control
-from .sample import Sample
-from .can_util import CANFrame
-from .async_util import wallclock_timestamps_nosleep
+from endless.component import Component
+from endless.facet import facet
+from endless.receptacle import receptacle, ONE
+from endless.interfaces import CANInputHandler, CANOutputHandler, SampleInlet, Switch, Control, Counter
+from endless.sample import Sample
+from endless.can_util import CANFrame
+from endless.async_util import wallclock_timestamps_nosleep
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -73,6 +73,7 @@ def transform_hum_temp_to_temp(sample):
                   )
 
 @facet('switch', Switch, (('set_state', '_set_state'),))
+@facet('counter', Counter, (('get_count', '_get_counter'),))
 @receptacle('frame_out', CANOutputHandler, multiplicity=ONE)
 class CANSwitch(Component):
     DATA_LAYOUT = "????"      # 4 bytes/bools, 4 switches
@@ -81,6 +82,7 @@ class CANSwitch(Component):
         super().__init__()
         self.can_id = can_id
         self.number = number
+        self.switch_counter = 0
 
     async def _set_state(self, state):
         states = [0,0,0,0]
@@ -91,3 +93,8 @@ class CANSwitch(Component):
         await self._frame_out.write_frame(
             can_id=self.can_id, 
             payload=struct.pack(self.DATA_LAYOUT, *states))
+
+        self.switch_counter += 1
+
+    async def _get_counter(self):
+        return self.switch_counter

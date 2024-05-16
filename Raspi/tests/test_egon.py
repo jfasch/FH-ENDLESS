@@ -1,4 +1,4 @@
-from endless import egon
+from egon import egon
 from endless.sample import Sample
 from endless.sample_filter import SampleFilter
 from endless.can_util import CANFrame
