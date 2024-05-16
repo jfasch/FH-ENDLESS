@@ -15,8 +15,6 @@ facets. For this, you connect together both components by plugging one
 component's facet into a compatible *receptacle* of the using
 component.
 
-jjj sketch of what follows
-
 .. literalinclude:: ../../../Raspi/tests/test_connected_components.py
    :language: python
 

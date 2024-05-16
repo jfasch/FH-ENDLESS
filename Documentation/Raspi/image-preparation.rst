@@ -4,8 +4,12 @@ Preparing A Bootable Image
 .. contents::
    :local:
 
-Note that we will once switch to Yocto for image preparation; this is
-considered preliminary.
+.. note::
+
+   These are only random notes!
+
+   Some of it *might* become relevant once we generate OS images,
+   using Yocto maybe.
 
 Adding User ``endless``
 -----------------------

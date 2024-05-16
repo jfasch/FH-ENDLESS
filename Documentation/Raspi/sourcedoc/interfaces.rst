@@ -4,10 +4,10 @@ Available Interfaces (Facets and Receptacles)
 .. contents::
    :local:
 
-``Inlet`` (Sample Consumption)
-------------------------------
+``SampleInlet`` (Sample Consumption)
+------------------------------------
 
-.. autoclass:: endless.interfaces.Inlet
+.. autoclass:: endless.interfaces.SampleInlet
    :members:
 
 ``Switch``

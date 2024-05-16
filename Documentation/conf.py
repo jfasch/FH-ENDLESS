@@ -15,7 +15,7 @@ import logging
 import os
 import sys
 
-sys.path.insert(0, '../Raspi')
+sys.path.insert(0, '../Raspi/src')
 
 # -- Project information -----------------------------------------------------
 project = 'ENDLESS'

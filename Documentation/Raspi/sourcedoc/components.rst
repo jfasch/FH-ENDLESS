@@ -28,11 +28,11 @@ Switches
 .. autoclass:: endless.switch_stdout.StdoutSwitch
    :members:
 
-.. autoclass:: endless.egon.CANSwitch
+.. autoclass:: egon.egon.CANSwitch
    :members:
 
 Misc
 ----
 
-.. autoclass:: endless.sample_converter.SampleConverter
+.. autoclass:: endless.sample_filter.SampleFilter
    :members:
