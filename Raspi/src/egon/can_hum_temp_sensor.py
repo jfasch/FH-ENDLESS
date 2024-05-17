@@ -1,3 +1,5 @@
+from egon.types import HumidityTemperature
+
 from endless.component import Component
 from endless.facet import facet
 from endless.receptacle import receptacle, ONE
@@ -5,20 +7,12 @@ from endless.interfaces import CANInputHandler, SampleInlet, Control
 from endless.sample import Sample
 from endless.async_util import wallclock_timestamps_nosleep
 
-from dataclasses import dataclass
-from datetime import datetime
 import struct
-import json
 
-
-@dataclass
-class HumidityTemperature:
-    humidity: float
-    temperature: float
 
 @facet('can_in', CANInputHandler, (('handle_frame', '_handle_frame'),))
 @receptacle('sample_out', SampleInlet, multiplicity=ONE)
-class HumidityTemperatureSensor(Component):
+class CAN_HumidityTemperatureSensor(Component):
     PAYLOAD_FORMAT = '<iI'
 
     def __init__(self, can_id, tag, timestamps=None):
@@ -46,27 +40,3 @@ class HumidityTemperatureSensor(Component):
                     humidity=humidity/10,
                 )))
 
-def transform_hum_temp_to_json(sample):
-    json_pydict = {
-        'humidity': sample.data.humidity,
-        'temperature': sample.data.temperature,
-    }
-    json_str = json.dumps(json_pydict)
-    json_bytes = bytes(json_str, encoding='ascii')
-
-    return Sample(tag=sample.tag,
-                  timestamp=sample.timestamp,
-                  data=json_bytes
-                  )
-
-@facet('sample_in', SampleInlet, (('consume_sample', '_consume_sample'),))
-@receptacle('control', Control, multiplicity=ONE)
-class HumidityTemperature2Control(Component):
-    async def _consume_sample(self, sample):
-        await self._control.adapt(timestamp=sample.timestamp, value=sample.data.temperature)
-
-def transform_hum_temp_to_temp(sample):
-    return Sample(tag=sample.tag,
-                  timestamp=sample.timestamp,
-                  data=sample.data.temperature,
-                  )

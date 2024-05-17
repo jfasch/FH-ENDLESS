@@ -1,4 +1,9 @@
 from egon import egon
+from egon.can_hum_temp_sensor import CAN_HumidityTemperatureSensor
+from egon.hum_temp_control import HumidityTemperature2Control
+from egon.mqtt_helper import transform_hum_temp_to_json
+from egon.types import HumidityTemperature
+
 from endless.sample import Sample
 from endless.sample_filter import SampleFilter
 from endless.can_util import CANFrame
@@ -14,8 +19,8 @@ import json
 
 @pytest.mark.asyncio
 async def test_canframe_to_humtemp():
-    sensor_0x33 = egon.HumidityTemperatureSensor(can_id=0x33, tag='CAN@0x33', timestamps=(datetime(2024, 5, 2, 10, 11,  7),))
-    sensor_0x34 = egon.HumidityTemperatureSensor(can_id=0x34, tag='CAN@0x34', timestamps=(datetime(2024, 5, 2, 10, 11, 15),))
+    sensor_0x33 = CAN_HumidityTemperatureSensor(can_id=0x33, tag='CAN@0x33', timestamps=(datetime(2024, 5, 2, 10, 11,  7),))
+    sensor_0x34 = CAN_HumidityTemperatureSensor(can_id=0x34, tag='CAN@0x34', timestamps=(datetime(2024, 5, 2, 10, 11, 15),))
 
     two_ready, cond = have_n_samples(2)
     sample_sink = SampleReceiver(cond)
@@ -52,7 +57,7 @@ async def test_humtemp_to_json():
             self.sample = sample
 
     json_consumer = MyJSONConsumer()
-    humtemp2json = SampleFilter(egon.transform_hum_temp_to_json)
+    humtemp2json = SampleFilter(transform_hum_temp_to_json)
     
     humtemp2json.sample_out.connect(json_consumer)
 
@@ -61,7 +66,7 @@ async def test_humtemp_to_json():
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
-            data=egon.HumidityTemperature(
+            data=HumidityTemperature(
                 humidity=23.3,
                 temperature=37.5,
             ),
@@ -85,7 +90,7 @@ async def test__humtemp_sample__to__control():
             self.value = value
 
     ctl = MyControl()
-    sample_controller = egon.HumidityTemperature2Control()
+    sample_controller = HumidityTemperature2Control()
     sample_controller.control.connect(ctl)
 
     # inject a humidity/temperature sample
@@ -93,7 +98,7 @@ async def test__humtemp_sample__to__control():
         Sample(
             tag='name',
             timestamp=datetime(2024, 4, 17, 17, 6),
-            data=egon.HumidityTemperature(
+            data=HumidityTemperature(
                 humidity=23.3,
                 temperature=37.5,
             ),
