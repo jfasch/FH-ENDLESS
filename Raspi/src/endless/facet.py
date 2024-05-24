@@ -1,6 +1,7 @@
 from .component import Component
 from .errors import MappedMethodNotAsync, MappedMethodNotSync
 
+import functools
 import inspect
 
 
@@ -92,10 +93,12 @@ class facet:
         # exchange facet-self with component-self, and call the
         # component method.
         if inspect.iscoroutinefunction(component_method):
+            @functools.wraps(component_method)
             async def trampoline(*args, **kwargs):
                 newargs = (args[0].component,) + args[1:]
                 return await component_method(*newargs, **kwargs)
         else:
+            @functools.wraps(component_method)
             def trampoline(*args, **kwargs):
                 newargs = (args[0].component,) + args[1:]
                 return component_method(*newargs, **kwargs)

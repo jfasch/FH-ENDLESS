@@ -1,4 +1,7 @@
+from .sample import Sample
+
 import abc
+from typing import Iterable
 
 
 class SampleInlet(abc.ABC):
@@ -38,4 +41,9 @@ class CANOutputHandler(abc.ABC):
 class Counter(abc.ABC):
     @abc.abstractmethod
     async def get_count(self):
+        raise NotImplementedError
+
+class SampleList(abc.ABC):
+    @abc.abstractmethod
+    async def get_samples(self) -> Iterable[Sample]:
         raise NotImplementedError

@@ -4,8 +4,8 @@ import sdbus
 
 
 class Counter(
-    sdbus.DbusInterfaceCommonAsync,
-    interface_name='org.endless.Counter'
+        sdbus.DbusInterfaceCommonAsync,
+        interface_name='org.endless.Counter'
 ):
     def __init__(self, counter:interfaces.Counter|None = None):
         super().__init__()
