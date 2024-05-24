@@ -14,6 +14,17 @@ class Control(abc.ABC):
     async def adapt(self, timestamp, value):
         raise NotImplementedError
 
+class HighLowConfig(abc.ABC):
+    @abc.abstractmethod
+    async def set_high(self, value):
+        raise NotImplementedError
+    @abc.abstractmethod
+    async def set_low(self, value):
+        raise NotImplementedError
+    @abc.abstractmethod
+    async def show(self):
+        raise NotImplementedError
+
 class Switch(abc.ABC):
     @abc.abstractmethod
     async def set_state(self, state: bool):
