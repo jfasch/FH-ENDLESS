@@ -7,32 +7,32 @@ Available Components
 CAN Bus
 -------
 
-.. autoclass:: endless.can_writer.CANWriter
+.. autoclass:: endless.framework.can_writer.CANWriter
    :members:
 
-.. autoclass:: endless.can_reader.CANReader
+.. autoclass:: endless.framework.can_reader.CANReader
    :members:
 
 MQTT
 ----
 
-.. autoclass:: endless.mqtt.MQTTClient
+.. autoclass:: endless.framework.mqtt.MQTTClient
    :members:
 
-.. autoclass:: endless.mqtt.MQTT_PublishSampleTagToTopic
+.. autoclass:: endless.framework.mqtt.MQTT_PublishSampleTagToTopic
    :members:
 
 Switches
 --------
 
-.. autoclass:: endless.switch_stdout.StdoutSwitch
+.. autoclass:: endless.framework.switch_stdout.StdoutSwitch
    :members:
 
-.. autoclass:: egon.egon.CANSwitch
+.. autoclass:: endless.project_1.can_switch.CANSwitch
    :members:
 
 Misc
 ----
 
-.. autoclass:: endless.sample_filter.SampleFilter
+.. autoclass:: endless.framework.sample_filter.SampleFilter
    :members:

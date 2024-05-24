@@ -7,21 +7,21 @@ Available Interfaces (Facets and Receptacles)
 ``SampleInlet`` (Sample Consumption)
 ------------------------------------
 
-.. autoclass:: endless.interfaces.SampleInlet
+.. autoclass:: endless.framework.interfaces.SampleInlet
    :members:
 
 ``Switch``
 ----------
 
-.. autoclass:: endless.interfaces.Switch
+.. autoclass:: endless.framework.interfaces.Switch
    :members:
 
 MQTT, CAN, ...
 --------------
 
-.. autoclass:: endless.interfaces.Publisher
+.. autoclass:: endless.framework.interfaces.Publisher
    :members:
 
-.. autoclass:: endless.interfaces.CANInputHandler
+.. autoclass:: endless.framework.interfaces.CANInputHandler
    :members:
 

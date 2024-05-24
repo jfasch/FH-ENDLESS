@@ -15,34 +15,34 @@ facets. For this, you connect together both components by plugging one
 component's facet into a compatible *receptacle* of the using
 component.
 
-.. literalinclude:: ../../../Raspi/tests/test_connected_components.py
+.. literalinclude:: ../../../Raspi/tests/framework/test_connected_components.py
    :language: python
 
 
 ``Component`` Base Class
 ------------------------
 
-.. autoclass:: endless.component.Component
+.. autoclass:: endless.framework.component.Component
    :members:
 
 Defining Facets And Receptacles
 -------------------------------
 
-.. autoclass:: endless.facet.facet
+.. autoclass:: endless.framework.facet.facet
    :members:
 
-.. autoclass:: endless.receptacle.receptacle
+.. autoclass:: endless.framework.receptacle.receptacle
    :members:
 
 Running Components: Lifetime and Error Management
 -------------------------------------------------
 
-.. autoclass:: endless.component.LifetimeComponent
+.. autoclass:: endless.framework.component.LifetimeComponent
    :members:
 
-.. autoclass:: endless.runner.Runner
+.. autoclass:: endless.framework.runner.Runner
    :members:
 
-.. autoclass:: endless.errorhandler.ErrorHandler
+.. autoclass:: endless.framework.errorhandler.ErrorHandler
    :members:
 
