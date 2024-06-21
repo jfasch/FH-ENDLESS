@@ -25,7 +25,7 @@ int main(int argc, char** argv)
         uint64_t temperature = sensor.get_temperature() * 1000;
 
         // NOTE that we don't care about endianness. the Python
-        // counterpart will treat it as little endian.
+        // counterpart will treat it as little endian though.
         const void* payload = (const void*)&temperature; 
         can.write({can_id, payload, 8});
 
