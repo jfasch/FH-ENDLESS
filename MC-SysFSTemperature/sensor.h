@@ -11,4 +11,3 @@ public:
 private:
     const std::string _filename;
 };
-
