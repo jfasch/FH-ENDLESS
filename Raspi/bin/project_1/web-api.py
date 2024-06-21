@@ -21,7 +21,7 @@ measurements_controllerB_proxy = HumidityTemperatureHistory.new_proxy(DBUS_SERVE
 
 app = FastAPI()
 
-@app.get("/switch/counter")
+@app.get('/api/switch/counter')
 async def switch_counter() -> int: 
     return await switch_counter_proxy.GetCount()
 
@@ -31,23 +31,23 @@ def dbus_to_web_measurements(dbus_measurements):
         web_measurements.append((datetime.fromtimestamp(posix_timestamp), HumidityTemperature(humidity, temperature)))
     return web_measurements
 
-@app.get("/controllerA/measurements")
+@app.get('/api/controllerA/measurements')
 async def controllerA_measurements() -> list[tuple[datetime, HumidityTemperature]]: 
     return dbus_to_web_measurements(await measurements_controllerA_proxy.GetLastMeasurements())
 
-@app.get("/controllerB/measurements")
+@app.get('/api/controllerB/measurements')
 async def controllerB_measurements() -> list[tuple[datetime, HumidityTemperature]]: 
     return dbus_to_web_measurements(await measurements_controllerB_proxy.GetLastMeasurements())
 
-@app.post("/hysteresis/config/high")
+@app.post('/api/hysteresis/config/high')
 async def hyst_set_high(value: float):
     await hysteresis_config_proxy.SetHigh(value)
 
-@app.post("/hysteresis/config/low")
+@app.post('/api/hysteresis/config/low')
 async def hyst_set_low(value: float):
     await hysteresis_config_proxy.SetLow(value)
 
-@app.get("/hysteresis/config/show")
+@app.get('/api/hysteresis/config/show')
 async def hyst_show() -> tuple[float, float]:     # low, high
     low, high = await hysteresis_config_proxy.Show()
     return low, high
