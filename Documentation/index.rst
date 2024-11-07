@@ -10,6 +10,7 @@ The ENDLESS Project
    Raspi/index
    misc-notes/index
    test-setup/index
+   yocto/index
 
 
 The Beginning Of It All
