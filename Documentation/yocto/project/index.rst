@@ -1,23 +1,42 @@
 .. ot-group:: yocto
 
-Project Plan
-============
+Todo List
+=========
 
 .. contents::
    :local:
 
-Task List
----------
+Different Images For Different Purposes
+---------------------------------------
 
-.. toctree::
-   :maxdepth: 1
+Status
+......
 
-   images
-   maximize-image
+* In the works
 
-Dependencies
-------------
+Examples
+........
 
-.. ot-graph::
-   :entries: yocto
+* ``development``. Debug info, SDK, development packages (headers and
+  such).
+* ``student``. One for each student, or one with all students. Or
+    both. Inherits ``development``. SSH public keys included, ideally.
+* ``endless_internal``. Password ``root1234``, of course. Inherits
+    ``development``
 
+Notes
+.....
+
+* See the ``extrausers.bbclass`` class
+* https://docs.yoctoproject.org/ref-manual/features.html
+
+Maximize Image At First Boot
+----------------------------
+
+Add systemd unit that enlarges rootfs to take available SD card space
+(at first boot only, ideally)
+
+.. code-block:: console
+
+   $ parted /dev/mmcblk0 'resizepart 2 100%'
+   $ resize2fs /dev/mmcblk0p2
