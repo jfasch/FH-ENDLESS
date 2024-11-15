@@ -6,13 +6,24 @@ Todo List
 .. contents::
    :local:
 
+``sshd`` Socket Activation
+--------------------------
+
+This would make boots a little faster. Look into
+``poky/meta/recipes-connectivity/openssh/openssh_9.9p1.bb`` how this
+is done (``PACKAGECONFIG``).
+
 Different Images For Different Purposes
 ---------------------------------------
 
 Status
 ......
 
-* In the works
+In the works. 
+
+* ``endless-image-base``
+* ``endless-image-fulldev``, based upon ``endless-image-base``
+* others to come
 
 Examples
 ........
@@ -40,3 +51,8 @@ Add systemd unit that enlarges rootfs to take available SD card space
 
    $ parted /dev/mmcblk0 'resizepart 2 100%'
    $ resize2fs /dev/mmcblk0p2
+
+Add User ``endless``
+--------------------
+
+Groups ``i2c``, ``gpio``, etc
