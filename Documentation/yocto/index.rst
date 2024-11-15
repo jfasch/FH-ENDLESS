@@ -180,3 +180,12 @@ QEMU
 * Machine ``aarch64``, qemu
 * Emulating devices:
   https://qemu-project.gitlab.io/qemu/system/device-emulation.html
+
+``systemd``
+-----------
+
+``common-local.conf`` is used from the various ``local.conf``
+files. It sets ``DISTRO_FEATURES`` which cannot be set in a recipe (an
+image recipe for that matter).
+
+* Add ``systemctl`` and related tools
