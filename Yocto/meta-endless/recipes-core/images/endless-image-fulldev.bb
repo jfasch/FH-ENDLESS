@@ -3,7 +3,15 @@ LICENSE = "GPLv3"
 
 require endless-image-base.bb
 
+# login for devs
 IMAGE_INSTALL:append = " openssh"
+
+# better tools for devs
+IMAGE_INSTALL:append = " bash"
+IMAGE_INSTALL:append = " coreutils"
+IMAGE_INSTALL:append = " findutils"
+IMAGE_INSTALL:append = " procps"
+
 
 IMAGE_FEATURES += " dev-pkgs doc-pkgs"
 # dbg-pkgs    was that that reason why all goes to /usr/bin/.debug?

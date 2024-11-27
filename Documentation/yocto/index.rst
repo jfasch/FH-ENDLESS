@@ -143,6 +143,17 @@ SD slot,
         'bzip2 -cd /home/jfasch/FH-ENDLESS/Yocto/raspberry3-build/tmp/deploy/images/raspberrypi3-64/endless-image-fulldev-raspberrypi3-64.rootfs.wic.bz2' \
         | sudo sh -c 'cat > /dev/mmcblk0'
 
+A Collection Of Commandlines
+............................
+
+* Find out which package provides a file
+
+  .. code-block:: console
+
+     $ oe-pkgdata-util find-path /usr/share/man/man1/groups.1
+     shadow-doc: /usr/share/man/man1/groups.1
+
+
 
 Project Management
 ------------------
