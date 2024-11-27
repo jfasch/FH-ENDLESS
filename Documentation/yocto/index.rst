@@ -1,6 +1,7 @@
 .. include:: <mmlalias.txt>
 
 
+
 Yocto
 =====
 
@@ -61,31 +62,87 @@ As of 2024-11-27, there are these build directories available:
 * ``qemux86-64``
 * ``raspberry3-build``
 
-For a ``qemux86-64`` build,
+QEMU (``MACHINE = qemux86-64``)
+...............................
 
-* Setup Yocto environment. This will cd the shell into the build
-  directory.
+Setup Environment
+`````````````````
 
-  .. code-block:: console
-  
-     $ . ~/FH-ENDLESS/Yocto/poky/oe-init-build-env ~/FH-ENDLESS/Yocto/qemux86-64/
-     $ pwd
-     /home/jfasch/FH-ENDLESS/Yocto/qemux86-64
+.. code-block:: console
 
-* Build the ``endless-image-fulldev``
+   $ . ~/FH-ENDLESS/Yocto/poky/oe-init-build-env ~/FH-ENDLESS/Yocto/qemux86-64/
+   $ pwd
+   /home/jfasch/FH-ENDLESS/Yocto/qemux86-64
 
-  .. code-block:: console
-  
-     $ bitbake endless-image-fulldev
+Build An Image (``endless-image-fulldev``)
+``````````````````````````````````````````
 
-* Start QEMU on it. The ``slirp`` option did the trick, everything
-  *just works*. 
+.. code-block:: console
 
-  .. code-block:: console
+   $ bitbake endless-image-fulldev
 
-     $ runqemu nographic slirp
+Test
+````
 
-  Boot messages are captured into the terminal, all fine.
+Start QEMU on it. The ``slirp`` option did the trick, *everything just
+works*.
+
+.. code-block:: console
+
+   $ runqemu nographic slirp
+
+Boot messages are captured into the terminal, all fine. I haven't yet
+figured out how to get the terminal back when guest is halted - so the
+terminal is lost.
+
+Raspberry Pi 3 (``MACHINE = raspberrypi3-64``)
+..............................................
+
+Setup Environment
+`````````````````
+
+.. code-block:: console
+
+   $ . ~/FH-ENDLESS/Yocto/poky/oe-init-build-env ~/FH-ENDLESS/Yocto/raspberry3-build/
+   $ pwd
+   /home/jfasch/FH-ENDLESS/Yocto/raspberry3-build
+
+Build An Image (``endless-image-fulldev``)
+``````````````````````````````````````````
+
+.. code-block:: console
+
+   $ bitbake endless-image-fulldev
+
+Test
+````
+
+Bring the generated ``.wic`` image onto the SD card.
+
+The image file (see
+https://docs.yoctoproject.org/dev-manual/wic.html)
+
+.. code-block:: console
+
+   $ ls -l tmp/deploy/images/raspberrypi3-64/endless-image-fulldev-raspberrypi3-64.rootfs.wic.bz2
+   lrwxrwxrwx 2 jfasch jfasch 67 Nov 27 13:29 tmp/deploy/images/raspberrypi3-64/endless-image-fulldev-raspberrypi3-64.rootfs.wic.bz2 -> endless-image-fulldev-raspberrypi3-64.rootfs-20241127121726.wic.bz2
+
+Uncompress
+
+.. code-block:: console
+
+   $ bzip -cd tmp/deploy/images/raspberrypi3-64/endless-image-fulldev-raspberrypi3-64.rootfs.wic.bz2 > uncompressed-image.wic
+   $ sudo cp uncompressed-image.wic /dev/mmcblk0
+
+Over SSH on the fly directly onto the SD card that is in my laptop's
+SD slot,
+
+.. code-block:: console
+
+   $ ssh $ENDLESS_SERVER \
+        'bzip2 -cd /home/jfasch/FH-ENDLESS/Yocto/raspberry3-build/tmp/deploy/images/raspberrypi3-64/endless-image-fulldev-raspberrypi3-64.rootfs.wic.bz2' \
+        | sudo sh -c 'cat > /dev/mmcblk0'
+
 
 Project Management
 ------------------
