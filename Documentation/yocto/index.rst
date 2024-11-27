@@ -44,11 +44,40 @@ Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
 .. code-block:: console
 
    $ mkdir ~/mounts/$ENDLESS_SERVER
-   $ sshfs $ENDLESS_SERVER: ~/mounts/$ENDLESS_SERVER
+   $ sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) $ENDLESS_SERVER: ~/mounts/$ENDLESS_SERVER
 
 .. code-block:: console
 
    $ umount ~/mounts/$ENDLESS_SERVER
+
+Building And Testing
+--------------------
+
+Work directory is the ``Yocto/`` subdirectory of the ``FH-ENDLESS`` project.
+
+As of 2024-11-27, there are these build directories available:
+
+* ``qemuarm64``
+* ``qemux86-64``
+* ``raspberry3-build``
+
+For a ``qemux86-64`` build,
+
+* Setup Yocto environment. This will cd the shell into the build
+  directory.
+
+  .. code-block:: console
+  
+     $ . ~/FH-ENDLESS/Yocto/poky/oe-init-build-env ~/FH-ENDLESS/Yocto/qemux86-64/
+     $ pwd
+     /home/jfasch/FH-ENDLESS/Yocto/qemux86-64
+
+* Build the ``endless-image-fulldev``
+
+  .. code-block:: console
+     :caption: Build the ``
+  
+     $ bitbake endless-image-fulldev
 
 Project Management
 ------------------
