@@ -26,8 +26,8 @@ Work Environment (ENDLESS)
 Interactive Login On ``$ENDLESS_SERVER``
 ........................................
 
-Required: an SSH account, setup by the administrator
-(:doc:`jfasch:about/myself/index`). My (``jfasch``'s) steps to setup my
+Required: an SSH account, setup by :doc:`the administrator
+<jfasch:about/myself/index>`). My (``jfasch``'s) steps to setup my
 daily work environment follow. It's all SSH, after all.
 
 .. code-block:: console
