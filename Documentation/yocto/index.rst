@@ -50,8 +50,8 @@ Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
 
    $ umount ~/mounts/$ENDLESS_SERVER
 
-Building And Testing
---------------------
+Yocto Development
+-----------------
 
 Work directory is the ``Yocto/`` subdirectory of the ``FH-ENDLESS`` project.
 
@@ -75,9 +75,17 @@ For a ``qemux86-64`` build,
 * Build the ``endless-image-fulldev``
 
   .. code-block:: console
-     :caption: Build the ``
   
      $ bitbake endless-image-fulldev
+
+* Start QEMU on it. The ``slirp`` option did the trick, everything
+  *just works*. 
+
+  .. code-block:: console
+
+     $ runqemu nographic slirp
+
+  Boot messages are captured into the terminal, all fine.
 
 Project Management
 ------------------
