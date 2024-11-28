@@ -6,13 +6,32 @@ Todo List
 .. contents::
    :local:
 
-``endless`` Development Recipes
--------------------------------
+Basic Fixes
+-----------
 
-* ``root`` -> nologin
+* Pi kernel cannot export any GPIO
+
+  .. code-block:: console
+
+     # echo 25 > /sys/class/gpio/export
+     [...ts...] export_store: invalid GPIO 25
+     write error: Invalid argument
+
+* remove module ``raspberrypi_gpiomem``
+
+``endless`` Recipes
+-------------------
+
+* ``root`` -> nologin (base)
+* udev rules
+
+  * assign ``/sys/class/gpio`` (and ``/dev/gpiochipXXX``?) to group
+    ``gpio``
+  * same for i2c
+
 * User ``endless``
 
-  * Groups ``i2c``, ``gpio``, etc
+  * Add to groups ``i2c``, ``gpio``
 
 * Dev addons for ``endless`` development
 

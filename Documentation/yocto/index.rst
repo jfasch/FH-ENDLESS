@@ -153,7 +153,10 @@ A Collection Of Commandlines
      $ oe-pkgdata-util find-path /usr/share/man/man1/groups.1
      shadow-doc: /usr/share/man/man1/groups.1
 
+Kernel Config Fragments
+.......................
 
+https://wiki.koansoftware.com/index.php/Modify_the_linux_kernel_with_configuration_fragments_in_Yocto
 
 Project Management
 ------------------
