@@ -1,0 +1,2 @@
+ENABLE_SPI_BUS = "1"
+ENABLE_I2C = "1"

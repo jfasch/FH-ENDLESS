@@ -17,7 +17,7 @@ Basic Fixes
      [...ts...] export_store: invalid GPIO 25
      write error: Invalid argument
 
-* remove module ``raspberrypi_gpiomem``
+* always load i2c-dev and bcm-i2c(?). compile them into the kernel.
 
 ``endless`` Recipes
 -------------------
