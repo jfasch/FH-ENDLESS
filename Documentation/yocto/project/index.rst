@@ -6,8 +6,8 @@ Todo List
 .. contents::
    :local:
 
-``endless`` Recipes
--------------------
+``endless`` Development Recipes
+-------------------------------
 
 * ``root`` -> nologin
 * User ``endless``
@@ -19,6 +19,28 @@ Todo List
   * Password for user ``endless``
   * ``sudo`` rules for user ``endless``
   * Check sshd config (enable password auth, possibly)
+
+CI Tests: TFTP/NFS Boot
+-----------------------
+
+* Provide recipe(s) and a containing image for CI testing
+* Kernel and root filesystem on endless server (which user?)
+* Automatically boot SUT
+
+Recipe: ``endless`` Demo Application
+------------------------------------
+
+You know, that Python thing: :doc:`/Raspi/index`
+
+* Application (base recipe), including systemd unit file
+* Config file recipe(s). Start with one "demo" config which is
+  packaged in a "demo" image
+
+Recipe: Crazy Car (Future)
+--------------------------
+
+* https://fh-stece2022.readthedocs.io/en/latest/index.html
+* Accounts for students
 
 Pi: Maximize Image At First Boot
 --------------------------------
