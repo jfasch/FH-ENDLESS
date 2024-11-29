@@ -22,6 +22,7 @@ Basic Fixes
 * User ``endless``
 
   * Add to groups ``i2c``, ``gpio``
+  * Aliases
 
 * Dev addons for ``endless`` development
 
