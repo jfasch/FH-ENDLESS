@@ -9,16 +9,6 @@ Todo List
 Basic Fixes
 -----------
 
-* Pi kernel cannot export any GPIO
-
-  .. code-block:: console
-
-     # echo 25 > /sys/class/gpio/export
-     [...ts...] export_store: invalid GPIO 25
-     write error: Invalid argument
-
-* always load i2c-dev and bcm-i2c(?). compile them into the kernel.
-
 ``endless`` Recipes
 -------------------
 
@@ -71,4 +61,26 @@ Add systemd unit that enlarges rootfs to take available SD card space
 
    $ parted /dev/mmcblk0 'resizepart 2 100%'
    $ resize2fs /dev/mmcblk0p2
+
+Image Documentation
+-------------------
+
+* i2c and spi configured in /boot/config.txt
+* sysfs GPIO number space 
+
+  .. code-block:: console
+
+     # echo 25 > /sys/class/gpio/export
+     [...ts...] export_store: invalid GPIO 25
+     write error: Invalid argument
+
+  .. code-block:: console
+
+     # cat /sysclass/gpio/gpiochip512/base
+     512
+
+  .. code-block:: console
+
+     # echo $((512+25)) > /sys/class/gpio/export
+
 
