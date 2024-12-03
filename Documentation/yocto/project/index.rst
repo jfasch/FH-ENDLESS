@@ -13,11 +13,44 @@ Basic Fixes
 -------------------
 
 * ``root`` -> nologin (base)
+* I2C: currently i2c is only forced into kernel on pi. bring it to
+  other kernels to ->
+  poky/meta/classes-recipe/linux-kernel-base.bbclass maybe?
+* I2C: likewise, ``KERNEL_MODULE_AUTOLOAD`` is only done in
+  meta-endless/recipes-tweaks/pi-kernel/linux-raspberrypi%.bbappend. bring
+  it to all kernels (and make sure we compile i2c-dev on all kernels)
+
+  .. code-block:: plaintext
+
+     # udevadm info /dev/i2c-*
+     ...
+     P: /devices/pci0000:00/0000:00:02.0/i2c-10/i2c-dev/i2c-10
+     M: i2c-10
+     R: 10
+     U: i2c-dev
+     D: c 89:10
+     N: i2c-10
+     L: 0
+     E: DEVPATH=/devices/pci0000:00/0000:00:02.0/i2c-10/i2c-dev/i2c-10
+     E: DEVNAME=/dev/i2c-10
+     E: MAJOR=89
+     E: MINOR=10
+     E: SUBSYSTEM=i2c-dev
+     ...
+
+
+  ``meta-endless/recipes-core/admin/endless-accounts/files/endless-i2c.rules``
+
+  .. code-block:: plaintext
+
+     KERNEL=="i2c-*", GROUP="i2c", MODE="0660"
+
 * udev rules
 
+  * put in ``/usr/lib/udev/rules.d`` (preinstalled, not configured
+    on-site)
   * assign ``/sys/class/gpio`` (and ``/dev/gpiochipXXX``?) to group
     ``gpio``
-  * same for i2c
 
 * User ``endless``
 
@@ -29,6 +62,8 @@ Basic Fixes
   * Password for user ``endless``
   * ``sudo`` rules for user ``endless``
   * Check sshd config (enable password auth, possibly)
+
+
 
 CI Tests: TFTP/NFS Boot
 -----------------------

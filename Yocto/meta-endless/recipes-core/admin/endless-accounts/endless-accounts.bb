@@ -7,7 +7,10 @@ LICENSE = "CLOSED"
 # DEPENDS = ""
 # LIC_FILES_CHKSUM = ""
 
-SRC_URI = "file://.bashrc"
+SRC_URI = "\
+	file://.bashrc \
+	file://endless-i2c.rules \
+	"
 
 S = "${WORKDIR}/sources"
 UNPACKDIR = "${S}"
@@ -20,13 +23,19 @@ do_install () {
     install -d -m 700 ${D}/home/endless
     install -p -m 600 .bashrc ${D}/home/endless
     chown -R endless ${D}/home/endless/
+
+    install -d -m 755 ${D}/usr/lib/udev/rules.d
+    install -m 644 endless-i2c.rules ${D}/usr/lib/udev/rules.d
 }
 
 USERADD_PACKAGES = "${PN}"
-USERADD_PARAM:${PN} = "--uid 4711 --gid endless --home-dir /home/endless --create-home --shell /bin/bash endless"
-GROUPADD_PARAM:${PN} = "--gid 4711 endless"
+USERADD_PARAM:${PN} = "--uid 4711 --gid endless --groups i2c --home-dir /home/endless --create-home --shell /bin/bash endless"
+GROUPADD_PARAM:${PN} = "--gid 4711 endless;i2c"
 
-FILES:${PN} = "/home/endless/.bashrc"
+FILES:${PN} = "\
+    /home/endless/.bashrc \
+    /usr/lib/udev/rules.d/endless-i2c.rules \
+"
 
 
 
