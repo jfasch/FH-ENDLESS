@@ -45,6 +45,8 @@ You know, that Python thing: :doc:`/Raspi/index`
 * Application (base recipe), including systemd unit file
 * Config file recipe(s). Start with one "demo" config which is
   packaged in a "demo" image
+* See `Packaging and installing own Python program for/on Yocto
+  <https://stackoverflow.com/questions/76529171/packaging-and-installing-own-python-program-for-on-yocto>`__
 
 Recipe: Crazy Car (Future)
 --------------------------
