@@ -91,9 +91,16 @@ works*.
 
    $ runqemu nographic slirp
 
-Boot messages are captured into the terminal, all fine. I haven't yet
-figured out how to get the terminal back when guest is halted - so the
-terminal is lost.
+Boot messages are captured into the terminal, all fine. There is no
+obvious way to get back to the starting shell, using the same terminal
+(``runqemu`` and ``qemu`` do their best to capture the terminal very
+tightly).
+
+A workaround is to say, on a second terminal,
+
+.. code-block:: console
+
+   $ ps -elf|grep runqemu|grep python|awk '{print $4}'|xargs kill -TERM
 
 Raspberry Pi 3 (``MACHINE = raspberrypi3-64``)
 ..............................................
