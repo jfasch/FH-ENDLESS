@@ -4,7 +4,7 @@ ConditionPathExists=!/var/lib/endless/pi-enlarged-rootfs
 
 [Service]
 Type=oneshot
-ExecStart=/usr/libexec/endless/pi-enlarge-rootfs
+ExecStart=/usr/libexec/endless/pi-enlarge-rootfs /var/lib/endless/pi-enlarged-rootfs
 
 [Install]
 WantedBy=multi-user.target
