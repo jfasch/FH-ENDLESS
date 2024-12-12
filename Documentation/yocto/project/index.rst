@@ -9,18 +9,9 @@ Todo List
 Basic Fixes
 -----------
 
-``endless`` Recipes
--------------------
+``endless`` Accounts
+--------------------
 
-* User ``endless``
-
-  * Add to groups ``i2c``, ``gpio``
-  * Aliases
-  * Password for user ``endless``
-  * ``sudo`` rules for user ``endless``
-  * Check sshd config (enable password auth, possibly)
-
-* ``root`` -> nologin (base)
 * I2C: currently i2c is only forced into kernel on pi. bring it to
   other kernels to ->
   poky/meta/classes-recipe/linux-kernel-base.bbclass maybe?

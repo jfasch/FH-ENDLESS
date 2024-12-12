@@ -1,0 +1,10 @@
+[Unit]
+Description=Enlarge Pi's RootFS at first boot
+ConditionPathExists=!/var/lib/endless/pi-enlarged-rootfs
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/endless/pi-enlarge-rootfs
+
+[Install]
+WantedBy=multi-user.target

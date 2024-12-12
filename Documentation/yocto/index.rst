@@ -91,16 +91,16 @@ works*.
 
    $ runqemu nographic slirp
 
-Boot messages are captured into the terminal, all fine. There is no
-obvious way to get back to the starting shell, using the same terminal
-(``runqemu`` and ``qemu`` do their best to capture the terminal very
-tightly).
+QEMU uses ``screen`` (or was it ``tmux``?) to capture the
+terminal. ``C-a x`` is used to quit the session, and get back to the
+shell where you started.
 
-A workaround is to say, on a second terminal,
+SSH Login
+`````````
 
 .. code-block:: console
 
-   $ ps -elf|grep runqemu|grep python|awk '{print $4}'|xargs kill -TERM
+   $ ssh -p 2222 endless@localhost
 
 Raspberry Pi 3 (``MACHINE = raspberrypi3-64``)
 ..............................................

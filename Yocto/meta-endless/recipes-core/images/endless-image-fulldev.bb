@@ -12,6 +12,7 @@ IMAGE_INSTALL:append = " coreutils"
 IMAGE_INSTALL:append = " findutils"
 IMAGE_INSTALL:append = " procps"
 IMAGE_INSTALL:append = " less"
+IMAGE_INSTALL:append = " iproute2"
 
 # user endless may become root (who cannot login)
 IMAGE_INSTALL:append = " sudo"
