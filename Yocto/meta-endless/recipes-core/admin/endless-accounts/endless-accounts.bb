@@ -1,11 +1,14 @@
 DESCRIPTION = "Create 'endless' user, and fiddle with groups"
 # HOMEPAGE = ""
 LICENSE = "CLOSED"
-# SECTION = ""
 
-# depend on i2c, gpio, etc set up (incl. udev rules for /sys/class)
-# DEPENDS = ""
-# LIC_FILES_CHKSUM = ""
+# notes
+# -----
+
+# * I'd like to inhibit root login here in this file, to have
+#   everything central. this is not possible with 'inherit useradd'
+#   though, so I have to 'inherit extrausers` in the image recipe
+#   ('extrausers' can only be used from image recipes).
 
 SRC_URI = "\
 	file://.bashrc \
@@ -16,9 +19,9 @@ SRC_URI = "\
 S = "${WORKDIR}/sources"
 UNPACKDIR = "${S}"
 
-inherit useradd
-
 DEPENDS_${PN} += " sudo-lib"
+
+inherit useradd
 
 # create user password "endless" on host, and add outcome to
 # USERADD_PARAM:
@@ -30,8 +33,6 @@ USERADD_PARAM:${PN} = "--uid 4711 --gid endless --groups i2c,sudo --password '${
 GROUPADD_PARAM:${PN} = "--gid 4711 endless;i2c"
 
 do_install () {
-    # USERADD_PARAM ... --create-home does not create home. workaround
-    # that.
     install -d -m 700 ${D}/home/endless
     install -p -m 600 .bashrc ${D}/home/endless
     chown -R endless ${D}/home/endless/
