@@ -10,12 +10,15 @@ LICENSE = "CLOSED"
 SRC_URI = "\
 	file://.bashrc \
 	file://endless-i2c.rules \
+	file://sudoers-sudo-group \
 	"
 
 S = "${WORKDIR}/sources"
 UNPACKDIR = "${S}"
 
 inherit useradd
+
+DEPENDS_${PN} += " sudo-lib"
 
 # create user password "endless" on host, and add outcome to
 # USERADD_PARAM:
@@ -35,37 +38,13 @@ do_install () {
 
     install -d -m 755 ${D}/usr/lib/udev/rules.d
     install -m 644 endless-i2c.rules ${D}/usr/lib/udev/rules.d
+
+    install -d -m 750 ${D}/etc/sudoers.d
+    install -m 600 sudoers-sudo-group ${D}/etc/sudoers.d
 }
 
 FILES:${PN} = "\
     /home/endless/.bashrc \
     /usr/lib/udev/rules.d/endless-i2c.rules \
+    /etc/sudoers.d/sudoers-sudo-group \
 "
-
-
-
-
-# root@qemux86-64:~# groupadd i2c 
-# root@qemux86-64:~# groupadd gpio
-# 
-# 
-# user endless
-# 
-# on host:
-# printf "%q" $(mkpasswd -m sha256crypt endless)
-# \$5\$IaDG0ZRukyPWfzWo\$moge.JIY2DiUc2H8flz/dTDohyPWTyDf.qnrrR3ozw9
-# 
-# install homedir (/home/endless) from files/
-# 
-# useradd --password ... 
-# 
-# 
-# 
-# inherit extrausers
-# 
-# EXTRA_USERS_PARAMS = " useradd customUser1; \
-#                        useradd customUser2; \
-#                        usermod  -p 'Password_1' customUser1; \
-#                        usermod  -p 'Password_2' customUser2; \
-#                        usermod  -a -G sudo customUser1; \
-#                        usermod  -a -G sudo customUser2;"
