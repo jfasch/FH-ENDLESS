@@ -17,6 +17,15 @@ UNPACKDIR = "${S}"
 
 inherit useradd
 
+# create user password "endless" on host, and add outcome to
+# USERADD_PARAM:
+# printf "%q" $(mkpasswd -m sha256crypt endless)
+endless_passwd = "\$5\$OXJaECO8TL6F.UCk\$kUjHX2nsRlmNiVsb3R2q9VTZexWhO5HgnzVilb8Ezj7"
+
+USERADD_PACKAGES = "${PN}"
+USERADD_PARAM:${PN} = "--uid 4711 --gid endless --groups i2c,sudo --password '${endless_passwd}' --home-dir /home/endless --create-home --shell /bin/bash endless"
+GROUPADD_PARAM:${PN} = "--gid 4711 endless;i2c"
+
 do_install () {
     # USERADD_PARAM ... --create-home does not create home. workaround
     # that.
@@ -27,10 +36,6 @@ do_install () {
     install -d -m 755 ${D}/usr/lib/udev/rules.d
     install -m 644 endless-i2c.rules ${D}/usr/lib/udev/rules.d
 }
-
-USERADD_PACKAGES = "${PN}"
-USERADD_PARAM:${PN} = "--uid 4711 --gid endless --groups i2c --home-dir /home/endless --create-home --shell /bin/bash endless"
-GROUPADD_PARAM:${PN} = "--gid 4711 endless;i2c"
 
 FILES:${PN} = "\
     /home/endless/.bashrc \

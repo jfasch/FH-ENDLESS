@@ -12,6 +12,14 @@ Basic Fixes
 ``endless`` Recipes
 -------------------
 
+* User ``endless``
+
+  * Add to groups ``i2c``, ``gpio``
+  * Aliases
+  * Password for user ``endless``
+  * ``sudo`` rules for user ``endless``
+  * Check sshd config (enable password auth, possibly)
+
 * ``root`` -> nologin (base)
 * I2C: currently i2c is only forced into kernel on pi. bring it to
   other kernels to ->
@@ -52,19 +60,6 @@ Basic Fixes
   * assign ``/sys/class/gpio`` (and ``/dev/gpiochipXXX``?) to group
     ``gpio``
 
-* User ``endless``
-
-  * Add to groups ``i2c``, ``gpio``
-  * Aliases
-
-* Dev addons for ``endless`` development
-
-  * Password for user ``endless``
-  * ``sudo`` rules for user ``endless``
-  * Check sshd config (enable password auth, possibly)
-
-
-
 CI Tests: TFTP/NFS Boot
 -----------------------
 
@@ -77,6 +72,7 @@ Recipe: ``endless`` Demo Application
 
 You know, that Python thing: :doc:`/Raspi/index`
 
+* meta-raspberrypi/recipes-devtools/python/rpi-gpio_0.7.1.bb: ``inherit pypi setuptools``
 * Application (base recipe), including systemd unit file
 * Config file recipe(s). Start with one "demo" config which is
   packaged in a "demo" image
