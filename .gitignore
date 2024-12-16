@@ -1,3 +1,7 @@
 *~
 __pycache__/
 .ipynb_checkpoints/
+/Raspi/build/
+/Raspi/dist/
+/Raspi/src/endless_proto.egg-info/
+/Raspi/src/endless_prototype.egg-info/
