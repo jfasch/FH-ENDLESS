@@ -39,3 +39,25 @@ async def Runner(components, errorhandler=None):
         finally:
             if hasattr(errorhandler, 'lifetime'):
                 await errorhandler.lifetime.stop()
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--configfile', type=str, required=True)
+    args = parser.parse_args()
+
+    config = open(args.configfile).read()
+    context = {}
+    exec(config, context)
+
+    components = context['COMPONENTS']
+
+    async def main():
+        async with Runner(components):
+            pass
+
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass
