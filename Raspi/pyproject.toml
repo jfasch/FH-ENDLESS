@@ -15,8 +15,14 @@ run-components = "endless.framework.runner:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-# data files (see 
 
+# data files (see
+# https://fh-endless.readthedocs.io/en/latest/Raspi/packaging.html)
+
+# TL;DR: pure pyproject.toml packaging does not let you install config
+# files into, say, /etc/endless/. Piggy-back data files together with
+# the python files of the library, and leave it to Yocto to sort them
+# out into /etc.
 
 [tool.setuptools.package-data]
 "endless.conf" = ["*.conf"]

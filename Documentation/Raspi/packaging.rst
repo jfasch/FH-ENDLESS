@@ -17,7 +17,7 @@ Test Packaging During Development: *Editable Install*
   .. code-block:: console
 
      $ . ~/My-Environments/endless-prototype-test/bin/activate
-     (endless-prototype-test) $ 
+     (endless-prototype-test) $               # <-- prompt modified
 
 * Install the package into ``endless-prototype-test``, as an *editable
   install*. This does not actually create a wheel file, but rather
