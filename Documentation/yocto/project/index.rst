@@ -19,7 +19,7 @@ Basic Fixes
   meta-endless/recipes-tweaks/pi-kernel/linux-raspberrypi%.bbappend. bring
   it to all kernels (and make sure we compile i2c-dev on all kernels)
 
-  .. code-block:: plaintext
+  .. code-block:: console
 
      # udevadm info /dev/i2c-*
      ...
@@ -40,7 +40,7 @@ Basic Fixes
 
   ``meta-endless/recipes-core/admin/endless-accounts/files/endless-i2c.rules``
 
-  .. code-block:: plaintext
+  .. code-block:: text
 
      KERNEL=="i2c-*", GROUP="i2c", MODE="0660"
 

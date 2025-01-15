@@ -125,9 +125,9 @@ the configuration fits your situation; for example, the ``CAN_IFACE``
 and ``MQTT_ADDR`` variables probably need tuning, as well as CAN IDs,
 probably.
 
-.. literalinclude:: ../../Raspi/conf/project_1/project_1.conf
+.. literalinclude:: ../../Raspi/src/endless/conf/project_1/project_1.conf
    :caption: :download:`project_1.conf (download)
-             <../../Raspi/conf/project_1/project_1.conf>`
+             <../../Raspi/src/endless/conf/project_1/project_1.conf>`
    :language: python
 
 Run Application

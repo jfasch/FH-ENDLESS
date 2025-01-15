@@ -15,3 +15,7 @@ run-components = "endless.framework.runner:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"endless.conf" = ["*.conf"]
+"endless.conf.framework" = ["*.conf"]
+"endless.conf.project_1" = ["*.conf"]

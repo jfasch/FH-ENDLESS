@@ -41,6 +41,9 @@ async def Runner(components, errorhandler=None):
                 await errorhandler.lifetime.stop()
 
 def main():
+    '''See pyproject.toml's [project.scripts] for how a program is
+    generated to run this function'''
+
     import argparse
 
     parser = argparse.ArgumentParser()
