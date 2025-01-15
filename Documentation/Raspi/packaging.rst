@@ -96,6 +96,13 @@ https://discuss.python.org/t/best-practice-for-documentation-its-installation/25
   * Move ``site-packages/endless/sine-plot.service`` to
     ``/etc/systemd/system/``
 
+Installation
+------------
+
+While this will be done by Yocto, it'll be necessary to understand
+what ``pip install`` does with a package. See
+https://www.tutorialspoint.com/how-to-install-a-python-package-into-a-different-directory-using-pip
+
 Links
 -----
 

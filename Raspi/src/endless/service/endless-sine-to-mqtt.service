@@ -1,0 +1,14 @@
+[Unit]
+Description=ENDLESS Demo: Pointless Sine Wave To MQTT
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=endless
+ExecStart=/usr/bin/run-components --conf /etc/endless/sine-to-mqtt.conf
+
+[Install]
+WantedBy=multi-user.target

@@ -28,3 +28,5 @@ where = ["src"]
 "endless.conf" = ["*.conf"]
 "endless.conf.framework" = ["*.conf"]
 "endless.conf.project_1" = ["*.conf"]
+
+"endless.service" = ["*.service"]
