@@ -6,3 +6,4 @@ __pycache__/
 /Raspi/src/endless_proto.egg-info/
 /Raspi/src/endless_prototype.egg-info/
 /Raspi/endless_prototype.egg-info/
+/Yocto/qemux86-64/bitbake.lock
