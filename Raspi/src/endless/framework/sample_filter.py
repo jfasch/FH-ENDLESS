@@ -6,7 +6,7 @@ from .interfaces import SampleInlet
 
 @facet('sample_in', SampleInlet, (('consume_sample', '_convert'),))
 @receptacle('sample_out', SampleInlet, multiplicity=ONE)
-class SampleConverter(Component):
+class SampleFilter(Component):
     def __init__(self, func):
         super().__init__()
         self.func = func
