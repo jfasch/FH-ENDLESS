@@ -8,10 +8,10 @@ The ENDLESS Project
    :hidden:
 
    Raspi/index
-   misc-notes/index
    test-setup/index
    yocto/index
-
+   misc-notes/index
+   todo
 
 The Beginning Of It All
 -----------------------

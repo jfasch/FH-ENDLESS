@@ -3,6 +3,7 @@ SUMMARY = "The idiomatic asyncio MQTT client"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=a462083fa4d830bdcf8c22a8ddf453cf"
 
+# after patching out poetry: python_setuptools_build_meta?
 inherit pypi python_poetry_core
 
 
