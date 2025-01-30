@@ -12,6 +12,10 @@ The ENDLESS Project
    misc-notes/index
    todo
 
+.. sidebar:: Source Code
+
+   * https://github.com/jfasch/FH-ENDLESS
+
 Project Overview
 ----------------
 
