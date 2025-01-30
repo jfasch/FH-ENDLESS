@@ -1,14 +1,21 @@
 .. include:: <mmlalias.txt>
 
 
-
-Yocto
-=====
+Yocto: Building Linux OS Images
+===============================
 
 .. toctree::
    :hidden:
 
    project/index
+
+.. toctree::
+
+   image-preparation-fixme
+
+.. todo::
+
+   Absorb image-preparation-fixme into this document
 
 .. contents::
    :local:

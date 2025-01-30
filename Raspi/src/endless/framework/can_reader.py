@@ -12,6 +12,11 @@ from datetime import datetime
 
 @receptacle('frame_out', CANInputHandler, multiplicity=ONE_OR_MANY)
 class CANReader(LifetimeComponent):
+    '''Reads frames from a CAN interface. Connect its ``frame_out``
+    receptacle to a facet of type
+    :class:`endless.framework.interfaces.CANInputHandler`
+
+    '''
     def __init__(self, can_iface):
         super().__init__(self._run)
         self.can_iface = can_iface

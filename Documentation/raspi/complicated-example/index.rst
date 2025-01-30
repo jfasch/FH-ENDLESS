@@ -1,5 +1,5 @@
-Test Setup
-==========
+Setting Up A Distributed Simulation (Sensors And Actors)
+========================================================
 
 .. contents::
    :local:
@@ -71,8 +71,10 @@ the interface.
 
 * Determine interface name (we'll use ``can0`` in the following)
 
-  $ ip link show
-  ... check for a CAN type interface ...
+  .. code-block:: console
+
+     $ ip link show
+     ... check for a CAN type interface ...
 
 * Set speed and buffer size
 
@@ -105,7 +107,7 @@ All-Simulated CAN: ``vcan``
 
 .. sidebar::
 
-   * :doc:`/Raspi/index`
+   * :doc:`/raspi/index`
 
 .. note::
 
@@ -125,9 +127,9 @@ the configuration fits your situation; for example, the ``CAN_IFACE``
 and ``MQTT_ADDR`` variables probably need tuning, as well as CAN IDs,
 probably.
 
-.. literalinclude:: ../../Raspi/src/endless/conf/project_1/project_1.conf
+.. literalinclude:: ../../../Raspi/src/endless/conf/project_1/project_1.conf
    :caption: :download:`project_1.conf (download)
-             <../../Raspi/src/endless/conf/project_1/project_1.conf>`
+             <../../../Raspi/src/endless/conf/project_1/project_1.conf>`
    :language: python
 
 Run Application

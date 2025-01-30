@@ -9,7 +9,15 @@ import asyncio
 
 @receptacle('sample_out', SampleInlet, multiplicity=ONE)
 class MockSource(LifetimeComponent):
+    'Emits configurably shaped samples with configurable timestamps.'
+
     def __init__(self, tag, timestamps, data):
+        ''':param tag: emitted samples carry this tag
+        :param timestamps: async-iterable sequence of dattime.datetime instances
+        :param data: if callable: called with current timestamp to produce data; 
+                     if not, taken literally as data
+        
+        '''
         super().__init__(self._run)
 
         self.tag = tag

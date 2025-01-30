@@ -36,6 +36,7 @@ html_theme = 'sphinx_rtd_theme'
 extensions = [
     'sphinx_rtd_theme',
 
+    'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
@@ -54,6 +55,8 @@ extensions = [
 
     'opentraining',
 ]
+
+todo_include_todos = True
 
 intersphinx_mapping = {
     'jfasch': ('https://www.faschingbauer.me/', None),

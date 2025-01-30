@@ -24,25 +24,31 @@ component.
 
 .. autoclass:: endless.framework.component.Component
    :members:
+   :special-members:      
 
 Defining Facets And Receptacles
 -------------------------------
 
 .. autoclass:: endless.framework.facet.facet
    :members:
+   :special-members:      
 
 .. autoclass:: endless.framework.receptacle.receptacle
    :members:
+   :special-members:      
 
 Running Components: Lifetime and Error Management
 -------------------------------------------------
 
 .. autoclass:: endless.framework.component.LifetimeComponent
    :members:
+   :special-members:      
 
 .. autoclass:: endless.framework.runner.Runner
    :members:
+   :special-members:      
 
 .. autoclass:: endless.framework.errorhandler.ErrorHandler
    :members:
+   :special-members:      
 

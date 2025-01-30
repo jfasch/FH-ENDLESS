@@ -61,7 +61,7 @@ CI Tests: TFTP/NFS Boot
 Recipe: ``endless`` Demo Application
 ------------------------------------
 
-You know, that Python thing: :doc:`/Raspi/index`
+You know, that Python thing: :doc:`/raspi/index`
 
 * meta-raspberrypi/recipes-devtools/python/rpi-gpio_0.7.1.bb: ``inherit pypi setuptools``
 * Application (base recipe), including systemd unit file

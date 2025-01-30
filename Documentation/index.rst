@@ -7,58 +7,58 @@ The ENDLESS Project
 .. toctree::
    :hidden:
 
-   Raspi/index
-   test-setup/index
+   raspi/index
    yocto/index
    misc-notes/index
    todo
 
+Project Overview
+----------------
+
+Demo Application
+................
+
+.. sidebar:: See also
+
+   * :doc:`raspi/index`
+   * :doc:`raspi/satellite/index`
+
+A demo application has been created. Actually, the demo application
+consists of multiple programs:
+
+* The :doc:`main application <raspi/index>`, running on Linux. It uses
+  Linux's hardware capabilities (:doc:`CAN bus
+  <jfasch:trainings/material/soup/linux/hardware/can/group>`, mostly,
+  but not necessarily so) to communicate with sensor and actor
+  devices - usually deeply embedded controllers with specialized
+  firmware.
+* *Simulations* of :doc:`sensor and actor devices
+  <raspi/satellite/index>`. Small Linux programs - for testing only - that
+  mimic the behavior of embedded controllers.
+
+Embedded Linux OS Images
+........................
+
+.. sidebar:: See also
+
+   * :doc:`/yocto/index`
+
+A set of :doc:`Yocto-built Linux OS images <yocto/index>` for
+different purposes.
+
+* Packaging the demo application and various configurations together
+  with an entire OS that runs the application.
+* General purpose OS, for educational use.
+
 The Beginning Of It All
 -----------------------
 
+The project originated from a sketch scribbled on paper. In that
+sketch, the node labeled "Raspi" is the :doc:`main application
+<raspi/index>`, and the ones labeled "MC" are instances of some of the
+:doc:`sensor and actor devices <raspi/satellite/index>`.
+
 .. image:: Egon-Sketch.jpg
-   :scale: 40%
+   :scale: 20%
 
-The Raspberry Pi Application
-----------------------------
 
-.. sidebar::
-
-   * :doc:`Raspi/index`
-
-In the sketch, this is the node labeled "Raspi". A datalogger,
-basically, capable of
-
-* Receiving measurements from various *sources*
-
-  * CAN bus
-  * MQTT
-  * Random simulated data
-  * ... to be continued ...
-
-* sending measurements to various *sinks*
-
-  * MQTT
-  * Standard output (aka "console")
-  * `InfluxDB <https://docs.influxdata.com/influxdb>`__ to come soon
-  * ... to be continued ...
-
-* Triggering actions on numerous kinds of actors
-
-``MC-HumTempSensor/``
----------------------
-
-In the sketch, this resembles one of the nodes labeled "MC". A Python
-program that does not produces any real measurements, but generates a
-configurable sine wave that it sends out over a CAN interface. It runs
-on Linux, either with real CAN hardware, or using a :doc:`Virtual CAN
-interface <jfasch:trainings/material/soup/linux/hardware/can/group>`
-
-The "Raspi" node is supposed to pick that up as one of its sources.
-
-``MC-Switches/``
-----------------
-
-Another pseudo microcontroller application: a Python program that
-operates an array of 16 switches, and listens on a CAN bus for
-commands.
