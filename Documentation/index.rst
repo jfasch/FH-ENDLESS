@@ -32,13 +32,13 @@ consists of multiple programs:
 
 * The :doc:`main application <raspi/index>`, running on Linux. It uses
   Linux's hardware capabilities (:doc:`CAN bus
-  <jfasch:trainings/material/soup/linux/hardware/can/group>`, mostly,
+  <jfasch:trainings/material/soup/linux/hardware/can/index>`, mostly,
   but not necessarily so) to communicate with sensor and actor
   devices - usually deeply embedded controllers with specialized
   firmware.
 * *Simulations* of :doc:`sensor and actor devices
-  <raspi/satellite/index>`. Small Linux programs - for testing only - that
-  mimic the behavior of embedded controllers.
+  <raspi/satellite/index>`. Small Linux programs - for testing only -
+  that mimic the behavior of embedded controllers.
 
 Embedded Linux OS Images
 ........................

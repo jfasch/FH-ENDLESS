@@ -12,7 +12,7 @@ In the sketch, this resembles one of the nodes labeled "MC". A Python
 program that does not produces any real measurements, but generates a
 configurable sine wave that it sends out over a CAN interface. It runs
 on Linux, either with real CAN hardware, or using a :doc:`Virtual CAN
-interface <jfasch:trainings/material/soup/linux/hardware/can/group>`
+interface <jfasch:trainings/material/soup/linux/hardware/can/index>`
 
 The "Raspi" node is supposed to pick that up as one of its sources.
 

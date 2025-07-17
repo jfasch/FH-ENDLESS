@@ -40,7 +40,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
-    'sphinx.ext.graphviz',
+#    'sphinx.ext.graphviz',
     'sphinx.ext.intersphinx',
 
     'nbsphinx',
@@ -52,8 +52,6 @@ extensions = [
 
     'sphinxcontrib.programoutput',
     'sphinxemoji.sphinxemoji',
-
-    'opentraining',
 ]
 
 todo_include_todos = True

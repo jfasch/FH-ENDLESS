@@ -23,9 +23,22 @@ Yocto: Building Linux OS Images
 Work Environment (ENDLESS)
 --------------------------
 
+Yocto can be built purely locally, on your own laptop. It might take a
+while though, and you'd have to make sure that the CPU is well
+ventilated.
+
+This section describes a way to use a dedicated build server:
+
+* SSH for interactive remote login, to run Yocto's build commands
+* SSH to mount the remote Yocto tree locally, so I can use a local
+  text editor for development
+
 .. sidebar:: See also
 
-   * :doc:`jfasch:trainings/material/soup/linux/ssh/group`.
+   * :doc:`jfasch:trainings/material/soup/linux/ssh/index`.
+
+The address of the remote build server is used by several commands
+described below; we store it in a variable that we reference below.
 
 .. code-block:: console
 
@@ -49,6 +62,11 @@ Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
 
    * :doc:`jfasch:trainings/material/soup/linux/ssh/sshfs`
 
+Use the ``sshfs`` command to mount the remote user's home directory
+locally under ``~/mounts/$ENDLESS_SERVER``. We use the ``idmap`` mount
+option because the local user's UID/GID might not match the remote
+user's.
+
 .. code-block:: console
 
    $ mkdir ~/mounts/$ENDLESS_SERVER
@@ -58,22 +76,79 @@ Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
 
    $ umount ~/mounts/$ENDLESS_SERVER
 
-Yocto Development
------------------
+Yocto Development And Build
+---------------------------
 
-Work directory is the ``Yocto/`` subdirectory of the ``FH-ENDLESS`` project.
+Getting
+.......
 
-As of 2024-11-27, there are these build directories available:
+.. sidebar:: Git Repo
 
-* ``qemuarm64``
-* ``qemux86-64``
-* ``raspberry3-build``
+   * https://github.com/jfasch/FH-ENDLESS
+
+.. code-block:: console
+
+   $ git clone https://github.com/jfasch/FH-ENDLESS
+   $ git submodule init
+   $ git submodule update
+
+Structure
+.........
+
+The ``FH-ENDLESS`` project contains not only the Yocto build. For
+Yocto, go to the ``Yocto/`` subdirectory.
+
+``poky/`` (Submodule)
+`````````````````````
+
+.. sidebar:: Git Repo
+
+   * https://git.yoctoproject.org/poky
+
+``poky/`` contains the upstream ``https://git.yoctoproject.org/poky``
+sources - the Yocto core, so to say (Yocto has a long history, and
+it's not always clear what the relationship between OpenEmbedded and
+Poky is).
+
+``meta-raspberrypi/`` (Submodule)
+`````````````````````````````````
+
+.. sidebar:: Git Repo
+
+   * https://github.com/agherzan/meta-raspberrypi
+
+This is the BSP layer for the raspberry build (see below).
+
+Build Directories
+`````````````````
+
+As of 2024-11-27, there are the following build directories available:
+
+* ``qemuarm64/``
+* ``qemux86-64/``
+* ``raspberry3-build/``
+
+.. sidebar:: Config files
+
+   * `Yocto/common-local.conf
+     <https://github.com/jfasch/FH-ENDLESS/blob/main/Yocto/common-local.conf>`__
+   * `Yocto/common-bblayers.conf
+     <https://github.com/jfasch/FH-ENDLESS/blob/main/Yocto/common-bblayers.conf>`__
+
+Each of those contains a ``conf/`` subdirectory with two config files,
+``conf/local.conf`` and ``conf/bblayers.conf``. To avoid duplication
+of setting, these files delegate (include) common settings from the
+files ``common-local.conf`` and ``common-bblayers.conf`` in the
+toplevel ``Yocto/`` directory.
+
+Building
+........
 
 QEMU (``MACHINE = qemux86-64``)
-...............................
+```````````````````````````````
 
 Setup Environment
-`````````````````
+'''''''''''''''''
 
 .. code-block:: console
 
@@ -82,14 +157,14 @@ Setup Environment
    /home/jfasch/FH-ENDLESS/Yocto/qemux86-64
 
 Build An Image (``endless-image-fulldev``)
-``````````````````````````````````````````
+''''''''''''''''''''''''''''''''''''''''''
 
 .. code-block:: console
 
    $ bitbake endless-image-fulldev
 
 Test
-````
+''''
 
 Start QEMU on it. The ``slirp`` option did the trick, *everything just
 works*.
@@ -103,17 +178,17 @@ terminal. ``C-a x`` is used to quit the session, and get back to the
 shell where you started.
 
 SSH Login
-`````````
+'''''''''
 
 .. code-block:: console
 
    $ ssh -p 2222 endless@localhost
 
 Raspberry Pi 3 (``MACHINE = raspberrypi3-64``)
-..............................................
+``````````````````````````````````````````````
 
 Setup Environment
-`````````````````
+'''''''''''''''''
 
 .. code-block:: console
 
@@ -122,14 +197,14 @@ Setup Environment
    /home/jfasch/FH-ENDLESS/Yocto/raspberry3-build
 
 Build An Image (``endless-image-fulldev``)
-``````````````````````````````````````````
+''''''''''''''''''''''''''''''''''''''''''
 
 .. code-block:: console
 
    $ bitbake endless-image-fulldev
 
 Test
-````
+''''
 
 Bring the generated ``.wic`` image onto the SD card.
 
