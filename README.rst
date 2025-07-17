@@ -1,12 +1,14 @@
 The ENDLESS Project
 ===================
 
-Documentation
--------------
+.. tip::
 
-See the `ReadTheDocs CI
-<https://fh-endless.readthedocs.io/en/latest/>`__ if you only intend
-to consume documentation.
+   See the `ReadTheDocs CI
+   <https://fh-endless.readthedocs.io/en/latest/>`__ if you intend to
+   *consume* documentation.
+
+Developers, And Documentation
+-----------------------------
 
 If you are a developer, you probably want to build the documentation
 locally and try it out before you commit/push. The documentation is
