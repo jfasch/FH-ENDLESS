@@ -1,11 +1,9 @@
 The ENDLESS Project
 ===================
 
-.. tip::
-
-   See the `ReadTheDocs CI
-   <https://fh-endless.readthedocs.io/en/latest/>`__ if you intend to
-   *consume* documentation.
+See the `ReadTheDocs CI
+<https://fh-endless.readthedocs.io/en/latest/>`__ if you intend to
+*consume* documentation.
 
 Developers, And Documentation
 -----------------------------
