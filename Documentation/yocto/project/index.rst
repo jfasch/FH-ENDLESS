@@ -1,7 +1,5 @@
-.. ot-group:: yocto
-
-Todo List
-=========
+Future Directions
+=================
 
 .. contents::
    :local:

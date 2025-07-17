@@ -4,77 +4,9 @@
 Yocto: Building Linux OS Images
 ===============================
 
-.. toctree::
-   :hidden:
-
-   project/index
-
-.. toctree::
-
-   image-preparation-fixme
-
-.. todo::
-
-   Absorb image-preparation-fixme into this document
-
 .. contents::
+   :depth: 1
    :local:
-
-Work Environment (ENDLESS)
---------------------------
-
-Yocto can be built purely locally, on your own laptop. It might take a
-while though, and you'd have to make sure that the CPU is well
-ventilated.
-
-This section describes a way to use a dedicated build server:
-
-* SSH for interactive remote login, to run Yocto's build commands
-* SSH to mount the remote Yocto tree locally, so I can use a local
-  text editor for development
-
-.. sidebar:: See also
-
-   * :doc:`jfasch:trainings/material/soup/linux/ssh/index`.
-
-The address of the remote build server is used by several commands
-described below; we store it in a variable that we reference below.
-
-.. code-block:: console
-
-   $ ENDLESS_SERVER=ddd.ddd.ddd.ddd
-
-Interactive Login On ``$ENDLESS_SERVER``
-........................................
-
-Required: an SSH account, setup by :doc:`the administrator
-<jfasch:about/myself/index>`). My (``jfasch``'s) steps to setup my
-daily work environment follow. It's all SSH, after all.
-
-.. code-block:: console
-
-   $ ssh jfasch@$ENDLESS_SERVER
-
-Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
-......................................................
-
-.. sidebar:: See also
-
-   * :doc:`jfasch:trainings/material/soup/linux/ssh/sshfs`
-
-Use the ``sshfs`` command to mount the remote user's home directory
-locally under ``~/mounts/$ENDLESS_SERVER``. We use the ``idmap`` mount
-option because the local user's UID/GID might not match the remote
-user's.
-
-.. code-block:: console
-
-   $ mkdir ~/mounts/$ENDLESS_SERVER
-   $ sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) $ENDLESS_SERVER: ~/mounts/$ENDLESS_SERVER
-
-.. code-block:: console
-
-   $ umount ~/mounts/$ENDLESS_SERVER
 
 Yocto Development And Build
 ---------------------------
@@ -90,7 +22,16 @@ Getting
 
    $ git clone https://github.com/jfasch/FH-ENDLESS
    $ git submodule init
+   Submodule 'Yocto/meta-raspberrypi' (https://github.com/agherzan/meta-raspberrypi) registered for path 'Yocto/meta-raspberrypi'
+   Submodule 'Yocto/poky' (https://git.yoctoproject.org/poky) registered for path 'Yocto/poky'
+
+.. code-block:: console
+
    $ git submodule update
+   Cloning into '/home/jfasch/My-Projects/FH-ENDLESS-nici/Yocto/meta-raspberrypi'...
+   Cloning into '/home/jfasch/My-Projects/FH-ENDLESS-nici/Yocto/poky'...
+   Submodule path 'Yocto/meta-raspberrypi': checked out 'd5ffe135c73ab940148e595c6fb010d50ddcfc60'
+   Submodule path 'Yocto/poky': checked out 'a6c1af1af5baad083f0c98acd9957ccabdd49067'
 
 Structure
 .........
@@ -143,6 +84,20 @@ toplevel ``Yocto/`` directory.
 
 Building
 ........
+
+Best to start with the Qemu variant because it is more easily tested
+than the Raspi variants.
+
+When you run ``bitbake`` the first time, you migt encounter errors
+like
+
+.. code-block:: console
+
+   $ bitbake endless-image-fulldev
+   ERROR: The following required tools (as specified by HOSTTOOLS) appear to be unavailable in PATH, please install them in order to proceed:
+     chrpath diffstat lz4c patch rpcgen
+
+Install the tools using your distribution's package manager [#fedora]_
 
 QEMU (``MACHINE = qemux86-64``)
 ```````````````````````````````
@@ -247,10 +202,61 @@ Kernel Config Fragments
 
 https://wiki.koansoftware.com/index.php/Modify_the_linux_kernel_with_configuration_fragments_in_Yocto
 
-Project Management
-------------------
+Work Environment Preparation (On ENDLESS Server Machine)
+--------------------------------------------------------
 
-* :doc:`project/index`
+Yocto can be built purely locally, on your own laptop. It might take a
+while though, and you'd have to make sure that the CPU is well
+ventilated.
+
+This section describes a way to use a dedicated build server:
+
+* SSH for interactive remote login, to run Yocto's build commands
+* SSH to mount the remote Yocto tree locally, so I can use a local
+  text editor for development
+
+.. sidebar:: See also
+
+   * :doc:`jfasch:trainings/material/soup/linux/ssh/index`.
+
+The address of the remote build server is used by several commands
+described below; we store it in a variable that we reference below.
+
+.. code-block:: console
+
+   $ ENDLESS_SERVER=ddd.ddd.ddd.ddd
+
+Interactive Login On ``$ENDLESS_SERVER``
+........................................
+
+Required: an SSH account, setup by :doc:`the administrator
+<jfasch:about/myself/index>`). My (``jfasch``'s) steps to setup my
+daily work environment follow. It's all SSH, after all.
+
+.. code-block:: console
+
+   $ ssh jfasch@$ENDLESS_SERVER
+
+Mounting And Unmounting My Home On ``$ENDLESS_SERVER``
+......................................................
+
+.. sidebar:: See also
+
+   * :doc:`jfasch:trainings/material/soup/linux/ssh/sshfs`
+
+Use the ``sshfs`` command to mount the remote user's home directory
+locally under ``~/mounts/$ENDLESS_SERVER``. We use the ``idmap`` mount
+option because the local user's UID/GID might not match the remote
+user's.
+
+.. code-block:: console
+
+   $ mkdir ~/mounts/$ENDLESS_SERVER
+   $ sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) $ENDLESS_SERVER: ~/mounts/$ENDLESS_SERVER
+
+.. code-block:: console
+
+   $ umount ~/mounts/$ENDLESS_SERVER
 
 To Be Cleaned
 -------------
@@ -333,3 +339,31 @@ Project Setup
 
      DL_DIR = "${HOME}/My-Projects/yocto/DOWNLOAD
      SSTATE_DIR = "${HOME}/My-Projects/yocto/SSTATE"
+
+Future Directions
+-----------------
+
+.. toctree::
+   :maxdepth: 1
+
+   project/index
+
+Random/Half-Obsolete Notes
+--------------------------
+
+.. toctree::
+   :hidden:
+
+   image-preparation-fixme
+
+* Some pre :doc:`Yocto notes on how to tune a Raspberry OS
+  installation <image-preparation-fixme>`
+
+.. rubric:: Footnotes
+.. [#fedora] On Fedora 42 (which is not yet supported/tested by Yocto
+             upstream) for example, I had to say
+
+	     .. code-block:: console
+
+		$ sudo dnf install chrpath diffstat lz4 patch rpcgen
+		$ sudo dnf install perl-FindBin perl-STD
